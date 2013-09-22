@@ -1,0 +1,32 @@
+<project name="macros" xmlns:plume="http://blog.soat.fr/ant-macros">
+	<property name="macros.uri" value="http://blog.soat.fr/ant-macros" />
+
+	<macrodef name="jarlib" uri="${macros.uri}">
+		<attribute name="jarName"/>
+		<attribute name="srcDir"/>
+
+		<sequential>
+			<tstamp>
+				<format property="releaseNumber" pattern="yyyyMMdd.hhmmss" />
+			</tstamp>
+			<jar destfile="@{jarName}.${releaseNumber}.jar" basedir="@{srcDir}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="jarapp" uri="${macros.uri}">
+		<attribute name="jarName"/>
+		<attribute name="srcDir"/>
+		<attribute name="mainClass"/>
+
+		<sequential>
+			<tstamp>
+				<format property="releaseNumber" pattern="yyyyMMdd.hhmmss" />
+			</tstamp>
+			<jar destfile="@{jarName}.${releaseNumber}.jar" basedir="@{srcDir}">
+				<manifest>
+					<attribute name="Main-Class" value="@{mainClass}"/>
+				</manifest>
+			</jar>
+		</sequential>
+	</macrodef>
+</project>

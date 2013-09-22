@@ -1,0 +1,20 @@
+<project name="mystery" default="compile" xmlns:plume="http://blog.soat.fr/ant-macros">
+  <import file="../../01_conf/targets.xml" />
+  <description>Mystery - Assembles and dumps class files</description>
+
+  <target name="archive" depends="compile, -init-dist, test" description="Creates a JAR file">
+    <plume:jarapp jarName="${dist.dir}/${ant.project.name}" 
+                  srcDir="${build.classes.dir}" 
+                  mainClass="org.isk.jvmhardcore.mystery.AssembleAndDump" />
+  </target>
+
+  <!--+=========================================================================================+-->
+  <!--+ Execute                                                                                 +-->
+  <!--+=========================================================================================+-->
+  <target name="execute" depends="compile" description="Run the program">
+    <echo level="warning" message="executing application..." />
+    <java classname="org.isk.jvmhardcore.mystery.AssembleAndDump" classpath="${build.classes.dir}">
+      <arg line="${args}" />
+      </java>
+    </target>
+</project>

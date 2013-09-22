@@ -1,0 +1,52 @@
+<project name="properties" basedir="../">
+	<description>Common properties</description>
+
+	<!--+=========================================================================================+-->
+  <!--+ Project Properties                                                                      +-->
+	<!--+=========================================================================================+-->
+  <property name="javac.version" value="1.7" />
+  
+	<!--+=========================================================================================+-->
+  <!--+ Directories Properties for the master project                                           +-->
+	<!--+_________________________________________________________________________________________+-->
+	<!--+ Master Project Hierarchy                                                                +-->
+	<!--+ <project>                                                                               +-->
+	<!--+ |  +- 01_conf                                                                           +-->
+	<!--+ |  +- 02_libs                                                                           +-->
+	<!--+ |  +- 03_project                                                                        +-->
+	<!--+ |  +- 04_archives (generated)                                                           +-->
+	<!--+=========================================================================================+-->
+	<property name="libs.dir" location="../../02_libs" />
+	<property name="projects.dir" location="03_projects" />
+	<property name="archives.dir" location="04_archives" />
+	
+	<!--+=========================================================================================+-->
+  <!--+ Directories Properties for each project                                                 +-->
+	<!--+_________________________________________________________________________________________+-->
+	<!--+ Project Hierarchy                                                                       +-->
+	<!--+ <project>                                                                               +-->
+	<!--+ |  +- 01_src                                                                            +-->
+	<!--+ |  |  +- main                                                                           +-->
+	<!--+ |  |  |  +- java                                                                        +-->
+	<!--+ |  |  |  +- resources                                                                   +-->
+	<!--+ |  |  +- test                                                                           +-->
+	<!--+ |  |  |  +- java                                                                        +-->
+	<!--+ |  |  |  +- resources                                                                   +-->
+	<!--+ |  +- 02_build (generated)                                                              +-->
+	<!--+ |  +- 03_dist (generated)                                                               +-->
+	<!--+=========================================================================================+-->
+  <property name="src.dir" location="01_src" />
+	<property name="build.dir" location="02_build" />
+	<property name="dist.dir" location="03_dist" />
+	<property name="dist.dir_str" value="03_dist" />
+	
+  <property name="src.main.dir" location="${src.dir}/main" />
+  <property name="src.main.java.dir" location="${src.main.dir}/java" />
+  <property name="src.test.dir" location="${src.dir}/test" />
+  <property name="src.test.java.dir" location="${src.test.dir}/java" />
+
+  <property name="build.classes.dir" location="${build.dir}/classes" />
+  <property name="build.test-classes.dir" location="${build.dir}/test-classes" />
+  <property name="build.junit-data.dir" location="${build.dir}/junit-data" />
+	<property name="build.junit-reports.dir" location="${build.dir}/junit-reports" />
+</project>

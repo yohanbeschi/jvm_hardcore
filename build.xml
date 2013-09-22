@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<project name="master" default="distToDist">
+	<import file="01_conf/properties.xml"/>
+	<description>Master build file</description>
+
+	<!--+=========================================================================================+-->
+  <!--+ Targets for children                                                                    +-->
+	<!--+ Not nice but easy to use and we keep all the targets from the master build              +-->
+	<!--+=========================================================================================+-->
+  <target name="-delegate" description="Delegates target to children">
+    <fail unless="target">Wrong usage: $ant -Dtarget=&lt;target_name&gt;</fail>
+    <ant dir="${projects.dir}/mystery/" target="${target}"  inheritAll="false"/>
+  </target>
+
+	<target name="nop" description="Checks projects build">
+		<antcall target="-delegate">
+			<param name="target" value="nop"/>
+		</antcall>
+	</target>
+
+	<target name="clean" description="Removes directory: 02_build">
+    <antcall target="-delegate">
+			<param name="target" value="clean"/>
+		</antcall>
+  </target>
+  
+  <target name="clean-dist" description="Removes directory: 03_dist">
+    <antcall target="-delegate">
+			<param name="clean-dist" value="clean-dist"/>
+		</antcall>
+  </target>
+  
+  <target name="clean-test" 
+	        description="Removes directories: 02_build/[test-classes &amp; junit-data &amp; junit-reports]">
+    <antcall target="-delegate">
+			<param name="target" value="clean-test"/>
+		</antcall>
+  </target>
+  
+  <target name="clean-all"
+	        description="Removes directories: 02_build &amp; 03_dist">
+		<antcall target="-delegate">
+			<param name="target" value="clean-all"/>
+		</antcall>
+	</target>
+	
+	<target name="compile" description="Compiles Main">
+		<antcall target="-delegate">
+			<param name="target" value="compile"/>
+		</antcall>
+  </target>
+
+  <target name="test-compile" description="Compiles Test">
+		<antcall target="-delegate">
+			<param name="target" value="test-compile"/>
+		</antcall>
+  </target>
+
+  <target name="test" description="Executes Unit Tests">
+		<antcall target="-delegate">
+			<param name="target" value="test"/>
+		</antcall>
+  </target>
+
+  <target name="archive" description="Creates a JAR file">
+		<antcall target="-delegate">
+			<param name="target" value="archive"/>
+		</antcall>
+  </target>
+	
+	<!--+=========================================================================================+-->
+  <!--+ Targets for master                                                                      +-->
+	<!--+=========================================================================================+-->
+	<target name="clean-archives" description="Removes directory: 04_archives">
+    <delete dir="${archives.dir}" />
+  </target>
+	
+	<target name="-init-archives">
+    <mkdir dir="${archives.dir}" />
+  </target>
+	
+	<target name="distToDist" depends="-init-archives" description="Copy all generated JARs to 04_archives">
+    <antcall target="-delegate">
+			<param name="target" value="archive"/>
+		</antcall>
+		
+		<copy todir="${archives.dir}" flatten="true">
+			<fileset dir="${projects.dir}">
+        <include name="**/${dist.dir_str}/*.jar" />
+			</fileset>
+		</copy>
+  </target>
+</project>
+

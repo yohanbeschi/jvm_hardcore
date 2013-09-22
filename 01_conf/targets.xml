@@ -1,0 +1,144 @@
+<project name="targets" basedir="../" xmlns:plume="http://blog.soat.fr/ant-macros">
+	<import file="properties.xml" />
+	<import file="macros.xml" />
+	<description>Common targets</description>
+	
+	<!--+=========================================================================================+-->
+  <!--+ Classpath                                                                               +-->
+	<!--+=========================================================================================+-->
+	<!-- To compile Main -->
+  <path id="compile.classpath">
+    <fileset dir="${libs.dir}">
+      <include name="junit-4.10.jar"/>
+    </fileset>
+  </path>
+  
+  <!-- To compile the Test -->
+  <path id="test.compile.classpath">
+		<path refid="compile.classpath"/>
+		<pathelement location="${build.classes.dir}"/>
+  </path>
+  
+  <!-- To run the tests -->
+  <path id="test.classpath">
+		<path refid="test.compile.classpath"/>
+		<pathelement location="${build.test-classes.dir}"/>
+  </path>
+	
+	<!--+=========================================================================================+-->
+  <!--+ Targets                                                                                 +-->
+	<!--+=========================================================================================+-->
+	<target name="nop" description="Checks projects build">
+		<echo>in ${basedir}</echo>
+	</target>
+	
+	<!--+=========================================================================================+-->
+  <!--+ Clean                                                                                   +-->
+	<!--+=========================================================================================+-->
+  <target name="clean" description="Removes directory: 04_build">
+    <delete dir="${build.dir}" />
+  </target>
+  
+  <target name="clean-dist" description="Removes directory: 05_dist">
+    <delete dir="${dist.dir}" />
+  </target>
+  
+  <target name="clean-test" 
+	        description="Removes directories: 04_build/[test-classes &amp; junit-data &amp; junit-reports]">
+    <delete dir="${build.test-classes.dir}" />
+    <delete dir="${build.junit-data.dir}" />
+		<delete dir="${build.junit-reports.dir}" />
+  </target>
+  
+  <target name="clean-all" 
+	        depends="clean, clean-dist" 
+	        description="Removes directories: 04_build &amp; 05_dist" />
+  
+	<!--+=========================================================================================+-->
+  <!--+ Init (private)                                                                          +-->
+	<!--+=========================================================================================+-->
+  <target name="-init-build">
+    <mkdir dir="${build.classes.dir}" />
+  </target>
+  
+  <target name="-init-dist">
+    <mkdir dir="${dist.dir}" />
+  </target>
+  
+  <target name="-init-test" depends="clean-test">
+    <mkdir dir="${build.test-classes.dir}" />
+		<mkdir dir="${build.junit-data.dir}" />
+		<mkdir dir="${build.junit-reports.dir}" />
+  </target>
+  
+	<!--+=========================================================================================+-->
+  <!--+ Compile                                                                                 +-->
+	<!--+=========================================================================================+-->
+	<!-- Main -->
+  <target name="compile" depends="-init-build" description="Compiles Main">
+    <javac srcdir="${src.main.java.dir}" 
+	       destdir="${build.classes.dir}" 
+				 includeAntRuntime="false"
+				 source="${javac.version}"
+				 target="${javac.version}"
+				 encoding="utf-8"
+				 deprecation="true" />
+  </target>
+  
+  <!-- Test -->
+  <target name="test-compile" depends="-init-test, compile" description="Compiles Test">
+		<javac srcdir="${src.test.java.dir}" 
+					 destdir="${build.test-classes.dir}" 
+					 includeAntRuntime="false"
+					 source="${javac.version}"
+					 target="${javac.version}"
+					 encoding="utf-8"
+					 deprecation="true">
+			<classpath refid="test.compile.classpath" />
+		</javac>
+  </target>
+
+	<!--+=========================================================================================+-->
+  <!--+ Test                                                                                    +-->
+	<!--+=========================================================================================+-->
+  <target name="test" depends="test-compile" description="Executes Unit Tests">
+		<junit printsummary="true" haltonfailure="false" 
+		       errorProperty="test.failed" failureProperty="test.failed">
+			<classpath refid="test.classpath"/>
+			
+			<formatter type="brief" usefile="false"/>
+			<formatter type="plain" />
+			<formatter type="xml"/>
+			
+			<test todir="${build.junit-data.dir}" name="${testClass}" 
+						if="testClass" unless="testMethod" />
+			
+			<test todir="${build.junit-data.dir}" name="${testClass}" 
+						if="testMethod" methods="${testMethod}" />
+			
+			<batchtest todir="${build.junit-data.dir}" unless="testClass">
+				<fileset dir="${build.test-classes.dir}" />
+			</batchtest>
+		</junit>
+		
+		<junitreport todir="${build.junit-data.dir}">
+			<fileset dir="${build.junit-data.dir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${build.junit-reports.dir}"/>
+		</junitreport>
+		
+		<fail if="test.failed">
+			Tests failed. Check ${build.junit-reports.dir}
+		</fail>
+  </target>
+  
+	<!--+=========================================================================================+-->
+  <!--+ Archive                                                                                 +-->
+	<!--+=========================================================================================+-->
+  <target name="archive" depends="compile, -init-dist, test" description="Creates a JAR file">
+		<plume:jarlib jarName="${dist.dir}/${ant.project.name}" srcDir="${build.classes.dir}" />
+  </target>
+
+</project>
+

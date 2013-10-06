@@ -41,11 +41,17 @@
 	<property name="dist.dir_str" value="03_dist" />
 	
   <property name="src.main.dir" location="${src.dir}/main" />
+	<property name="src.main.assembler.dir" location="${src.main.dir}/assembler" />
   <property name="src.main.java.dir" location="${src.main.dir}/java" />
+	<property name="src.main.pjb.dir" location="${src.main.dir}/pjb" />
   <property name="src.test.dir" location="${src.dir}/test" />
   <property name="src.test.java.dir" location="${src.test.dir}/java" />
 
+	<property name="build.assembler.dir" location="${build.dir}/assembler" />
+	<property name="build.assembler.classes.dir" location="${build.dir}/assembler/classes" />
+	<property name="build.assembler.reports.dir" location="${build.dir}/assembler/reports" />
   <property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="build.pjb-classes.dir" location="${build.dir}/pjb-classes" />
   <property name="build.test-classes.dir" location="${build.dir}/test-classes" />
   <property name="build.junit-data.dir" location="${build.dir}/junit-data" />
 	<property name="build.junit-reports.dir" location="${build.dir}/junit-reports" />

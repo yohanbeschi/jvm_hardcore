@@ -10,6 +10,7 @@
   <target name="-delegate" description="Delegates target to children">
     <fail unless="target">Wrong usage: $ant -Dtarget=&lt;target_name&gt;</fail>
     <ant dir="${projects.dir}/mystery/" target="${target}"  inheritAll="false"/>
+		<ant dir="${projects.dir}/bytecode/" target="${target}"  inheritAll="false"/>
   </target>
 
 	<target name="nop" description="Checks projects build">
@@ -43,6 +44,12 @@
 			<param name="target" value="clean-all"/>
 		</antcall>
 	</target>
+	
+	<target name="assemble" description="Assembles pjb files">
+		<antcall target="-delegate">
+			<param name="target" value="assemble"/>
+		</antcall>
+  </target>
 	
 	<target name="compile" description="Compiles Main">
 		<antcall target="-delegate">
@@ -80,13 +87,13 @@
   </target>
 	
 	<target name="distToDist" depends="-init-archives" description="Copy all generated JARs to 04_archives">
-    <antcall target="-delegate">
+		<antcall target="-delegate">
 			<param name="target" value="archive"/>
 		</antcall>
 		
 		<copy todir="${archives.dir}" flatten="true">
 			<fileset dir="${projects.dir}">
-        <include name="**/${dist.dir_str}/*.jar" />
+				<include name="**/${dist.dir_str}/*.jar" />
 			</fileset>
 		</copy>
   </target>

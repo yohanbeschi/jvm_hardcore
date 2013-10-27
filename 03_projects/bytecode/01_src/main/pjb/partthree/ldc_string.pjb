@@ -1,0 +1,6 @@
+.class org/isk/jvmhardcore/bytecode/partthree/Ldc_String
+	.method getString()Ljava/lang/String;
+		ldc "Привет \\\" мир по-русски"
+		areturn
+	.methodend
+.classend

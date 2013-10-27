@@ -151,3 +151,13 @@ Moreover, in order that build scripts remains simple and to be able to compile/a
 Therefore, all of this isn't a real problem.
 
 Blog post: [JVM Hardcore - Part 2 - Bytecode - Plume Java Bytecode Assembler](http://blog.soat.fr/2013/10/03-jvm-hardcore-part-2-bytecode-plume-java-bytecode-assembler)
+
+## part03
+### Summary
+Bytecode instructions : constants (`xconst_y`, `bipush`, `sipush` and `ldc`) and returns (`xreturn`)
+
+### Compile and execute
+See part02.
+
+### Blog post
+[JVM Hardcore - Part 3 - Bytecode - Constantes](http://blog.soat.fr/2013/09/04-jvm-hardcore-part-3-bytecode-constantes)

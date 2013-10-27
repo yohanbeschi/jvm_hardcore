@@ -1,4 +1,4 @@
-@ Add two ints
+@ Adds two ints
 .class org/isk/jvmhardcore/bytecode/parttwo/Adder
   .method add(II)I
     iload_0   @ Push to the stack the local variable at index 0

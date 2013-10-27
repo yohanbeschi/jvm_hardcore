@@ -1,0 +1,7 @@
+@ Returns a short
+.class org/isk/jvmhardcore/bytecode/partthree/Sipush
+  .method get()S
+    sipush 14909
+    ireturn
+  .methodend
+.classend

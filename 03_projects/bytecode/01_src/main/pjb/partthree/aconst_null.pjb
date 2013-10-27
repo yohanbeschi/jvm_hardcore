@@ -1,0 +1,7 @@
+@ Returns null
+.class org/isk/jvmhardcore/bytecode/partthree/Aconst_null
+  .method get()Ljava/lang/Object;
+    aconst_null   @ Add null to the top of the stack
+    areturn       @ Return the top of the stack
+  .methodend
+.classend

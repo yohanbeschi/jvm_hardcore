@@ -1,0 +1,7 @@
+@ Crashes - Waiting an int and returns a double
+.class org/isk/jvmhardcore/bytecode/partthree/WrongReturnType
+  .method get()I
+    dconst_1   @ Add 1 to the top of the stack
+    dreturn    @ Return the top of the stack
+  .methodend
+.classend

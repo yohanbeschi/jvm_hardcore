@@ -1,0 +1,6 @@
+.class org/isk/jvmhardcore/bytecode/partthree/Ldc_Long
+  .method getLong()J
+    ldc2_w 1324
+    lreturn
+  .methodend
+.classend

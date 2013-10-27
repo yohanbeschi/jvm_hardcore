@@ -1,0 +1,7 @@
+@ Returns -1
+.class org/isk/jvmhardcore/bytecode/partthree/Iconst_m1
+  .method get()I
+    iconst_m1   @ Add -1 to the top of the stack
+    ireturn       @ Return the top of the stack
+  .methodend
+.classend

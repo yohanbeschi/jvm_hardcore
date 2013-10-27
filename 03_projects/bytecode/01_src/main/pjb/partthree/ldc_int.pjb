@@ -1,0 +1,6 @@
+.class org/isk/jvmhardcore/bytecode/partthree/Ldc_Integer
+  .method getInteger()I
+    ldc 1000
+    ireturn
+  .methodend
+.classend

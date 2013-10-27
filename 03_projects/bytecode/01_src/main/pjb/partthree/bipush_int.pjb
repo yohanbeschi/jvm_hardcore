@@ -1,0 +1,7 @@
+@ Returns a byte
+.class org/isk/jvmhardcore/bytecode/partthree/Bipush_int
+  .method get()I
+    bipush -117
+    ireturn
+  .methodend
+.classend

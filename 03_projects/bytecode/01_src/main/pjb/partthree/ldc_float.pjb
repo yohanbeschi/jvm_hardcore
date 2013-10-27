@@ -1,0 +1,6 @@
+.class org/isk/jvmhardcore/bytecode/partthree/Ldc_Float
+  .method getFloat()F
+    ldc -15.56e-12
+    freturn
+  .methodend
+.classend

@@ -1,0 +1,6 @@
+.class org/isk/jvmhardcore/bytecode/partthree/Ldc_Double
+  .method getDouble()D
+    ldc2_w -14.70e-43
+    dreturn
+  .methodend
+.classend

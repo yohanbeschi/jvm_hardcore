@@ -1,0 +1,7 @@
+@ Returns a String
+.class org/isk/jvmhardcore/bytecode/partfour/Aload
+  .method getThird(BILjava/lang/String;J)Ljava/lang/String;
+    aload 2
+    areturn
+  .methodend
+.classend

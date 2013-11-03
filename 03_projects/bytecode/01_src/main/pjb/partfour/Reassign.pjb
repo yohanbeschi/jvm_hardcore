@@ -1,0 +1,11 @@
+.class org/isk/jvmhardcore/bytecode/partfour/Reassign
+  .method reassign()D
+    ldc "ma chaîne"
+    astore_0
+    aload_0
+    dconst_1
+    dstore_0
+    dload_0
+    dreturn
+  .methodend
+.classend

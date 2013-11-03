@@ -161,3 +161,13 @@ See part02.
 
 ### Blog post
 [JVM Hardcore - Part 3 - Bytecode - Constantes](http://blog.soat.fr/2013/09/04-jvm-hardcore-part-3-bytecode-constantes)
+
+## part04
+### Summary
+Bytecode instructions : handling local variables (`xload`, `xload_y`, `xstore` and `xstore_y`).
+
+### Compile and execute
+See part02.
+
+### Blog post
+[Part 4 - Bytecode - Manipulation des variables locales](http://blog.soat.fr/2013/10/05_jvm_hardcore_04_variables_locale)

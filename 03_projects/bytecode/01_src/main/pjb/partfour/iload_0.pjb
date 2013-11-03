@@ -1,0 +1,6 @@
+.class org/isk/jvmhardcore/bytecode/partfour/Iload_0
+  .method getFirst(III)I
+    iload_0
+    ireturn
+  .methodend
+.classend

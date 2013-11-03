@@ -1,0 +1,7 @@
+@ Returns a long
+.class org/isk/jvmhardcore/bytecode/partfour/Lload
+  .method getFourth(BILjava/lang/String;J)J
+    lload 3
+    lreturn
+  .methodend
+.classend

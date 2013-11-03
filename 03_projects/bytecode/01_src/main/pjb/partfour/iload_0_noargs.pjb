@@ -1,0 +1,10 @@
+@ Try to get the local at index 0
+@ The method not having parameters 
+@ and nothing having be storing at this index
+@ an exception is thrown
+.class org/isk/jvmhardcore/bytecode/partfour/Iload_0_NoArgs
+  .method getFirst()I
+    iload_0
+    ireturn
+  .methodend
+.classend

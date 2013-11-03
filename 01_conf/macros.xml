@@ -1,6 +1,97 @@
 <project name="macros" xmlns:plume="http://blog.soat.fr/ant-macros">
 	<property name="macros.uri" value="http://blog.soat.fr/ant-macros" />
 
+  <!--+=========================================================================================+-->
+  <!--+ Javac                                                                                   +-->
+  <!--+=========================================================================================+-->
+  <path id="fake.classpath" />
+
+  <macrodef name="compiler" uri="${macros.uri}">
+    <attribute name="srcDir" />
+    <attribute name="destDir" />
+    <attribute name="classpath" default="fake.classpath" />
+
+    <sequential>
+      <javac srcdir="@{srcDir}"
+           destdir="@{destDir}"
+           includeAntRuntime="false"
+           source="${javac.version}"
+           target="${javac.version}"
+           encoding="utf-8"
+           deprecation="true"
+           classpathref="@{classpath}" />
+    </sequential>
+  </macrodef>
+
+  <!--+=========================================================================================+-->
+  <!--+ Copy resources                                                                          +-->
+  <!--+=========================================================================================+-->
+
+  <macrodef name="resources" uri="${macros.uri}">
+    <attribute name="from" /> <!-- ${build.test-classes.dir} -->
+    <attribute name="to" /> <!-- {src.test.resources.dir} -->
+
+    <sequential>
+      <copy todir="@{to}" failonerror="false">
+        <fileset dir="@{from}" />
+      </copy>
+    </sequential>
+  </macrodef>
+
+  <!--+=========================================================================================+-->
+  <!--+ JUnit                                                                                   +-->
+  <!--+=========================================================================================+-->
+
+  <macrodef name="tester" uri="${macros.uri}">
+    <attribute name="classpath" />
+    <attribute name="dataDir" />
+    <attribute name="testClass" default="" />
+    <attribute name="testMethod" default="" />
+    <attribute name="testDir" />
+    <attribute name="reportsDir" />
+    <attribute name="include" default="**/*Test.class" />
+
+    <sequential>
+      <junit printsummary="true" haltonfailure="false"
+             errorProperty="test.failed"
+             failureProperty="test.failed">
+
+        <classpath refid="@{classpath}"/>
+
+        <formatter type="brief" usefile="false"/>
+        <formatter type="plain" />
+        <formatter type="xml"/>
+
+        <test todir="@{dataDir}" name="@{testClass}"
+              if="testClass" unless="testMethod" />
+
+        <test todir="@{dataDir}" name="@{testClass}"
+              if="testMethod" methods="@{testMethod}" />
+
+        <batchtest todir="@{dataDir}" unless="testClass">
+          <fileset dir="@{testDir}">
+            <include name="@{include}" />
+          </fileset>
+        </batchtest>
+      </junit>
+
+      <junitreport todir="@{dataDir}">
+        <fileset dir="@{dataDir}">
+          <include name="TEST-*.xml"/>
+        </fileset>
+        <report format="frames" todir="@{reportsDir}"/>
+      </junitreport>
+
+      <fail if="test.failed">
+        Tests failed. Check @{reportsDir}
+      </fail>
+    </sequential>
+  </macrodef>
+
+  <!--+=========================================================================================+-->
+  <!--+ Create a library                                                                        +-->
+  <!--+=========================================================================================+-->
+
 	<macrodef name="jarlib" uri="${macros.uri}">
 		<attribute name="jarName"/>
 		<attribute name="srcDir"/>
@@ -12,6 +103,10 @@
 			<jar destfile="@{jarName}.${releaseNumber}.jar" basedir="@{srcDir}" />
 		</sequential>
 	</macrodef>
+
+  <!--+=========================================================================================+-->
+  <!--+ Create an executable JAR                                                                +-->
+  <!--+=========================================================================================+-->
 
 	<macrodef name="jarapp" uri="${macros.uri}">
 		<attribute name="jarName"/>

@@ -132,7 +132,7 @@ The folder *01\_src/main/assembler/* contains classes allowing us to generate *.
 
 The folder *02\_build/assembler/* contains all the compiled components of the assembler and tests reports from tests ran to generate *.class* files.
 
-The method [assemblePjb()](http://github.com/yohanbeschi/jvm_hardcore/blob/part02/03_projects/bytecode/01_src/main/java/org/isk/jvmhardcore/bytecode/parttwo/Assembler#L46) takes all the files in the folder *pjb/* and its children regardless of their extension and invokes PJBA parser (available in the folder   *02\_libs* under the name *pjba.jar*).<br />
+The method [assemblePjb()](http://github.com/yohanbeschi/jvm_hardcore/blob/part02/03_projects/bytecode/01_src/main/assembler/org/isk/jvmhardcore/bytecode/parttwo/Assembler#L46) takes all the files in the folder *pjb/* and its children regardless of their extension and invokes PJBA parser (available in the folder   *02\_libs* under the name *pjba.jar*).<br />
 Generated files are created in the folder *02\_build\pjb-classes*. Therefore, it 
 MUST be added to the classpath to allow unit tests testing its classes and methods to access it.
 
@@ -159,7 +159,7 @@ Bytecode instructions : constants (`xconst_y`, `bipush`, `sipush` and `ldc`) and
 ### Compile and execute
 See part02.
 
-Blog post: [JVM Hardcore - Part 3 - Bytecode - Constantes](http://blog.soat.fr/2013/09/04-jvm-hardcore-part-3-bytecode-constantes)
+Blog post: [JVM Hardcore - Part 3 - Bytecode - Constantes](http://blog.soat.fr/2013/10/04-jvm-hardcore-part-3-bytecode-constantes)
 
 ## part04
 ### Summary
@@ -168,4 +168,4 @@ Bytecode instructions : handling local variables (`xload`, `xload_y`, `xstore` a
 ### Compile and execute
 See part02.
 
-Blog post: [JVM Hardcore - Part 4 - Bytecode - Manipulation des variables locales](http://blog.soat.fr/2013/10/05_jvm_hardcore_04_variables_locale)
+Blog post: [JVM Hardcore - Part 4 - Bytecode - Manipulation des variables locales](http://blog.soat.fr/2013/11/05-jvm-hardcore-part-4-bytecode-variables-locales)

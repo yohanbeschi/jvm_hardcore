@@ -39,7 +39,6 @@ public class Assembler {
   @Test
   public void assemblePjb() throws Exception {
     final URL resource = Thread.currentThread().getContextClassLoader().getResource("pjb/");
-    System.out.println(resource);
     final File folder = new File(resource.getPath());
     this.goThroughEachFolder(folder);
   }

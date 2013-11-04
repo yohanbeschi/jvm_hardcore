@@ -1,6 +1,72 @@
-<project name="bytecode" default="assemble">
+<project name="bytecode" default="archive" xmlns:plume="http://blog.soat.fr/ant-macros">
   <import file="../../01_conf/targets.xml" />
   <description>Bytecode - Assembles and dumps class files</description>
+
+  <!--+=========================================================================================+-->
+  <!--+ Classpath                                                                               +-->
+  <!--+=========================================================================================+-->
+  <!-- To compile main -->
+  <path id="compile.classpath">
+    <fileset dir="${libs.dir}">
+      <include name="junit-4.10.jar" />
+      <include name="pjba.jar" />
+    </fileset>
+  </path>
+
+  <!-- To Generate .class file (handmade) -->
+	<path id="assembler.execute.classpath">
+		<path refid="compile.classpath"/>
+		<pathelement location="${build.assembler.classes.dir}" />
+  </path>
+
+  <!-- To compile tests -->
+  <path id="test.compile.classpath">
+		<path refid="compile.classpath"/>
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${build.pjb-classes.dir}" />
+  </path>
+
+  <!-- To run tests -->
+  <path id="test.classpath">
+		<path refid="test.compile.classpath"/>
+		<pathelement location="${build.test-classes.dir}" />
+  </path>
+
+  <!--+=========================================================================================+-->
+  <!--+ Targets                                                                                 +-->
+	<!--+=========================================================================================+-->
+  <target name="compile" depends="-init-assembler">
+    <plume:compiler srcDir="${src.main.assembler.dir}"
+                    destDir="${build.assembler.classes.dir}"
+                    classpath="compile.classpath" />
+  </target>
+
+  <target name="assemble" depends="compile">
+    <copy todir="${build.assembler.classes.dir}">
+			<fileset dir="${src.main.dir}">
+        <include name="pjb/" />
+			</fileset>
+		</copy>
+
+    <plume:tester classpath="assembler.execute.classpath"
+                  dataDir="${build.assembler.reports.dir}"
+                  testDir="${build.assembler.classes.dir}"
+                  reportsDir="${build.assembler.reports.dir}"
+                  include="**/*.class" />
+
+		<plume:compiler srcDir="${src.test.java.dir}"
+                    destDir="${build.test-classes.dir}"
+                    classpath="test.compile.classpath" />
+  </target>
+
+  <target name="test" depends="assemble">
+    <plume:tester classpath="test.classpath"
+                  dataDir="${build.junit-data.dir}"
+                  testClass="${testClass}"
+                  testMethod="${testMethod}"
+                  testDir="${build.test-classes.dir}"
+                  reportsDir="${build.junit-reports.dir}" />
+  </target>
 
 	<target name="archive" depends="assemble, test" description="Assembles &amp; tests" />
 </project>

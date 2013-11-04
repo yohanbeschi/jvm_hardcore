@@ -130,7 +130,7 @@ The folder *01\_src/main/assembler/* contains classes allowing us to generate *.
 
 The folder *02\_build/assembler/* contains all the compiled components of the assembler and tests reports from tests ran to generate *.class* files.
 
-The method [assemblePjb()](http://github.com/yohanbeschi/jvm_hardcore/blob/part02/03_projects/bytecode/01_src/main/java/org/isk/jvmhardcore/bytecode/parttwo/Assembler#L46) takes all the files in the folder *pjb/* and its children regardless of their extension and invokes PJBA parser (available in the folder   *02\_libs* under the name *pjba.jar*).<br />
+The method [assemblePjb()](http://github.com/yohanbeschi/jvm_hardcore/blob/part02/03_projects/bytecode/01_src/main/assembler/org/isk/jvmhardcore/bytecode/parttwo/Assembler#L42) takes all the files in the folder *pjb/* and its children regardless of their extension and invokes PJBA parser (available in the folder   *02\_libs* under the name *pjba.jar*).<br />
 Generated files are created in the folder *02\_build\pjb-classes*. Therefore, it 
 MUST be added to the classpath to allow unit tests testing its classes and methods to access it.
 

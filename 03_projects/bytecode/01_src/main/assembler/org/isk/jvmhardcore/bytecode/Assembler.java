@@ -5,12 +5,12 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 import org.isk.jvmhardcore.pjba.parser.PjbParser;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class Assembler {
@@ -21,13 +21,15 @@ public class Assembler {
    * 
    * @throws Exception
    */
-  @BeforeClass
-  public static void init() throws Exception {
+  static {
     final File directory = new File(".");
-    if (directory.getCanonicalPath().contains("bytecode")) {
-      GENERATED_DIRECTORY = "02_build/pjb-classes/";
-    } else {
-      GENERATED_DIRECTORY = "03_projects/bytecode/02_build/pjb-classes/";
+    try {
+      if (directory.getCanonicalPath().contains("bytecode")) {
+        GENERATED_DIRECTORY = "02_build/pjb-classes/";
+      } else {
+        GENERATED_DIRECTORY = "03_projects/bytecode/02_build/pjb-classes/";
+      }
+    } catch (IOException e) {
     }
   }
 

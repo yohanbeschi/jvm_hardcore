@@ -25,6 +25,7 @@ Ant allowing a lot of freedom it is necessary to set some conventions. The typic
 	|  |  |  +- pjb (Plume Java Bytecode)
 	|  |  |  +- resources
 	|  |  +- test
+	|  +- 02_build (generated)
 	|  |  |  +- assembler
 	|  |  |  |  +- classes (Compiler Assembler compilé)
 	|  |  |  |  +- reports (Assembling reports)
@@ -33,7 +34,6 @@ Ant allowing a lot of freedom it is necessary to set some conventions. The typic
 	|  |  |  +- junit-reports
 	|  |  |  +- pjb-classes (.pjb assembled into .class)
 	|  |  |  +- test-classes
-	|  +- 02_build (generated)
 	|  +- 03_dist (generated)
 
 The series of blog posts covering a lot of different topics there will be several projects, therefore a root level in the directories' hierarchy is needed:
@@ -53,7 +53,7 @@ It's really simple to compile everything at once:
 
 To delete the folders *02\_build* and *03\_dist* of each projects:
 
-	<jvm_hardcore_path>$ ant clean-all
+	<jvm_hardcore_path>$ ant clean
 
 To delete the folder *04\_archives*:
 
@@ -61,11 +61,9 @@ To delete the folder *04\_archives*:
 
 The others **targets** are the followings:
 
-- **clean**: delete the folder *02\_build* of each projects
-- **clean-dist**: delete the folder *03\_dist* of each projects
-- **clean-test**: delete the folder *02\_build/[test-classes &amp; junit-data &amp; junit-reports]* of each projects
+- **clean-all**: delete the folders *02\_build* & *03\_dist* of each projects, and the forlder *04\_archives*
 - **compile** : compile the Java source code of each projects
-- **test-compile** : compile the Unit Tests of each projects
+- **assemble** : assemble *.pjb* files or class file representations as Java objects to *.class* files. And compile unit tests of these generated files.
 - **test** : run Unit Tests of each projects
 - **archive** : generated a JAR for each projects.
 
@@ -170,4 +168,4 @@ Bytecode instructions : handling local variables (`xload`, `xload_y`, `xstore` a
 See part02.
 
 ### Blog post
-[Part 4 - Bytecode - Manipulation des variables locales](http://blog.soat.fr/2013/10/05_jvm_hardcore_04_variables_locale)
+[JVM Hardcore - Part 4 - Bytecode - Manipulation des variables locales](http://blog.soat.fr/2013/11/05-jvm-hardcore-part-4-bytecode-variables-locales)

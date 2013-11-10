@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Ior
+  .method ior()I
+    bipush 10  # [empty] -> 10 (1010)
+    bipush 7   # 10 -> 10, 5 (0111)
+    ior        # 10, 5 -> 15 (1111)
+    ireturn
+  .methodend
+.classend

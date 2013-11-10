@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/BitShifting_Left
+  .method shift()I
+    bipush 9  # [empty] -> 9 (1001)
+    iconst_1  # 9 -> 9, 1
+    ishl      # 9, 1 -> 18
+    ireturn
+  .methodend
+.classend

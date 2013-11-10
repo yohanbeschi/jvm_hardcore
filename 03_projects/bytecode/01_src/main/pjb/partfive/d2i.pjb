@@ -1,0 +1,7 @@
+.class org/isk/jvmhardcore/bytecode/partfive/D2i
+  .method d2i(D)I
+    dload_0
+    d2i
+    ireturn
+  .methodend
+.classend

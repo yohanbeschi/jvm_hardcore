@@ -1,0 +1,7 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Negation
+  .method negate(I)I
+    iload_0  # [empty] -> idx0
+    ineg     # idx0 -> result
+    ireturn
+  .methodend
+.classend

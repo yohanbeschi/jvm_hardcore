@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Ixor
+  .method ixor()I
+    bipush 10  # [empty] -> 10 (1010)
+    bipush 7   # 10 -> 10, 5 (0111)
+    ixor       # 10, 5 -> 13 (1101)
+    ireturn
+  .methodend
+.classend

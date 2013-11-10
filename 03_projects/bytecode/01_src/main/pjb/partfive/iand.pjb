@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Iand
+  .method iand()I
+    bipush 10  # [empty] -> 10 (1010)
+    bipush 7   # 10 -> 10, 7 (0111)
+    iand       # 10, 5 -> 2 (0010)
+    ireturn
+  .methodend
+.classend

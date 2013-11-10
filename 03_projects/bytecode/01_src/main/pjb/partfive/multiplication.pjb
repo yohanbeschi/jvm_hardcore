@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Multiplication
+  .method multiply(FF)F
+    fload_0  # [empty] -> idx0
+    fload_1  # idx0 -> idx0, idx1
+    fmul     # idx0, idx1 -> result
+    freturn
+  .methodend
+.classend

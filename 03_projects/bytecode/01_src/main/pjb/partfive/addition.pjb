@@ -1,0 +1,10 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Addition
+  .method add(III)I
+    iload_0  # [empty] -> idx0
+    iload_1  # idx0 -> idx0, idx1
+    iadd     # idx0, idx1 -> partialResult
+    iload_2  # partialResult -> partialResult, idx2
+    iadd     # partialResult, idx2 -> result
+    ireturn
+  .methodend
+.classend

@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Remainder
+  .method getRemainder(II)I
+    iload_0  # [empty] -> idx0
+    iload_1  # idx0 -> idx0, idx1
+    irem     # idx0, idx1 -> result
+    ireturn
+  .methodend
+.classend

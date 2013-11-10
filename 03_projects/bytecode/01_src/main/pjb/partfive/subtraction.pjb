@@ -1,0 +1,10 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Subtraction
+  .method subtract(DDD)D
+    dload_0  # [empty] -> idx0
+    dload_2  # idx0 -> idx0, idx2
+    dsub     # idx0, idx2 -> partialResult
+    dload 4  # partialResult -> partialResult, idx4
+    dsub     # partialResult, idx4 -> result
+    dreturn
+  .methodend
+.classend

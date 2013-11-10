@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partfive/Division
+  .method divide(JJ)J
+    lload_0  # [empty] -> idx0
+    lload_2  # idx0 -> idx0, idx2
+    ldiv     # idx0, idx2 -> result
+    lreturn
+  .methodend
+.classend

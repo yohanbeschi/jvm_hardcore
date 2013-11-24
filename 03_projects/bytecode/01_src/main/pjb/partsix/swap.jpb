@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Swap
+  .method swap()I
+    iconst_1
+    iconst_2
+    swap
+    ireturn
+  .methodend
+.classend

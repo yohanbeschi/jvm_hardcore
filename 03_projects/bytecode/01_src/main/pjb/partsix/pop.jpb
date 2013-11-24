@@ -1,0 +1,8 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Pop
+  .method pop()D
+    dconst_0
+    iconst_1
+    pop
+    dreturn
+  .methodend
+.classend

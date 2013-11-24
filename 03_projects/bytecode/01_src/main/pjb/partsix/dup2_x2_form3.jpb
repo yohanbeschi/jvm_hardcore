@@ -1,0 +1,15 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Dup2_X2_Form3
+  .method dup2_x2()I
+    dconst_1  # [empty] -> 1.0
+    iconst_1  # 1.0 -> 1.0, 1
+    iconst_2  # 1.0, 1 -> 1.0, 1, 2
+    dup2_x2   # 1.0, 1, 2 -> 1, 2, 1.0, 1, 2
+    pop2      # 1, 2, 1.0, 1, 2 -> 1, 2, 1.0
+    pop2      # 1, 2, 1.0 -> 1, 2
+    @--------- Start packing
+    bipush 4
+    ishl
+    ior
+    ireturn   # 0010 0001
+  .methodend
+.classend

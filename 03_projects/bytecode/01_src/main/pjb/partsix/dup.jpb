@@ -1,0 +1,9 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Dup
+  .method dup()I
+    iconst_2
+    iconst_1
+    dup
+    pop2
+    ireturn
+  .methodend
+.classend

@@ -1,0 +1,18 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Dup2_Form1
+  .method dup2()I
+    iconst_2  # [empty] -> 2
+    iconst_1  # 2 -> 2, 1
+    dup2      # 2, 1 -> 2, 1, 2, 1
+    @--------- Start packing
+    bipush 8  # 2, 1, 2, 1 -> 2, 1, 2, 1, 8
+    ishl      # 2, 1, 2, 1, 8 -> 2, 1, 2, 1 << 8
+    ior       # 2, 1, 2, 1 << 8 -> 2, 1, 2 | 1 << 8
+    bipush 8  # 2, 1, 2 | 1 << 8 -> 2, 1, 2 | 1 << 8, 8
+    ishl      # 2, 1, 2 | 1 << 8, 8 -> 2, 1, (2 | 1 << 8) << 8
+    ior       # 2, 1, (2 | 1 << 8) << 8 -> 2, 1 | (2 | 1 << 8) << 8
+    bipush 8  # etc.
+    ishl
+    ior
+    ireturn   # 0000 0001 0000 0010 0000 0001 0000 0010
+  .methodend
+.classend

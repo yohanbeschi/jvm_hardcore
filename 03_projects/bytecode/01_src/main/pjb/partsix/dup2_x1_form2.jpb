@@ -1,0 +1,10 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Dup2_X1_Form2
+  .method dup2_x1()D
+    iconst_3  # [empty] -> 3
+    dconst_1  # 3 -> 3, 1.0
+    dup2_x1   # 3, 1.0 -> 1.0, 3, 1.0
+    pop2      # 1.0, 3, 1.0 -> 1.0, 3
+    pop       # 1.0, 3 -> 1.0
+    dreturn
+  .methodend
+.classend

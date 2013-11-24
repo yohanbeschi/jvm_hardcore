@@ -170,9 +170,18 @@ Blog post: [JVM Hardcore - Part 4 - Bytecode - Manipulation des variables locale
 
 ## part05
 ### Summary
-Bytecode instructions : operations on number.
+Bytecode instructions : operations on numbers.
 
 ### Compile and execute
 See part02.
 
 Blog post: [JVM Hardcore - Part 5 - Bytecode - Mathématiques et Conversions](http://blog.soat.fr/2013/11/06-jvm-hardcore-part-5-bytecode-mathematiques-et-conversions)
+
+## part06
+### Summary
+Bytecode instructions : handling the Stack.
+
+### Compile and execute
+See part02.
+
+Blog post: [JVM Hardcore - Part 6 - Bytecode - Manipulation de la pile](http://blog.soat.fr/2013/11/07-jvm-hardcore-part-6-bytecode-manipulation-de-la-pile)

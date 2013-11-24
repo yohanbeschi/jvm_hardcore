@@ -1,0 +1,9 @@
+.class org/isk/jvmhardcore/bytecode/partsix/Pop2_Form1
+  .method pop2()I
+    iconst_0
+    iconst_1
+    iconst_1
+    pop2
+    ireturn
+  .methodend
+.classend

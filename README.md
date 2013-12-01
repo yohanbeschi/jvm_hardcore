@@ -185,3 +185,12 @@ Bytecode instructions : handling the Stack.
 See part02.
 
 Blog post: [JVM Hardcore - Part 6 - Bytecode - Manipulation de la pile](http://blog.soat.fr/2013/11/07-jvm-hardcore-part-6-bytecode-manipulation-de-la-pile)
+
+## part07
+### Summary
+Introduction to a simple LL event-based parser (1/2).
+ 
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 7 - Mon premier analyseur syntaxique - 1/2](http://blog.soat.fr/2013/12/08-jvm-hardcore-part-7-mon-premier-analyseur-syntaxique-12)

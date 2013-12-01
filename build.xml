@@ -11,6 +11,7 @@
     <fail unless="target">Wrong usage: $ant -Dtarget=&lt;target_name&gt;</fail>
     <ant dir="${projects.dir}/mystery/" target="${target}"  inheritAll="false" />
     <ant dir="${projects.dir}/bytecode/" target="${target}"  inheritAll="false" />
+    <ant dir="${projects.dir}/mathparser/" target="${target}"  inheritAll="false" />
   </target>
 
   <target name="nop" description="Checks projects build">

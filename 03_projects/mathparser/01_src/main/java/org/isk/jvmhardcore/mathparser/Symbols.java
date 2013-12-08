@@ -9,6 +9,11 @@ public class Symbols {
   final public static int EXPRESSION = number++;
   final public static int OR_RIGHT_EXPRESSION = number++;
   
+  final public static int OR_LEFT_PARENTHESIS = number++;
+  final public static int OR_RIGHT_PARENTHESIS = number++;
+  final public static int LEFT_PARENTHESIS = number++;
+  final public static int RIGHT_PARENTHESIS = number++;
+  
   final public static int NUMBER = number++;
   final public static int OPERATOR = number++;
 

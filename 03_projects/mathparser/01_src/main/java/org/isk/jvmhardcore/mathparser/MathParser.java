@@ -34,6 +34,12 @@ public class MathParser extends Parser<LinkedList<String>, EventType, MathTokeni
       case OPERATOR:
         this.tokens.add(String.valueOf(Character.toChars(this.tokenizer.getOperator())));
         break;
+      case LEFT_PARENTHESIS:
+        this.tokens.add(String.valueOf(Character.toChars(this.tokenizer.getNext())));
+        break;
+      case RIGHT_PARENTHESIS:
+        this.tokens.add(String.valueOf(Character.toChars(this.tokenizer.getNext())));
+        break;
       case EOF:
         this.tokenizer.checkEndOfFile();
         done = true;
@@ -58,6 +64,10 @@ public class MathParser extends Parser<LinkedList<String>, EventType, MathTokeni
     this.table[Symbols.EOF] = new Productions.EndOfFile();
     this.table[Symbols.EXPRESSION] = new Productions.Expression();
     this.table[Symbols.OR_RIGHT_EXPRESSION] = new Productions.OrRightExpression();
+    this.table[Symbols.OR_LEFT_PARENTHESIS] = new Productions.OrLeftParenthesis();
+    this.table[Symbols.OR_RIGHT_PARENTHESIS] = new Productions.OrRightParenthesis();
+    this.table[Symbols.LEFT_PARENTHESIS] = new Productions.LeftParenthesis();
+    this.table[Symbols.RIGHT_PARENTHESIS] = new Productions.RightParenthesis();
     this.table[Symbols.NUMBER] = new Productions.Number();
     this.table[Symbols.OPERATOR] = new Productions.Operator();
     this.table[Symbols.WS] = new Productions.Whitespaces();

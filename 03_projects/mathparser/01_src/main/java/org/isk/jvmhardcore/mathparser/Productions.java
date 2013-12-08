@@ -18,7 +18,7 @@ public class Productions {
     }
   }
 
-  // expression = ws number orRightExpression ws
+  // expression = orLeftParenthesis ws number orRightExpression ws
   public static class Expression implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
@@ -27,12 +27,13 @@ public class Productions {
       productionStack.push(table[Symbols.OR_RIGHT_EXPRESSION]);
       productionStack.push(table[Symbols.NUMBER]);
       productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.OR_LEFT_PARENTHESIS]);
 
       return null;
     }
   }
   
-  // orRightExpression = {ws operator ws number}
+  // orRightExpression = {ws operator orLeftParenthesis number orRightParenthesis ws}
   public static class OrRightExpression implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
@@ -41,8 +42,10 @@ public class Productions {
 
       if (tokenizer.isOperator()) {
         productionStack.push(table[Symbols.OR_RIGHT_EXPRESSION]);
-        productionStack.push(table[Symbols.NUMBER]);
         productionStack.push(table[Symbols.WS]);
+        productionStack.push(table[Symbols.OR_RIGHT_PARENTHESIS]);
+        productionStack.push(table[Symbols.NUMBER]);
+        productionStack.push(table[Symbols.OR_LEFT_PARENTHESIS]);
         productionStack.push(table[Symbols.OPERATOR]);
       }
 
@@ -67,6 +70,56 @@ public class Productions {
       } else {
         return EventType.INTEGER;
       }
+    }
+  }
+
+  // orLeftParenthesis = {ws leftParenthesis}
+  public static class OrLeftParenthesis implements Production<EventType, MathTokenizer> {
+    public EventType produce(MathTokenizer tokenizer,
+                             Production<EventType, MathTokenizer>[] table,
+                             Stack<Production<EventType, MathTokenizer>> productionStack) {
+      tokenizer.consumeUnprintables();
+
+      if (tokenizer.isLeftParenthesis()) {
+        productionStack.push(table[Symbols.OR_LEFT_PARENTHESIS]);
+        productionStack.push(table[Symbols.LEFT_PARENTHESIS]);
+      }
+
+      return null;
+    }
+  }
+
+  // orRightParenthesis = {ws rightParenthesis}
+  public static class OrRightParenthesis implements Production<EventType, MathTokenizer> {
+    public EventType produce(MathTokenizer tokenizer,
+                             Production<EventType, MathTokenizer>[] table,
+                             Stack<Production<EventType, MathTokenizer>> productionStack) {
+      tokenizer.consumeUnprintables();
+
+      if (tokenizer.isRightParenthesis()) {
+        productionStack.push(table[Symbols.OR_RIGHT_PARENTHESIS]);
+        productionStack.push(table[Symbols.RIGHT_PARENTHESIS]);
+      }
+
+      return null;
+    }
+  }
+
+  // leftParenthesis = '('
+  public static class LeftParenthesis implements Production<EventType, MathTokenizer> {
+    public EventType produce(MathTokenizer tokenizer,
+                             Production<EventType, MathTokenizer>[] table,
+                             Stack<Production<EventType, MathTokenizer>> productionStack) {
+      return EventType.LEFT_PARENTHESIS;
+    }
+  }
+
+  // rightParenthesis = ')'
+  public static class RightParenthesis implements Production<EventType, MathTokenizer> {
+    public EventType produce(MathTokenizer tokenizer,
+                             Production<EventType, MathTokenizer>[] table,
+                             Stack<Production<EventType, MathTokenizer>> productionStack) {
+      return EventType.RIGHT_PARENTHESIS;
     }
   }
 

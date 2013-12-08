@@ -123,4 +123,39 @@ public class MathParserTest {
   public void variableNumberOfOperands() {
     this.test("2 + 3 - 4 * 5 / -17", this.expected("2", "+", "3", "-", "4", "*", "5", "/", "-17"));
   }
+  
+  @Test
+  public void expressionWithParenthesis0() {
+    this.test("(2 + 5) - 2", this.expected("(", "2", "+", "5", ")", "-", "2"));
+  }
+  
+  @Test
+  public void expressionWithParenthesis1() {
+    this.test("((2 + 5) * 2) - 2", this.expected("(", "(", "2", "+", "5", ")", "*", "2", ")", "-", "2"));
+  }
+  
+  @Test
+  public void expressionWithParenthesis2() {
+    this.test("((2 + 5) * (10 - 8)) - 2", this.expected("(", "(", "2", "+", "5", ")", "*", "(", "10", "-", "8", ")", ")", "-", "2"));
+  }
+  
+  @Test
+  public void expressionWithParenthesis3() {
+    this.test("((2 + 5) * (10 - 8) - 2) + 3", this.expected("(", "(", "2", "+", "5", ")", "*", "(", "10", "-", "8", ")", "-", "2", ")", "+", "3"));
+  }
+  
+  @Test
+  public void expressionWithParenthesis4() {
+    this.test("((2 + 5) - 2 * (10 - 8)) + 3", this.expected("(", "(", "2", "+", "5", ")", "-", "2", "*", "(", "10", "-", "8", ")", ")", "+", "3"));
+  }
+  
+  @Test
+  public void expressionWithParenthesis5() {
+    this.test("(2 * (2 + 5) - (10 - 8)) + 3", this.expected("(", "2", "*", "(", "2", "+", "5", ")", "-", "(", "10", "-", "8", ")", ")", "+", "3"));
+  }
+  
+  @Test
+  public void expressionWithParenthesis6() {
+    this.test("4 - (2 + 5) - 2", this.expected("4", "-", "(", "2", "+", "5", ")", "-", "2"));
+  }
 }

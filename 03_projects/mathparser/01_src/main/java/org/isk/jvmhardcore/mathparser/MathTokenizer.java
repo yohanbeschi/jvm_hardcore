@@ -69,6 +69,10 @@ public class MathTokenizer extends Tokenizer {
     }
   }
   
+  public int getNext() {
+    return this.next();
+  }
+  
   public boolean isFloat() {
     this.mark();
 
@@ -128,5 +132,17 @@ public class MathTokenizer extends Tokenizer {
     final int character = this.next();
     this.rewind();
     return isOperator(character);
+  }
+  
+  public boolean isLeftParenthesis() {
+    final int character = this.next();
+    this.rewind();
+    return character == Ascii.LEFT_PARENTHESIS;
+  }
+
+  public boolean isRightParenthesis() {
+    final int character = this.next();
+    this.rewind();
+    return character == Ascii.RIGHT_PARENTHESIS;
   }
 }

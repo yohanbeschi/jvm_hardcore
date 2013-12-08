@@ -4,5 +4,7 @@ public enum EventType {
   EOF,
   INTEGER,
   FLOAT,
-  OPERATOR;
+  OPERATOR,
+  LEFT_PARENTHESIS,
+  RIGHT_PARENTHESIS;
 }

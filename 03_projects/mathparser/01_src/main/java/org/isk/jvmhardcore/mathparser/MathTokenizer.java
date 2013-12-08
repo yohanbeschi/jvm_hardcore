@@ -23,10 +23,14 @@ public class MathTokenizer extends Tokenizer {
   public int getOperator() {
     int character = this.next();
 
-    if (character == Ascii.PLUS_SIGN) {
+    if ( character == Ascii.PLUS_SIGN
+      || character == Ascii.HYPHEN
+      || character == Ascii.ASTERIX
+      || character == Ascii.SLASH
+        ) {
       return character;
     } else {
-      throw new ParserException("Expected: '+'.");
+      throw new ParserException("Expected: '+' or '-' or '*' or '/'.");
     }
   }
 }

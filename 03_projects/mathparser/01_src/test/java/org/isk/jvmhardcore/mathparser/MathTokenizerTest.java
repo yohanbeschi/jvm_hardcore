@@ -25,23 +25,23 @@ public class MathTokenizerTest {
     Assert.assertEquals(Ascii.PLUS_SIGN, operator);
     Assert.assertEquals(Ascii.DIGIT_5, digitTwo);
   }
-  
+
   @Test
   public void operatorExpected() {
     final String string = "32+5";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
-    
+
     tokenizer.getDigit();
-    
+
     try {
       tokenizer.getOperator();
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("Line 1, column 2 - Expected: '+'. Got: 2", e.getMessage());
+      Assert.assertEquals("Line 1, column 2 - Expected: '+' or '-' or '*' or '/'. Got: 2", e.getMessage());
     }
   }
-  
+
   @Test
   public void digitExpected() {
     final String string = "2+,5";
@@ -50,12 +50,56 @@ public class MathTokenizerTest {
 
     tokenizer.getDigit();
     tokenizer.getOperator();
-    
+
     try {
       tokenizer.getDigit();
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals("Line 1, column 3 - Expected: Digit [0-9]. Got: ,", e.getMessage());
     }
+  }
+
+  @Test
+  public void addition() {
+    final String string = "2+5";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    tokenizer.getDigit();
+    final int operator = tokenizer.getOperator();
+    Assert.assertEquals(Ascii.PLUS_SIGN, operator);
+  }
+
+  @Test
+  public void subtraction() {
+    final String string = "2-5";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    tokenizer.getDigit();
+    final int operator = tokenizer.getOperator();
+    Assert.assertEquals(Ascii.HYPHEN, operator);
+  }
+
+  @Test
+  public void multiplication() {
+    final String string = "2*5";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    tokenizer.getDigit();
+    final int operator = tokenizer.getOperator();
+    Assert.assertEquals(Ascii.ASTERIX, operator);
+  }
+
+  @Test
+  public void division() {
+    final String string = "2/5";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    tokenizer.getDigit();
+    final int operator = tokenizer.getOperator();
+    Assert.assertEquals(Ascii.SLASH, operator);
   }
 }

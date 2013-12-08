@@ -16,11 +16,7 @@ public class MathTokenizer extends Tokenizer {
   }
 
   public String getInteger() {
-    int character = Ascii.NULL;
-
-    while (isDigit(character = this.next())) {
-      generator.appendChar(character);
-    }
+    this.fillWithDigits();
 
     if (!generator.isEmpty()) {
       this.rewind();
@@ -31,11 +27,7 @@ public class MathTokenizer extends Tokenizer {
   }
 
   public String getFloat() {
-    int character = Ascii.NULL;
-
-    while (isDigit(character = this.next())) {
-      generator.appendChar(character);
-    }
+    int character = this.fillWithDigits();
 
     // getFloat() is called after isFloat()
     // therefore we are not supposed to check if it's a dot or not
@@ -47,6 +39,24 @@ public class MathTokenizer extends Tokenizer {
 
     this.rewind();
     return generator.toString();
+  }
+
+  private int fillWithDigits() {
+    int character = this.next();
+
+    if (character == Ascii.PLUS_SIGN) {
+      // Ignore
+    } else if (character == Ascii.HYPHEN) {
+      generator.appendChar(character);
+    } else {
+      this.rewind();
+    }
+    
+    while (isDigit(character = this.next())) {
+      generator.appendChar(character);
+    }
+    
+    return character;
   }
 
   public int getOperator() {
@@ -66,7 +76,12 @@ public class MathTokenizer extends Tokenizer {
   public boolean isFloat() {
     this.mark();
 
-    int character = Ascii.NULL;
+    int character = this.next();
+
+    // Ignore the sign
+    if (character != Ascii.PLUS_SIGN && character != Ascii.HYPHEN) {
+      this.rewind();
+    }
 
     // number of digits
     int counter = 0;

@@ -36,6 +36,7 @@ public class Productions {
   // float = oRepeatingDigit [dot] oRepeatingDigit
   // repeatingDigit = digit oRepeatingDigit
   // oRepeatingDigit = {digit}
+  // sign = '+' | '-' | ''  (* New *)
   // digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
   // dot = '.'
   public static class Number implements Production<EventType, MathTokenizer> {
@@ -59,7 +60,7 @@ public class Productions {
     }
   }
 
-  // eof = ? fin du flux ?
+  // eof = ? end of stream ?
   public static class EndOfFile implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer, 
                              Production<EventType, MathTokenizer>[] table,

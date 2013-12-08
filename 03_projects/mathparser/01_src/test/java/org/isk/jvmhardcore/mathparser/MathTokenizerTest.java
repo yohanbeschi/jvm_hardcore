@@ -102,6 +102,39 @@ public class MathTokenizerTest {
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.SLASH, operator);
   }
+  
+  @Test
+  public void getInteger0() {
+    final String string = "124";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getInteger();
+
+    Assert.assertEquals(string, num);
+  }
+  
+  @Test
+  public void getInteger1() {
+    final String string = "+124";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getInteger();
+
+    Assert.assertEquals("124", num);
+  }
+  
+  @Test
+  public void getInteger2() {
+    final String string = "-124";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getInteger();
+
+    Assert.assertEquals(string, num);
+  }
 
   @Test
   public void isFloat0() {
@@ -128,6 +161,72 @@ public class MathTokenizerTest {
   @Test
   public void isFloat2() {
     final String string = "23.";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat3() {
+    final String string = "+1.1";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat4() {
+    final String string = "+.567";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat5() {
+    final String string = "+23.";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat6() {
+    final String string = "-1.1";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat7() {
+    final String string = "-.567";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat8() {
+    final String string = "-23.";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
@@ -183,6 +282,72 @@ public class MathTokenizerTest {
   @Test
   public void getFloat2() {
     final String string = "23.";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(string, num);
+  }
+  
+  @Test
+  public void getFloat3() {
+    final String string = "+1.1";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals("1.1", num);
+  }
+  
+  @Test
+  public void getFloat4() {
+    final String string = "+.567";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(".567", num);
+  }
+  
+  @Test
+  public void getFloat5() {
+    final String string = "+23.";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals("23.", num);
+  }
+  
+  @Test
+  public void getFloat6() {
+    final String string = "-1.1";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(string, num);
+  }
+  
+  @Test
+  public void getFloat7() {
+    final String string = "-.567";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(string, num);
+  }
+  
+  @Test
+  public void getFloat8() {
+    final String string = "-23.";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 

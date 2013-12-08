@@ -125,4 +125,22 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "1.2", "+", "56.32" }, tokens);
   }
+  
+  @Test
+  public void getNegativeInteger() {
+    final String string = "-23+-54";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "-23", "+", "-54" }, tokens);
+  }
+  
+  @Test
+  public void getNegativeFloat() {
+    final String string = "-1.2+-56.32";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "-1.2", "+", "-56.32" }, tokens);
+  }
 }

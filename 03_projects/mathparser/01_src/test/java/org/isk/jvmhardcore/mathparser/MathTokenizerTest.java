@@ -102,7 +102,7 @@ public class MathTokenizerTest {
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.SLASH, operator);
   }
-  
+
   @Test
   public void getInteger0() {
     final String string = "124";
@@ -135,7 +135,7 @@ public class MathTokenizerTest {
 
     Assert.assertEquals(string, num);
   }
-
+  
   @Test
   public void isFloat0() {
     final String string = "1.1";

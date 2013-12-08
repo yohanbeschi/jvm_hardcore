@@ -143,4 +143,13 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "-1.2", "+", "-56.32" }, tokens);
   }
+  
+  @Test
+  public void expressionWithUnprintables() {
+    final String string = " \t1.2\u0003 \u0020+\n5   ";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "1.2", "+", "5" }, tokens);
+  }
 }

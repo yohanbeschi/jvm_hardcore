@@ -59,5 +59,6 @@ public class MathParser extends Parser<String[], EventType, MathTokenizer> {
     this.table[Symbols.EXPRESSION] = new Productions.Expression();
     this.table[Symbols.NUMBER] = new Productions.Number();
     this.table[Symbols.OPERATOR] = new Productions.Operator();
+    this.table[Symbols.WS] = new Productions.Whitespaces();
   }
 }

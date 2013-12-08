@@ -10,6 +10,8 @@ public class Symbols {
   final public static int NUMBER = number++;
   final public static int OPERATOR = number++;
 
+  final public static int WS = number++;
+  
   private Symbols() {
   }
 

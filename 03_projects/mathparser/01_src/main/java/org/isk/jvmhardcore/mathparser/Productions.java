@@ -18,14 +18,18 @@ public class Productions {
     }
   }
 
-  // expression = number operator number
+  // expression = ws number ws operator ws number ws
   public static class Expression implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
+      productionStack.push(table[Symbols.WS]);
       productionStack.push(table[Symbols.NUMBER]);
+      productionStack.push(table[Symbols.WS]);
       productionStack.push(table[Symbols.OPERATOR]);
+      productionStack.push(table[Symbols.WS]);
       productionStack.push(table[Symbols.NUMBER]);
+      productionStack.push(table[Symbols.WS]);
 
       return null;
     }
@@ -36,7 +40,7 @@ public class Productions {
   // float = oRepeatingDigit [dot] oRepeatingDigit
   // repeatingDigit = digit oRepeatingDigit
   // oRepeatingDigit = {digit}
-  // sign = '+' | '-' | ''  (* New *)
+  // sign = '+' | '-' | ''
   // digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
   // dot = '.'
   public static class Number implements Production<EventType, MathTokenizer> {
@@ -57,6 +61,16 @@ public class Productions {
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
       return EventType.OPERATOR;
+    }
+  }
+
+  // ws = ? whitespaces ?
+  public static class Whitespaces implements Production<EventType, MathTokenizer> {
+    public EventType produce(MathTokenizer tokenizer, 
+                             Production<EventType, MathTokenizer>[] table,
+                             Stack<Production<EventType, MathTokenizer>> productionStack) {
+      tokenizer.consumeUnprintables();
+      return null;
     }
   }
 

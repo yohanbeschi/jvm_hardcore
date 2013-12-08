@@ -18,23 +18,38 @@ public class Productions {
     }
   }
 
-  // expression = ws number ws operator ws number ws
+  // expression = ws number orRightExpression ws
   public static class Expression implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
       productionStack.push(table[Symbols.WS]);
-      productionStack.push(table[Symbols.NUMBER]);
-      productionStack.push(table[Symbols.WS]);
-      productionStack.push(table[Symbols.OPERATOR]);
-      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.OR_RIGHT_EXPRESSION]);
       productionStack.push(table[Symbols.NUMBER]);
       productionStack.push(table[Symbols.WS]);
 
       return null;
     }
   }
+  
+  // orRightExpression = {ws operator ws number}
+  public static class OrRightExpression implements Production<EventType, MathTokenizer> {
+    public EventType produce(MathTokenizer tokenizer,
+                             Production<EventType, MathTokenizer>[] table,
+                             Stack<Production<EventType, MathTokenizer>> productionStack) {
+      tokenizer.consumeUnprintables();
 
+      if (tokenizer.isOperator()) {
+        productionStack.push(table[Symbols.OR_RIGHT_EXPRESSION]);
+        productionStack.push(table[Symbols.NUMBER]);
+        productionStack.push(table[Symbols.WS]);
+        productionStack.push(table[Symbols.OPERATOR]);
+      }
+
+      return null;
+    }
+  }
+  
   // number = integer | float
   // integer = repeatingDigit
   // float = oRepeatingDigit [dot] oRepeatingDigit

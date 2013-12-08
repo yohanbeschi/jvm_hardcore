@@ -62,11 +62,7 @@ public class MathTokenizer extends Tokenizer {
   public int getOperator() {
     int character = this.next();
 
-    if ( character == Ascii.PLUS_SIGN
-      || character == Ascii.HYPHEN
-      || character == Ascii.ASTERIX
-      || character == Ascii.SLASH
-        ) {
+    if (this.isOperator(character)) {
       return character;
     } else {
       throw new ParserException("Expected: '+' or '-' or '*' or '/'.");
@@ -119,5 +115,18 @@ public class MathTokenizer extends Tokenizer {
     // There is no character before and after the period
     this.reset();
     return false;
+  }
+
+  public boolean isOperator(int character) {
+    return character == Ascii.PLUS_SIGN
+              || character == Ascii.HYPHEN
+              || character == Ascii.ASTERIX
+              || character == Ascii.SLASH;
+  }
+  
+  public boolean isOperator() {
+    final int character = this.next();
+    this.rewind();
+    return isOperator(character);
   }
 }

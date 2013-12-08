@@ -1,23 +1,23 @@
 package org.isk.jvmhardcore.mathparser;
 
 import java.io.InputStream;
+import java.util.LinkedList;
 
 import org.isk.jvmhardcore.mathparser.core.InputStreamReader;
 import org.isk.jvmhardcore.mathparser.core.Parser;
 
-public class MathParser extends Parser<String[], EventType, MathTokenizer> {
+public class MathParser extends Parser<LinkedList<String>, EventType, MathTokenizer> {
 
-  private String[] tokens;
-  private int counter = 0;
+  private LinkedList<String> tokens;
 
   public MathParser(final InputStream inputStream) {
     super(inputStream, Symbols.number());
 
-    this.tokens = new String[3];
+    this.tokens = new LinkedList<>();
   }
 
   @Override
-  public String[] parse() {
+  public LinkedList<String> parse() {
     EventType eventType = null;
 
     boolean done = false;
@@ -26,13 +26,13 @@ public class MathParser extends Parser<String[], EventType, MathTokenizer> {
 
       switch (eventType) {
       case FLOAT:
-        this.tokens[counter++] = this.tokenizer.getFloat();
+        this.tokens.add(this.tokenizer.getFloat());
         break;
       case INTEGER:
-        this.tokens[counter++] = this.tokenizer.getInteger();
+        this.tokens.add(this.tokenizer.getInteger());
         break;
       case OPERATOR:
-        this.tokens[counter++] = String.valueOf(Character.toChars(this.tokenizer.getOperator()));
+        this.tokens.add(String.valueOf(Character.toChars(this.tokenizer.getOperator())));
         break;
       case EOF:
         this.tokenizer.checkEndOfFile();
@@ -57,6 +57,7 @@ public class MathParser extends Parser<String[], EventType, MathTokenizer> {
     this.table[Symbols.STREAM] = new Productions.Stream();
     this.table[Symbols.EOF] = new Productions.EndOfFile();
     this.table[Symbols.EXPRESSION] = new Productions.Expression();
+    this.table[Symbols.OR_RIGHT_EXPRESSION] = new Productions.OrRightExpression();
     this.table[Symbols.NUMBER] = new Productions.Number();
     this.table[Symbols.OPERATOR] = new Productions.Operator();
     this.table[Symbols.WS] = new Productions.Whitespaces();

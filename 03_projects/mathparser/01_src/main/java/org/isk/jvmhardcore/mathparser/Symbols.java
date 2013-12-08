@@ -7,6 +7,8 @@ public class Symbols {
   final public static int EOF = number++;
 
   final public static int EXPRESSION = number++;
+  final public static int OR_RIGHT_EXPRESSION = number++;
+  
   final public static int NUMBER = number++;
   final public static int OPERATOR = number++;
 

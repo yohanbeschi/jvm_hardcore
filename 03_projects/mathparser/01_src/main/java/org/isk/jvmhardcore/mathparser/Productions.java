@@ -18,25 +18,26 @@ public class Productions {
     }
   }
 
-  // expression = digit operator digit
+  // expression = number operator number
   public static class Expression implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
-      productionStack.push(table[Symbols.DIGIT]);
+      productionStack.push(table[Symbols.NUMBER]);
       productionStack.push(table[Symbols.OPERATOR]);
-      productionStack.push(table[Symbols.DIGIT]);
+      productionStack.push(table[Symbols.NUMBER]);
 
       return null;
     }
   }
 
+  // number = digit {digit}
   // digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
-  public static class Digit implements Production<EventType, MathTokenizer> {
+  public static class Number implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
-      return EventType.DIGIT;
+      return EventType.NUMBER;
     }
   }
 

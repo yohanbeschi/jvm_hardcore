@@ -3,20 +3,30 @@ package org.isk.jvmhardcore.mathparser;
 import org.isk.jvmhardcore.mathparser.core.Reader;
 import org.isk.jvmhardcore.mathparser.core.Tokenizer;
 import org.isk.jvmhardcore.mathparser.core.util.Ascii;
+import org.isk.jvmhardcore.mathparser.core.util.StringGenerator;
 
 public class MathTokenizer extends Tokenizer {
 
+  final private StringGenerator generator;
+
   public MathTokenizer(String filename, Reader reader) {
     super(filename, reader);
+
+    this.generator = new StringGenerator();
   }
 
-  public int getDigit() {
-    int character = this.next();
+  public String getNumber() {
+    int character = Ascii.NULL;
 
-    if (isDigit(character)) {
-      return character;
+    while (isDigit(character = this.next())) {
+      generator.appendChar(character);
+    }
+
+    if (!generator.isEmpty()) {
+      this.rewind();
+      return generator.toString();
     } else {
-      throw new ParserException("Expected: Digit [0-9].");
+      throw new ParserException("Expected: At least one Digit [0-9].");
     }
   }
 

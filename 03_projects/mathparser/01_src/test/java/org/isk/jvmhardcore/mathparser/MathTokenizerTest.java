@@ -13,32 +13,32 @@ import org.junit.Test;
 public class MathTokenizerTest {
   @Test
   public void getEachToken() {
-    final String string = "2+5";
+    final String string = "24+53";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
     
-    final int digitOne = tokenizer.getDigit();
+    final String digitOne = tokenizer.getNumber();
     final int operator = tokenizer.getOperator();
-    final int digitTwo = tokenizer.getDigit();
+    final String digitTwo = tokenizer.getNumber();
     
-    Assert.assertEquals(Ascii.DIGIT_2, digitOne);
+    Assert.assertEquals("24", digitOne);
     Assert.assertEquals(Ascii.PLUS_SIGN, operator);
-    Assert.assertEquals(Ascii.DIGIT_5, digitTwo);
+    Assert.assertEquals("53", digitTwo);
   }
 
   @Test
   public void operatorExpected() {
-    final String string = "32+5";
+    final String string = "3a+5";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getDigit();
+    tokenizer.getNumber();
 
     try {
       tokenizer.getOperator();
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("Line 1, column 2 - Expected: '+' or '-' or '*' or '/'. Got: 2", e.getMessage());
+      Assert.assertEquals("Line 1, column 2 - Expected: '+' or '-' or '*' or '/'. Got: a", e.getMessage());
     }
   }
 
@@ -48,14 +48,14 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getDigit();
+    tokenizer.getNumber();
     tokenizer.getOperator();
 
     try {
-      tokenizer.getDigit();
+      tokenizer.getNumber();
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("Line 1, column 3 - Expected: Digit [0-9]. Got: ,", e.getMessage());
+      Assert.assertEquals("Line 1, column 3 - Expected: At least one Digit [0-9]. Got: ,", e.getMessage());
     }
   }
 
@@ -65,7 +65,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getDigit();
+    tokenizer.getNumber();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.PLUS_SIGN, operator);
   }
@@ -76,7 +76,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getDigit();
+    tokenizer.getNumber();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.HYPHEN, operator);
   }
@@ -87,7 +87,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getDigit();
+    tokenizer.getNumber();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.ASTERIX, operator);
   }
@@ -98,7 +98,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getDigit();
+    tokenizer.getNumber();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.SLASH, operator);
   }

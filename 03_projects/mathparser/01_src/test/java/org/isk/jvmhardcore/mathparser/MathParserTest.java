@@ -44,9 +44,10 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "2", "/", "5" }, tokens);
   }
+
   @Test
   public void operatorExpected() {
-    final String string = "32+5";
+    final String string = "3a+5";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathParser parser = new MathParser(inputStream);
 
@@ -54,7 +55,7 @@ public class MathParserTest {
       parser.parse();
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("Line 1, column 2 - Expected: '+' or '-' or '*' or '/'. Got: 2", e.getMessage());
+      Assert.assertEquals("Line 1, column 2 - Expected: '+' or '-' or '*' or '/'. Got: a", e.getMessage());
     }
   }
 
@@ -68,7 +69,34 @@ public class MathParserTest {
       parser.parse();
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("Line 1, column 3 - Expected: Digit [0-9]. Got: ,", e.getMessage());
+      Assert.assertEquals("Line 1, column 3 - Expected: At least one Digit [0-9]. Got: ,", e.getMessage());
     }
+  }
+
+  @Test
+  public void getNumber0() {
+    final String string = "23+5";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "23", "+", "5" }, tokens);
+  }
+
+  @Test
+  public void getNumber1() {
+    final String string = "2+54";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "2", "+", "54" }, tokens);
+  }
+
+  @Test
+  public void getNumber2() {
+    final String string = "23+54";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "23", "+", "54" }, tokens);
   }
 }

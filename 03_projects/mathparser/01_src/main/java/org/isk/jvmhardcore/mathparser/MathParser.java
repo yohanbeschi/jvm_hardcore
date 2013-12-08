@@ -25,8 +25,8 @@ public class MathParser extends Parser<String[], EventType, MathTokenizer> {
       eventType = this.getNextEvent();
 
       switch (eventType) {
-        case DIGIT:
-          this.tokens[counter++] = String.valueOf(Character.toChars(this.tokenizer.getDigit()));
+        case NUMBER:
+          this.tokens[counter++] = this.tokenizer.getNumber();
           break;
         case OPERATOR:
           this.tokens[counter++] = String.valueOf(Character.toChars(this.tokenizer.getOperator()));
@@ -54,7 +54,7 @@ public class MathParser extends Parser<String[], EventType, MathTokenizer> {
     this.table[Symbols.STREAM] = new Productions.Stream();
     this.table[Symbols.EOF] = new Productions.EndOfFile();
     this.table[Symbols.EXPRESSION] = new Productions.Expression();
-    this.table[Symbols.DIGIT] = new Productions.Digit();
+    this.table[Symbols.NUMBER] = new Productions.Number();
     this.table[Symbols.OPERATOR] = new Productions.Operator();
   }
 }

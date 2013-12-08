@@ -31,13 +31,22 @@ public class Productions {
     }
   }
 
-  // number = digit {digit}
+  // number = integer | float
+  // integer = repeatingDigit
+  // float = oRepeatingDigit [dot] oRepeatingDigit
+  // repeatingDigit = digit oRepeatingDigit
+  // oRepeatingDigit = {digit}
   // digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+  // dot = '.'
   public static class Number implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
-      return EventType.NUMBER;
+      if (tokenizer.isFloat()) {
+        return EventType.FLOAT;
+      } else {
+        return EventType.INTEGER;
+      }
     }
   }
 

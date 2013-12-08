@@ -16,11 +16,11 @@ public class MathTokenizerTest {
     final String string = "24+53";
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
-    
-    final String digitOne = tokenizer.getNumber();
+
+    final String digitOne = tokenizer.getInteger();
     final int operator = tokenizer.getOperator();
-    final String digitTwo = tokenizer.getNumber();
-    
+    final String digitTwo = tokenizer.getInteger();
+
     Assert.assertEquals("24", digitOne);
     Assert.assertEquals(Ascii.PLUS_SIGN, operator);
     Assert.assertEquals("53", digitTwo);
@@ -32,7 +32,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getNumber();
+    tokenizer.getInteger();
 
     try {
       tokenizer.getOperator();
@@ -48,11 +48,11 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getNumber();
+    tokenizer.getInteger();
     tokenizer.getOperator();
 
     try {
-      tokenizer.getNumber();
+      tokenizer.getInteger();
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals("Line 1, column 3 - Expected: At least one Digit [0-9]. Got: ,", e.getMessage());
@@ -65,7 +65,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getNumber();
+    tokenizer.getInteger();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.PLUS_SIGN, operator);
   }
@@ -76,7 +76,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getNumber();
+    tokenizer.getInteger();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.HYPHEN, operator);
   }
@@ -87,7 +87,7 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getNumber();
+    tokenizer.getInteger();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.ASTERIX, operator);
   }
@@ -98,8 +98,96 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    tokenizer.getNumber();
+    tokenizer.getInteger();
     final int operator = tokenizer.getOperator();
     Assert.assertEquals(Ascii.SLASH, operator);
+  }
+
+  @Test
+  public void isFloat0() {
+    final String string = "1.1";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat1() {
+    final String string = ".567";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isFloat2() {
+    final String string = "23.";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertTrue(isFloat);
+  }
+  
+  @Test
+  public void isNotFloat0() {
+    final String string = ".";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertFalse(isFloat);
+  }
+  
+  @Test
+  public void isNotFloat1() {
+    final String string = "10";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final boolean isFloat = tokenizer.isFloat();
+    
+    Assert.assertFalse(isFloat);
+  }
+  
+  @Test
+  public void getFloat0() {
+    final String string = "1.1";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(string, num);
+  }
+
+  @Test
+  public void getFloat1() {
+    final String string = ".567";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(string, num);
+  }
+
+  @Test
+  public void getFloat2() {
+    final String string = "23.";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
+
+    final String num = tokenizer.getFloat();
+
+    Assert.assertEquals(string, num);
   }
 }

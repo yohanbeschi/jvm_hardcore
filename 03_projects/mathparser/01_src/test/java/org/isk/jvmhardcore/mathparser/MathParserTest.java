@@ -35,7 +35,7 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "2", "*", "5" }, tokens);
   }
-
+  
   @Test
   public void division() {
     final String string = "2/5";
@@ -44,7 +44,6 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "2", "/", "5" }, tokens);
   }
-
   @Test
   public void operatorExpected() {
     final String string = "3a+5";
@@ -72,7 +71,7 @@ public class MathParserTest {
       Assert.assertEquals("Line 1, column 3 - Expected: At least one Digit [0-9]. Got: ,", e.getMessage());
     }
   }
-
+  
   @Test
   public void getNumber0() {
     final String string = "23+5";
@@ -81,7 +80,7 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "23", "+", "5" }, tokens);
   }
-
+  
   @Test
   public void getNumber1() {
     final String string = "2+54";
@@ -90,7 +89,7 @@ public class MathParserTest {
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "2", "+", "54" }, tokens);
   }
-
+  
   @Test
   public void getNumber2() {
     final String string = "23+54";
@@ -98,5 +97,32 @@ public class MathParserTest {
     final MathParser parser = new MathParser(inputStream);
     final String[] tokens = parser.parse();
     Assert.assertArrayEquals(new String[] { "23", "+", "54" }, tokens);
+  }
+  
+  @Test
+  public void getFloat0() {
+    final String string = "1.2+5";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "1.2", "+", "5" }, tokens);
+  }
+  
+  @Test
+  public void getFloat1() {
+    final String string = "1+56.32";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "1", "+", "56.32" }, tokens);
+  }
+  
+  @Test
+  public void getFloat2() {
+    final String string = "1.2+56.32";
+    final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+    final MathParser parser = new MathParser(inputStream);
+    final String[] tokens = parser.parse();
+    Assert.assertArrayEquals(new String[] { "1.2", "+", "56.32" }, tokens);
   }
 }

@@ -25,20 +25,23 @@ public class MathParser extends Parser<String[], EventType, MathTokenizer> {
       eventType = this.getNextEvent();
 
       switch (eventType) {
-        case NUMBER:
-          this.tokens[counter++] = this.tokenizer.getNumber();
-          break;
-        case OPERATOR:
-          this.tokens[counter++] = String.valueOf(Character.toChars(this.tokenizer.getOperator()));
-          break;
-        case EOF:
-          this.tokenizer.checkEndOfFile();
-          done = true;
-          break;
-        default:
-          System.err.println("Unexpected event.");
-          break;
-        }
+      case FLOAT:
+        this.tokens[counter++] = this.tokenizer.getFloat();
+        break;
+      case INTEGER:
+        this.tokens[counter++] = this.tokenizer.getInteger();
+        break;
+      case OPERATOR:
+        this.tokens[counter++] = String.valueOf(Character.toChars(this.tokenizer.getOperator()));
+        break;
+      case EOF:
+        this.tokenizer.checkEndOfFile();
+        done = true;
+        break;
+      default:
+        System.err.println("Unexpected event.");
+        break;
+      }
     }
 
     return this.tokens;

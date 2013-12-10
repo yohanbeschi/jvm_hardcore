@@ -194,3 +194,15 @@ Introduction to a simple LL event-based parser (1/2).
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 7 - Mon premier analyseur syntaxique - 1/2](http://blog.soat.fr/2013/12/08-jvm-hardcore-part-7-mon-premier-analyseur-syntaxique-12)
+
+## part08
+### Summary
+Introduction to a simple LL event-based parser (2/2).
+
+To see the evolution of the grammar look at branches `part08_01` to `part08_07`, where `part08_07` is equals to `part08`. 
+ 
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+### Blog post
+[JVM Hardcore - Part 8 - Mon premier analyseur syntaxique - 2/2](http://blog.soat.fr/2013/12/09-jvm-hardcore-part-8-mon-premier-analyseur-syntaxique-22)

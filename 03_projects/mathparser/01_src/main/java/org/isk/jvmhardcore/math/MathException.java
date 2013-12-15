@@ -1,10 +1,7 @@
-package org.isk.jvmhardcore.mathparser;
+package org.isk.jvmhardcore.math;
 
 public class MathException extends RuntimeException {
 
-  /**
-   *
-   */
   private static final long serialVersionUID = 2413076920261396393L;
 
   public MathException() {

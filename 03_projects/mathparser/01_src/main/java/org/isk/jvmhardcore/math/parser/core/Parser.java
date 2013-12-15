@@ -1,4 +1,4 @@
-package org.isk.jvmhardcore.mathparser.core;
+package org.isk.jvmhardcore.math.parser.core;
 
 import java.io.InputStream;
 import java.util.Stack;

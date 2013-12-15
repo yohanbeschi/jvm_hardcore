@@ -1,13 +1,12 @@
-package org.isk.jvmhardcore.mathparser;
+package org.isk.jvmhardcore.math.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import junit.framework.Assert;
 
-import org.isk.jvmhardcore.mathparser.core.InputStreamReader;
-import org.isk.jvmhardcore.mathparser.core.Tokenizer.ParserException;
-import org.isk.jvmhardcore.mathparser.core.util.Ascii;
+import org.isk.jvmhardcore.math.parser.core.InputStreamReader;
+import org.isk.jvmhardcore.math.parser.core.Tokenizer.ParserException;
 import org.junit.Test;
 
 public class MathTokenizerTest {
@@ -17,13 +16,13 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String digitOne = tokenizer.getInteger();
-    final int operator = tokenizer.getOperator();
-    final String digitTwo = tokenizer.getInteger();
+    final int digitOne = tokenizer.getInteger();
+    final ParsingOperator operator = tokenizer.getOperator();
+    final int digitTwo = tokenizer.getInteger();
 
-    Assert.assertEquals("24", digitOne);
-    Assert.assertEquals(Ascii.PLUS_SIGN, operator);
-    Assert.assertEquals("53", digitTwo);
+    Assert.assertEquals(24, digitOne);
+    Assert.assertEquals(ParsingOperator.PLUS, operator);
+    Assert.assertEquals(53, digitTwo);
   }
 
   @Test
@@ -66,8 +65,8 @@ public class MathTokenizerTest {
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
     tokenizer.getInteger();
-    final int operator = tokenizer.getOperator();
-    Assert.assertEquals(Ascii.PLUS_SIGN, operator);
+    final ParsingOperator operator = tokenizer.getOperator();
+    Assert.assertEquals(ParsingOperator.PLUS, operator);
   }
 
   @Test
@@ -77,8 +76,8 @@ public class MathTokenizerTest {
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
     tokenizer.getInteger();
-    final int operator = tokenizer.getOperator();
-    Assert.assertEquals(Ascii.HYPHEN, operator);
+    final ParsingOperator operator = tokenizer.getOperator();
+    Assert.assertEquals(ParsingOperator.MINUS, operator);
   }
 
   @Test
@@ -88,8 +87,8 @@ public class MathTokenizerTest {
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
     tokenizer.getInteger();
-    final int operator = tokenizer.getOperator();
-    Assert.assertEquals(Ascii.ASTERIX, operator);
+    final ParsingOperator operator = tokenizer.getOperator();
+    Assert.assertEquals(ParsingOperator.TIMES, operator);
   }
 
   @Test
@@ -99,8 +98,8 @@ public class MathTokenizerTest {
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
     tokenizer.getInteger();
-    final int operator = tokenizer.getOperator();
-    Assert.assertEquals(Ascii.SLASH, operator);
+    final ParsingOperator operator = tokenizer.getOperator();
+    Assert.assertEquals(ParsingOperator.DIVIDE, operator);
   }
 
   @Test
@@ -109,9 +108,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getInteger();
+    final int num = tokenizer.getInteger();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(124, num);
   }
   
   @Test
@@ -120,9 +119,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getInteger();
+    final int num = tokenizer.getInteger();
 
-    Assert.assertEquals("124", num);
+    Assert.assertEquals(124, num);
   }
   
   @Test
@@ -131,9 +130,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getInteger();
+    final int num = tokenizer.getInteger();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(-124, num);
   }
   
   @Test
@@ -263,9 +262,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(1.1, num);
   }
 
   @Test
@@ -274,9 +273,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(.567, num);
   }
 
   @Test
@@ -285,9 +284,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(23., num);
   }
   
   @Test
@@ -296,9 +295,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals("1.1", num);
+    Assert.assertEquals(1.1, num);
   }
   
   @Test
@@ -307,9 +306,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(".567", num);
+    Assert.assertEquals(.567, num);
   }
   
   @Test
@@ -318,9 +317,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals("23.", num);
+    Assert.assertEquals(23., num);
   }
   
   @Test
@@ -329,9 +328,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(-1.1, num);
   }
   
   @Test
@@ -340,9 +339,9 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(-.567, num);
   }
   
   @Test
@@ -351,8 +350,8 @@ public class MathTokenizerTest {
     final InputStream inputStream = new ByteArrayInputStream(string.getBytes());
     final MathTokenizer tokenizer = new MathTokenizer(null, new InputStreamReader(inputStream));
 
-    final String num = tokenizer.getFloat();
+    final double num = tokenizer.getFloat();
 
-    Assert.assertEquals(string, num);
+    Assert.assertEquals(-23., num);
   }
 }

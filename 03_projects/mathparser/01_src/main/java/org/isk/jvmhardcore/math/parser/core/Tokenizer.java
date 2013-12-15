@@ -1,6 +1,6 @@
-package org.isk.jvmhardcore.mathparser.core;
+package org.isk.jvmhardcore.math.parser.core;
 
-import org.isk.jvmhardcore.mathparser.core.util.Ascii;
+import org.isk.jvmhardcore.math.parser.core.util.Ascii;
 
 public abstract class Tokenizer {
   final private String filename;
@@ -32,8 +32,7 @@ public abstract class Tokenizer {
   }
 
   /**
-   * If the next character to be read is not the end of the file/stream a
-   * ParserException is thrown.
+   * If the next character to be read is not the end of the file/stream a ParserException is thrown.
    */
   public void checkEndOfFile() {
     int character = this.next();

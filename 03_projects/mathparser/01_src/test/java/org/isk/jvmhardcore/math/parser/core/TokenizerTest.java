@@ -1,10 +1,13 @@
-package org.isk.jvmhardcore.mathparser.core;
+package org.isk.jvmhardcore.math.parser.core;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import org.isk.jvmhardcore.mathparser.core.Tokenizer.ParserException;
-import org.isk.jvmhardcore.mathparser.core.util.Ascii;
+import org.isk.jvmhardcore.math.parser.core.InputStreamReader;
+import org.isk.jvmhardcore.math.parser.core.Reader;
+import org.isk.jvmhardcore.math.parser.core.Tokenizer;
+import org.isk.jvmhardcore.math.parser.core.Tokenizer.ParserException;
+import org.isk.jvmhardcore.math.parser.core.util.Ascii;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package org.isk.jvmhardcore.mathparser;
+package org.isk.jvmhardcore.math.parser;
 
 public enum EventType {
   EOF,

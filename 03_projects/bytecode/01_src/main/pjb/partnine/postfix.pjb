@@ -1,0 +1,14 @@
+.class org/isk/jvmhardcore/bytecode/partnine/Postfix
+  .method compute()I
+    iconst_2
+    bipush 7
+    iconst_5
+    isub
+    imul
+    bipush 8
+    iconst_5
+    isub
+    imul
+    ireturn
+  .methodend
+.classend

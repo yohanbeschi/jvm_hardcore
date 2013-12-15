@@ -1,4 +1,4 @@
-package org.isk.jvmhardcore.mathparser.core.util;
+package org.isk.jvmhardcore.math.parser.core.util;
 
 public interface Ascii {
   public static final byte EOF = -1;
@@ -16,7 +16,7 @@ public interface Ascii {
   public static final char SINGLE_QUOTE = 0x27; // '
   public static final char LEFT_PARENTHESIS = 0x28; // (
   public static final char RIGHT_PARENTHESIS = 0x29; // )
-  public static final char ASTERIX = 0x2A; // *
+  public static final char ASTERISK = 0x2A; // *
   public static final char PLUS_SIGN = 0x2B; // +
   public static final char COMMA = 0x2C; // ,
   public static final char HYPHEN = 0x2D; // -

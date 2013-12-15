@@ -1,11 +1,11 @@
-package org.isk.jvmhardcore.mathparser;
+package org.isk.jvmhardcore.math.parser;
 
 import java.util.Stack;
 
-import org.isk.jvmhardcore.mathparser.core.Production;
+import org.isk.jvmhardcore.math.parser.core.Production;
 
 public class Productions {
-  
+
   // stream = expression eof
   public static class Stream implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
@@ -32,7 +32,7 @@ public class Productions {
       return null;
     }
   }
-  
+
   // orRightExpression = {ws operator orLeftParenthesis number orRightParenthesis ws}
   public static class OrRightExpression implements Production<EventType, MathTokenizer> {
     public EventType produce(MathTokenizer tokenizer,
@@ -52,7 +52,7 @@ public class Productions {
       return null;
     }
   }
-  
+
   // number = integer | float
   // integer = repeatingDigit
   // float = oRepeatingDigit [dot] oRepeatingDigit
@@ -132,9 +132,9 @@ public class Productions {
     }
   }
 
-  // ws = ? whitespaces ?
+  // ws = ? caractères d'espacement ?
   public static class Whitespaces implements Production<EventType, MathTokenizer> {
-    public EventType produce(MathTokenizer tokenizer, 
+    public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
       tokenizer.consumeUnprintables();
@@ -142,9 +142,9 @@ public class Productions {
     }
   }
 
-  // eof = ? end of stream ?
+  // eof = ? fin du flux ?
   public static class EndOfFile implements Production<EventType, MathTokenizer> {
-    public EventType produce(MathTokenizer tokenizer, 
+    public EventType produce(MathTokenizer tokenizer,
                              Production<EventType, MathTokenizer>[] table,
                              Stack<Production<EventType, MathTokenizer>> productionStack) {
       return EventType.EOF;

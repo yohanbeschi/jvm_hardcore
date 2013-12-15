@@ -1,32 +1,32 @@
-package org.isk.jvmhardcore.mathparser;
+package org.isk.jvmhardcore.math.parser;
 
-import org.isk.jvmhardcore.mathparser.core.Reader;
-import org.isk.jvmhardcore.mathparser.core.Tokenizer;
-import org.isk.jvmhardcore.mathparser.core.util.Ascii;
-import org.isk.jvmhardcore.mathparser.core.util.StringGenerator;
+import org.isk.jvmhardcore.math.parser.core.Reader;
+import org.isk.jvmhardcore.math.parser.core.Tokenizer;
+import org.isk.jvmhardcore.math.parser.core.util.Ascii;
+import org.isk.jvmhardcore.math.parser.core.util.StringGenerator;
 
 public class MathTokenizer extends Tokenizer {
 
   final private StringGenerator generator;
-  
+
   public MathTokenizer(String filename, Reader reader) {
     super(filename, reader);
-    
+
     this.generator = new StringGenerator();
   }
 
-  public String getInteger() {
+  public Integer getInteger() {
     this.fillWithDigits();
 
     if (!generator.isEmpty()) {
       this.rewind();
-      return generator.toString();
+      return Integer.valueOf(generator.toString());
     } else {
       throw new ParserException("Expected: At least one Digit [0-9].");
     }
   }
 
-  public String getFloat() {
+  public Double getFloat() {
     int character = this.fillWithDigits();
 
     // getFloat() is called after isFloat()
@@ -38,7 +38,7 @@ public class MathTokenizer extends Tokenizer {
     }
 
     this.rewind();
-    return generator.toString();
+    return Double.valueOf(generator.toString());
   }
 
   private int fillWithDigits() {
@@ -51,28 +51,29 @@ public class MathTokenizer extends Tokenizer {
     } else {
       this.rewind();
     }
-    
+
     while (isDigit(character = this.next())) {
       generator.appendChar(character);
     }
-    
+
     return character;
   }
 
-  public int getOperator() {
+  public ParsingOperator getOperator() {
     int character = this.next();
 
     if (this.isOperator(character)) {
-      return character;
+      return ParsingOperator.get(character);
     } else {
       throw new ParserException("Expected: '+' or '-' or '*' or '/'.");
     }
   }
-  
-  public int getNext() {
-    return this.next();
+
+  public ParsingOperator getParenthesis() {
+    int character = this.next();
+    return ParsingOperator.get(character);
   }
-  
+
   public boolean isFloat() {
     this.mark();
 
@@ -122,18 +123,18 @@ public class MathTokenizer extends Tokenizer {
   }
 
   public boolean isOperator(int character) {
-    return character == Ascii.PLUS_SIGN
-              || character == Ascii.HYPHEN
-              || character == Ascii.ASTERIX
-              || character == Ascii.SLASH;
+    return character == Ascii.PLUS_SIGN 
+        || character == Ascii.HYPHEN 
+        || character == Ascii.ASTERISK
+        || character == Ascii.SLASH;
   }
-  
+
   public boolean isOperator() {
     final int character = this.next();
     this.rewind();
     return isOperator(character);
   }
-  
+
   public boolean isLeftParenthesis() {
     final int character = this.next();
     this.rewind();

@@ -213,4 +213,13 @@ Introduction to a simple interpreter.
 ### Compile and execute
 The project can only be executed through unit tests. (See introduction)
 
-Blog post: [JVM Hardcore - Part 9 - Résoudre une expression arithmétique](http://blog.soat.fr/2013/12/10-jvm-hardcore-part-9-resoudre-une-expression-arithmetique)
+Blog post: [JVM Hardcore - Part 9 - Résoudre une expression arithmétique](http://blog.soat.fr/2014/01/10-jvm-hardcore-part-9-resoudre-une-expression-arithmetique/)
+
+## part10
+### Summary
+Unicode and Java.
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [Part 10 - L'unicode et Java](http://blog.soat.fr/2014/01/jvm-hardcore-part-10-unicode-et-java)

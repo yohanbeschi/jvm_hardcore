@@ -1,0 +1,13 @@
+<project name="pjba" default="archive" xmlns:plume="http://blog.soat.fr/ant-macros">
+  <import file="../../01_conf/targets.xml" />
+  <description>Plume Java Bytecode Assembler</description>
+
+  <target name="compile" depends="-init">
+    <echo>Compiling Main</echo>
+    <plume:compiler srcDir="${src.main.java.dir}" destDir="${build.classes.dir}" />
+  </target>
+  
+  <target name="test" depends="compile">
+    <!-- Do nothing for now -->
+  </target>
+</project>

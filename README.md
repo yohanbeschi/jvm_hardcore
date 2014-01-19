@@ -222,4 +222,13 @@ Unicode and Java.
 ### Compile and execute
 The project can only be executed through unit tests. (See introduction)
 
-Blog post: [Part 10 - L'unicode et Java](http://blog.soat.fr/2014/01/jvm-hardcore-part-10-unicode-et-java)
+Blog post: [JVM Hardcore - Part 10 - L'unicode et Java](http://blog.soat.fr/2014/01/11-jvm-hardcore-part-10-unicode-et-java)
+
+## part11
+### Summary
+Introduction to the `class` File Format.
+
+### Compile and execute
+Nothing to test. The project **pjba** contains only beans representing the structure of a class file.
+
+Blog post: [JVM Hardcore - Part 11 - Bytecode - Format d'un fichier .class](http://blog.soat.fr/2014/01/12-jvm-hardcore-part-11-bytecode-format-fichier-class)

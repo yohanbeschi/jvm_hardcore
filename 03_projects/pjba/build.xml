@@ -2,12 +2,81 @@
   <import file="../../01_conf/targets.xml" />
   <description>Plume Java Bytecode Assembler</description>
 
-  <target name="compile" depends="-init">
+  <!--+=========================================================================================+-->
+  <!--+ Classpath                                                                               +-->
+	<!--+=========================================================================================+-->
+  <!-- To compile Dis/Assembler -->
+  <path id="assembler.compile.classpath">
+		<fileset dir="${libs.dir}">
+      <include name="junit-4.10.jar" />
+    </fileset>
+		<pathelement location="${build.classes.dir}" />
+  </path>
+  
+  <!-- To Generate .class file (handmade) -->
+	<path id="assembler.execute.classpath">
+		<path refid="assembler.compile.classpath"/>
+		<pathelement location="${build.assembler.classes.dir}" />
+  </path>
+
+  <!-- To compile tests -->
+  <path id="test.compile.classpath">
+		<path refid="assembler.compile.classpath"/>
+		<pathelement location="${build.pjb-classes.dir}" />
+  </path>
+  
+  <!-- To run tests -->
+  <path id="test.classpath">
+		<path refid="test.compile.classpath"/>
+		<pathelement location="${build.test-classes.dir}" />
+  </path>
+  
+  <!--+=========================================================================================+-->
+  <!--+ Targets                                                                                 +-->
+	<!--+=========================================================================================+-->
+  <target name="compile" depends="-init-assembler">
     <echo>Compiling Main</echo>
     <plume:compiler srcDir="${src.main.java.dir}" destDir="${build.classes.dir}" />
+
+    <echo>Compiling Assembler</echo>
+    <plume:compiler srcDir="${src.main.assembler.dir}" 
+                    destDir="${build.assembler.classes.dir}"
+                    classpath="assembler.compile.classpath" />
   </target>
   
-  <target name="test" depends="compile">
-    <!-- Do nothing for now -->
+  <target name="assemble" depends="compile">
+    <echo>Move .pjb files</echo>
+    <copy todir="${build.assembler.classes.dir}">
+			<fileset dir="${src.main.dir}">
+        <include name="pjb/" />
+			</fileset>
+		</copy>
+    
+    <echo>Assembling</echo>
+    <plume:tester classpath="assembler.execute.classpath"
+                  dataDir="${build.assembler.reports.dir}"
+                  testDir="${build.assembler.classes.dir}"
+                  reportsDir="${build.assembler.reports.dir}"
+                  include="**/*.class" />
+                  
+    <echo>Compiling Test</echo>
+		<plume:compiler srcDir="${src.test.java.dir}" 
+                    destDir="${build.test-classes.dir}"
+                    classpath="test.compile.classpath" />
+  </target>
+
+  <target name="test-r">
+    <echo>Move resources</echo>
+    <plume:resources from="${src.test.resources.dir}"	to="${build.test-classes.dir}" />	
+  </target>
+  
+  <target name="test" depends="assemble, test-r">
+    <echo>Test with assembled files</echo>
+    <plume:tester classpath="test.classpath"
+                  dataDir="${build.junit-data.dir}"
+                  testClass="${testClass}"
+                  testMethod="${testMethod}"
+                  testDir="${build.test-classes.dir}"
+                  reportsDir="${build.junit-reports.dir}" />
   </target>
 </project>

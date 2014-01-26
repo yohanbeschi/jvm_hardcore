@@ -232,3 +232,12 @@ Introduction to the `class` File Format.
 Nothing to test. The project **pjba** contains only beans representing the structure of a class file.
 
 Blog post: [JVM Hardcore - Part 11 - Bytecode - Format d'un fichier .class](http://blog.soat.fr/2014/01/12-jvm-hardcore-part-11-bytecode-format-fichier-class)
+
+## part12
+### Summary
+Building a bytecode assembler (1/2)
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 12 – Bytecode - Assembleur de bytecode - 1/2](http://blog.soat.fr/2014/01/13-jvm-hardcore-part-12-bytecode-assembleur-1)

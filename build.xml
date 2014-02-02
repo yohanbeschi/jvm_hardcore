@@ -13,6 +13,7 @@
     <ant dir="${projects.dir}/bytecode/" target="${target}"  inheritAll="false" />
     <ant dir="${projects.dir}/mathparser/" target="${target}"  inheritAll="false" />
     <ant dir="${projects.dir}/encoding/" target="${target}"  inheritAll="false"/>
+    <ant dir="${projects.dir}/visitor/" target="${target}"  inheritAll="false" />
     <ant dir="${projects.dir}/pjba/" target="${target}"  inheritAll="false" />
   </target>
 

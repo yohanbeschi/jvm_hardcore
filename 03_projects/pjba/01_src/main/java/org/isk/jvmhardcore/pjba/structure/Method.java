@@ -1,18 +1,17 @@
 package org.isk.jvmhardcore.pjba.structure;
 
-import java.io.DataOutput;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.isk.jvmhardcore.pjba.structure.attribute.constraint.MethodAttribute;
 import org.isk.jvmhardcore.pjba.util.Ascii;
-import org.isk.jvmhardcore.pjba.util.BytecodeEnabled;
 import org.isk.jvmhardcore.pjba.util.PjbaLinkedList;
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
-public class Method implements BytecodeEnabled {
+public class Method implements Visitable {
   private static final String ENCODING = "UTF-8";
 
-  final private int accessFlags = 0x0001 | 0x0008; // public static
+  private int accessFlags = 0x0001 | 0x0008; // public static
 
   private int nameIndex;
   private int descriptorIndex;
@@ -25,12 +24,20 @@ public class Method implements BytecodeEnabled {
     this.attributes = new PjbaLinkedList<>();
   }
 
+  public void setAccessFlags(int accessFlags) {
+    this.accessFlags = accessFlags;
+  }
+
   public void setNameIndex(int utf8NameIndex) {
     this.nameIndex = utf8NameIndex;
   }
 
   public void setDescriptorIndex(int utf8DescriptorIndex) {
     this.descriptorIndex = utf8DescriptorIndex;
+  }
+
+  public void setAttributes(PjbaLinkedList<MethodAttribute> attributes) {
+    this.attributes = attributes;
   }
 
   public void addAttibute(final MethodAttribute attribute) {
@@ -98,11 +105,11 @@ public class Method implements BytecodeEnabled {
   }
 
   @Override
-  public void toBytecode(DataOutput dataOutput) throws IOException {
-    dataOutput.writeShort(this.accessFlags);
-    dataOutput.writeShort(this.nameIndex);
-    dataOutput.writeShort(this.descriptorIndex);
-    dataOutput.writeShort(this.attributes.size());
-    this.attributes.toBytecode(dataOutput);
+  public void accept(Visitor visitor) {
+    visitor.visitMethodAccessFlags(this.accessFlags);
+    visitor.visitMethodNameIndex(this.nameIndex);
+    visitor.visitMethodDescriptorIndex(this.descriptorIndex);
+    visitor.visitMethodAttributesSize(this.attributes.size());
+    this.attributes.accept(visitor);
   }
 }

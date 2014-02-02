@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.junit.Test;
 
-public class Assembler {
+public class Assembling {
   private static String GENERATED_DIRECTORY;
 
   /**
@@ -56,7 +56,8 @@ public class Assembler {
 
     final FileOutputStream file = new FileOutputStream(directoryStr + classFile.getClassName() + ".class");
     final DataOutput bytecode = new DataOutputStream(file);
-    classFile.toBytecode(bytecode);
+    final Assembler assembler = new Assembler(classFile, bytecode);
+    assembler.assemble();
     file.close();
   }
 }

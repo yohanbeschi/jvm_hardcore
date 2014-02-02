@@ -18,6 +18,13 @@
 		<path refid="assembler.compile.classpath"/>
 		<pathelement location="${build.assembler.classes.dir}" />
   </path>
+  
+  <!-- To Disassembler .class files and reassemble them -->
+  <path id="disassembler.execute.classpath">
+		<path refid="assembler.compile.classpath"/>
+    <pathelement location="${build.disassembler.classes.dir}" />
+		<pathelement location="${build.pjb-classes.dir}" />
+  </path>
 
   <!-- To compile tests -->
   <path id="test.compile.classpath">
@@ -31,16 +38,32 @@
 		<pathelement location="${build.test-classes.dir}" />
   </path>
   
+  <path id="disassembling.test.classpath">
+		<path refid="assembler.compile.classpath"/>
+    <pathelement location="${build.class-classes.dir}"/>
+		<pathelement location="${build.test-classes.dir}" />
+  </path>
+  
   <!--+=========================================================================================+-->
   <!--+ Targets                                                                                 +-->
 	<!--+=========================================================================================+-->
-  <target name="compile" depends="-init-assembler">
+  <target name="-init-disassembler" depends="-init-assembler">
+    <mkdir dir="${build.disassembler.classes.dir}" />
+		<mkdir dir="${build.disassembler.reports.dir}" />
+  </target>
+  
+  <target name="compile" depends="-init-disassembler">
     <echo>Compiling Main</echo>
     <plume:compiler srcDir="${src.main.java.dir}" destDir="${build.classes.dir}" />
 
     <echo>Compiling Assembler</echo>
     <plume:compiler srcDir="${src.main.assembler.dir}" 
                     destDir="${build.assembler.classes.dir}"
+                    classpath="assembler.compile.classpath" />
+
+    <echo>Compiling Disassembler</echo>
+    <plume:compiler srcDir="${src.main.disassembler.dir}" 
+                    destDir="${build.disassembler.classes.dir}"
                     classpath="assembler.compile.classpath" />
   </target>
   
@@ -64,13 +87,24 @@
                     destDir="${build.test-classes.dir}"
                     classpath="test.compile.classpath" />
   </target>
+  
+  <target name="disassemble" depends="assemble">
+    <echo>Disassembling</echo>
+    <plume:tester classpath="disassembler.execute.classpath"
+                  dataDir="${build.disassembler.reports.dir}"
+                  testDir="${build.disassembler.classes.dir}"
+                  reportsDir="${build.disassembler.reports.dir}"
+                  include="**/*.class" /> 
+		
+    
+  </target>
 
   <target name="test-r">
     <echo>Move resources</echo>
     <plume:resources from="${src.test.resources.dir}"	to="${build.test-classes.dir}" />	
   </target>
   
-  <target name="test" depends="assemble, test-r">
+  <target name="test-a" depends="assemble, test-r">
     <echo>Test with assembled files</echo>
     <plume:tester classpath="test.classpath"
                   dataDir="${build.junit-data.dir}"
@@ -78,5 +112,15 @@
                   testMethod="${testMethod}"
                   testDir="${build.test-classes.dir}"
                   reportsDir="${build.junit-reports.dir}" />
+  </target>
+  
+  <target name="test" depends="disassemble, test-a">
+    <echo>Test with disassembled files</echo>
+    <plume:tester classpath="disassembling.test.classpath"
+                  dataDir="${build.junit-data.dir}"
+                  testClass="${testClass}"
+                  testMethod="${testMethod}"
+                  testDir="${build.test-classes.dir}"
+                  reportsDir="${build.junit-reports.dir}" /> 
   </target>
 </project>

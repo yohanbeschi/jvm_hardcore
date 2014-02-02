@@ -1,13 +1,11 @@
 package org.isk.jvmhardcore.pjba.structure.attribute;
 
-import java.io.DataOutput;
-import java.io.IOException;
-
 import org.isk.jvmhardcore.pjba.structure.Exception;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
 import org.isk.jvmhardcore.pjba.structure.attribute.constraint.CodeAttribute;
 import org.isk.jvmhardcore.pjba.structure.attribute.constraint.MethodAttribute;
 import org.isk.jvmhardcore.pjba.util.PjbaLinkedList;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class Code extends Attribute implements MethodAttribute {
   public final static String ATTRIBUTE_NAME = "Code";
@@ -28,6 +26,22 @@ public class Code extends Attribute implements MethodAttribute {
     this.instructions = new PjbaLinkedList<>();
     this.exceptions = new PjbaLinkedList<>();
     this.attributes = new PjbaLinkedList<>();
+  }
+
+  public void setMaxStack(int maxStack) {
+    this.maxStack = maxStack;
+  }
+
+  public void setMaxLocals(int maxLocals) {
+    this.maxLocals = maxLocals;
+  }
+
+  public void setCodeLength(int codeLength) {
+    this.codeLength = codeLength;
+  }
+
+  public void setInstructions(PjbaLinkedList<Instruction> instructions) {
+    this.instructions = instructions;
   }
 
   public void setParameterCount(int parameterCount) {
@@ -60,17 +74,18 @@ public class Code extends Attribute implements MethodAttribute {
   }
 
   @Override
-  public void toBytecode(DataOutput dataOutput) throws IOException {
-    super.toBytecode(dataOutput);
-    dataOutput.writeInt(12 + this.codeLength + 8 * this.exceptions.size()); // 2 + 2 + 4 + code.length + 2 + 8 *
-                                                                            // exceptionTable.length + 2
-    dataOutput.writeShort(this.maxStack);
-    dataOutput.writeShort(this.maxLocals);
-    dataOutput.writeInt(this.codeLength);
-    this.instructions.toBytecode(dataOutput);
-    dataOutput.writeShort(this.exceptions.size());
-    this.exceptions.toBytecode(dataOutput);
-    dataOutput.writeShort(this.attributes.size());
-    this.attributes.toBytecode(dataOutput);
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+
+    // 2 + 2 + 4 + code.length + 2 + 8 * exceptionTable.length + 2
+    visitor.visitAttributeLength(12 + this.codeLength + 8 * this.exceptions.size()); 
+    visitor.visitCodeMaxStack(this.maxStack);
+    visitor.visitCodeMaxLocals(this.maxLocals);
+    visitor.visitCodeLength(this.codeLength);
+    this.instructions.accept(visitor);
+    visitor.visitCodeExceptionsSize(this.exceptions.size());
+    this.exceptions.accept(visitor);
+    visitor.visitCodeAttributesSize(this.attributes.size());
+    this.attributes.accept(visitor);
   }
 }

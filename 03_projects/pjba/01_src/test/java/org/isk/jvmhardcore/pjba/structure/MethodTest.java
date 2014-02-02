@@ -1,7 +1,6 @@
 package org.isk.jvmhardcore.pjba.structure;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -142,4 +141,10 @@ public class MethodTest {
     Assert.assertEquals(2, parameterCount);
   }
 
+  @Test
+  public void countParams15() {
+    final int parameterCount = this.count("(Ljava/lang/Integer;ZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;");
+
+    Assert.assertEquals(11, parameterCount);
+  }
 }

@@ -1,14 +1,12 @@
 package org.isk.jvmhardcore.pjba.structure;
 
-import java.io.DataOutput;
-import java.io.IOException;
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
-import org.isk.jvmhardcore.pjba.util.BytecodeEnabled;
-
-public class Exception implements BytecodeEnabled {
+public class Exception implements Visitable {
 
   @Override
-  public void toBytecode(DataOutput dataOutput) throws IOException {
+  public void accept(Visitor visitor) {
     // Do nothing
   }
 }

@@ -235,9 +235,18 @@ Blog post: [JVM Hardcore - Part 11 - Bytecode - Format d'un fichier .class](http
 
 ## part12
 ### Summary
-Building a bytecode assembler (1/2)
+Building a bytecode assembler (1/2).
 
 ### Compile and execute
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 12 – Bytecode - Assembleur de bytecode - 1/2](http://blog.soat.fr/2014/01/13-jvm-hardcore-part-12-bytecode-assembleur-1)
+
+## part13
+### Summary
+The Visitor Design Pattern and new features for PJBA (Plume Java Bytecode Assembler).
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 13 – Bytecode - Ajouter des fonctionnalités à PJBA](http://blog.soat.fr/2014/02/14-jvm-hardcore-part-13-bytecode-ajouter-des-fonctionnalites-a-pjba)

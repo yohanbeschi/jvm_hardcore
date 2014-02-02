@@ -1,11 +1,9 @@
 package org.isk.jvmhardcore.pjba.structure;
 
-import java.io.DataOutput;
-import java.io.IOException;
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
-import org.isk.jvmhardcore.pjba.util.BytecodeEnabled;
-
-public class Instruction implements BytecodeEnabled {
+public class Instruction implements Visitable {
   final private int opcode;
   final private int stack;
   final private int locals;
@@ -35,7 +33,7 @@ public class Instruction implements BytecodeEnabled {
   }
 
   @Override
-  public void toBytecode(DataOutput dataOutput) throws IOException {
-    dataOutput.writeByte(opcode);
+  public void accept(Visitor visitor) {
+    visitor.visitOpcode(this.opcode);
   }
 }

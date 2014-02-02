@@ -1,7 +1,7 @@
 package org.isk.jvmhardcore.pjba.structure.attribute.constraint;
 
-import org.isk.jvmhardcore.pjba.util.BytecodeEnabled;
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
 
-public interface ClassAttribute extends BytecodeEnabled {
+public interface ClassAttribute extends Visitable {
 
 }

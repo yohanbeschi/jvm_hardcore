@@ -39,6 +39,6 @@ public class Classes {
     code.addInstruction(Instructions.ireturn());
     method.addAttibute(code);
 
-    org.isk.jvmhardcore.pjba.Assembler.createFile(classFile);
+    org.isk.jvmhardcore.pjba.Assembling.createFile(classFile);
   }
 }

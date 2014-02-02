@@ -1,17 +1,18 @@
 package org.isk.jvmhardcore.pjba.util;
 
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.LinkedList;
 
-public class PjbaLinkedList<E extends BytecodeEnabled> extends LinkedList<E> implements BytecodeEnabled {
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
+
+public class PjbaLinkedList<E extends Visitable> extends LinkedList<E> implements Visitable {
   private static final long serialVersionUID = 1L;
 
   @Override
-  public void toBytecode(DataOutput dataOutput) throws IOException {
-    for (BytecodeEnabled b : this) {
-      if (b != null) {
-        b.toBytecode(dataOutput);
+  public void accept(Visitor visitor) {
+    for (Visitable v : this) {
+      if (v != null) {
+        v.accept(visitor);
       }
     }
   }

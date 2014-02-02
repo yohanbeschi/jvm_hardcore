@@ -1,25 +1,23 @@
 package org.isk.jvmhardcore.pjba.structure;
 
-import java.io.DataOutput;
-import java.io.IOException;
-
-import org.isk.jvmhardcore.pjba.util.BytecodeEnabled;
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class Constant {
 
   // --------------------------------------------------------------------------------------------------------------------
   // ConstantPoolEntry
   // --------------------------------------------------------------------------------------------------------------------
-  public static abstract class ConstantPoolEntry implements BytecodeEnabled {
-    final int tag;
+  public static abstract class ConstantPoolEntry implements Visitable {
+    final public int tag;
 
     public ConstantPoolEntry(final ConstantPoolTag tag) {
       this.tag = tag.getValue();
     }
 
-    public void toBytecode(final DataOutput dataOutput) throws IOException {
-      dataOutput.writeByte(this.tag);
-      this.constantToBytecode(dataOutput);
+    public void accept(final Visitor visitor) {
+      visitor.visitConstantTag(this.tag);
+      this.constantAccept(visitor);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class Constant {
       return true;
     }
 
-    public abstract void constantToBytecode(final DataOutput dataOutput) throws IOException;
+    public abstract void constantAccept(final Visitor visitor);
   }
 
   // --------------------------------------------------------------------------------------------------------------------
@@ -57,7 +55,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class UTF8 extends ConstantPoolEntry {
-    final java.lang.String value;
+    final public java.lang.String value;
 
     public UTF8(final java.lang.String value) {
       super(ConstantPoolTag.UTF8);
@@ -65,8 +63,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeUTF(this.value); // length included
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantUTF8(this.value);
     }
 
     @Override
@@ -109,7 +107,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class Integer extends ConstantPoolEntry {
-    final int integer;
+    final public int integer;
 
     public Integer(int integer) {
       super(ConstantPoolTag.INTEGER);
@@ -117,8 +115,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeInt(this.integer);
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantInteger(this.integer);
     }
 
     @Override
@@ -157,7 +155,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class Float extends ConstantPoolEntry {
-    final float floatValue;
+    final public float floatValue;
 
     public Float(float floatValue) {
       super(ConstantPoolTag.FLOAT);
@@ -165,8 +163,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeFloat(this.floatValue);
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantFloat(this.floatValue);
     }
 
     @Override
@@ -205,7 +203,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class Long extends ConstantPoolEntry {
-    final long longValue;
+    final public long longValue;
 
     public Long(long longValue) {
       super(ConstantPoolTag.LONG);
@@ -213,8 +211,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeLong(this.longValue);
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantLong(this.longValue);
     }
 
     @Override
@@ -253,7 +251,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class Double extends ConstantPoolEntry {
-    final double doubleValue;
+    final public double doubleValue;
 
     public Double(double doubleValue) {
       super(ConstantPoolTag.DOUBLE);
@@ -261,8 +259,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeDouble(this.doubleValue);
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantDouble(this.doubleValue);
     }
 
     @Override
@@ -303,7 +301,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class Class extends ConstantPoolEntry {
-    final int nameIndex;
+    final public int nameIndex;
 
     public Class(final int nameIndex) {
       super(ConstantPoolTag.CLASS);
@@ -311,8 +309,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeShort(this.nameIndex);
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantClass(this.nameIndex);
     }
 
     @Override
@@ -351,7 +349,7 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static class String extends ConstantPoolEntry {
-    final private int utf8Index;
+    final public int utf8Index;
 
     public String(int stringIndex) {
       super(ConstantPoolTag.STRING);
@@ -359,8 +357,8 @@ public class Constant {
     }
 
     @Override
-    public void constantToBytecode(DataOutput dataOutput) throws IOException {
-      dataOutput.writeShort(this.utf8Index);
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantString(this.utf8Index);
     }
 
     @Override
@@ -399,8 +397,18 @@ public class Constant {
   // --------------------------------------------------------------------------------------------------------------------
 
   public static enum ConstantPoolTag {
-    UTF8(1), INTEGER(3), FLOAT(4), LONG(5), DOUBLE(6), CLASS(7), STRING(8), FIELDREF(9), METHODREF(10), INTERFACE_METHODREF(
-        11), NAME_AND_TYPE(12);
+    UNDEFINED(0),
+    UTF8(1), 
+    INTEGER(3),
+    FLOAT(4),
+    LONG(5),
+    DOUBLE(6),
+    CLASS(7),
+    STRING(8),
+    FIELDREF(9),
+    METHODREF(10),
+    INTERFACE_METHODREF(11),
+    NAME_AND_TYPE(12);
 
     private int value;
 

@@ -1,4 +1,4 @@
-<project name="targets" basedir="../" xmlns:plume="http://blog.soat.fr/ant-macros">
+<project name="targetsMaster" basedir="../" xmlns:plume="http://blog.soat.fr/ant-macros">
   <import file="properties.xml" />
   <import file="macros.xml" />
   <description>Common targets</description>

@@ -1,44 +1,46 @@
 package org.isk.jvmhardcore.pjba.structure;
 
-import java.io.DataOutput;
-import java.io.IOException;
-
 import org.isk.jvmhardcore.pjba.structure.Constant.ConstantPoolEntry;
 import org.isk.jvmhardcore.pjba.structure.attribute.constraint.ClassAttribute;
 import org.isk.jvmhardcore.pjba.util.Ascii;
-import org.isk.jvmhardcore.pjba.util.BytecodeEnabled;
 import org.isk.jvmhardcore.pjba.util.PjbaLinkedList;
+import org.isk.jvmhardcore.pjba.visitor.Visitable;
+import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
-public class ClassFile implements BytecodeEnabled {
+public class ClassFile implements Visitable {
   final private int magicNumber = 0xcafebabe;
-  final private int version = 0x30; // 48.0 = 0x00 (version mineure) | 0x30 (version majeur)
+  private int version = 0x30; // 48.0 = 0x00 (version mineure) | 0x30 (version majeur)
 
-  final private PjbaLinkedList<ConstantPoolEntry> constantPool;
+  private PjbaLinkedList<Constant.ConstantPoolEntry> constantPool;
 
-  final private int accessFlags = 0x0001 | 0x0020; // public super
+  private int accessFlags = 0x0001 | 0x0020; // public super
 
-  final private int thisClass;
-  final private int superClass;
+  private int thisClass;
+  private int superClass;
 
-  final private int[] interfaces;
+  private int[] interfaces;
 
-  final private PjbaLinkedList<Field> fields;
-  final private PjbaLinkedList<Method> methods;
-  final private PjbaLinkedList<ClassAttribute> attributes;
+  private PjbaLinkedList<Field> fields;
+  private PjbaLinkedList<Method> methods;
+  private PjbaLinkedList<ClassAttribute> attributes;
 
   private String className;
   private String directories;
 
-  public ClassFile(final String fullyQualifiedName) {
-    this.parseName(fullyQualifiedName);
-
+  public ClassFile() {
     this.constantPool = new PjbaLinkedList<>();
-    this.constantPool.add(null); // Index 0 reserved by the JVM
-
     this.interfaces = new int[0];
     this.fields = new PjbaLinkedList<>();
     this.methods = new PjbaLinkedList<>();
     this.attributes = new PjbaLinkedList<>();
+  }
+
+  public ClassFile(final String fullyQualifiedName) {
+    this();
+
+    this.parseName(fullyQualifiedName);
+
+    this.constantPool.add(null); // Index 0 reserved by the JVM
 
     // This
     final int classNameIndex = this.addConstantUTF8(fullyQualifiedName);
@@ -75,6 +77,49 @@ public class ClassFile implements BytecodeEnabled {
 
   public String getDirectories() {
     return directories;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------
+  // ConstantPool methods
+  // --------------------------------------------------------------------------------------------------------------------
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  public void setConstantPool(PjbaLinkedList<Constant.ConstantPoolEntry> constantPool) {
+    this.constantPool = constantPool;
+  }
+
+  public void setAccessFlags(int accessFlags) {
+    this.accessFlags = accessFlags;
+  }
+
+  public void setThisClass(int thisClass) {
+    this.thisClass = thisClass;
+  }
+
+  public void setSuperClass(int superClass) {
+    this.superClass = superClass;
+  }
+
+  public void setInterfaces(int[] interfaces) {
+    this.interfaces = interfaces;
+  }
+
+  public void setFields(PjbaLinkedList<Field> fields) {
+    this.fields = fields;
+  }
+
+  public void setMethods(PjbaLinkedList<Method> methods) {
+    this.methods = methods;
+  }
+
+  public void setAttributes(PjbaLinkedList<ClassAttribute> attributes) {
+    this.attributes = attributes;
+  }
+
+  public void setFullyQualifiedClassName(String fullyQualifiedClassName) {
+    this.parseName(fullyQualifiedClassName);
   }
 
   // --------------------------------------------------------------------------------------------------------------------
@@ -134,6 +179,10 @@ public class ClassFile implements BytecodeEnabled {
     return this.constantPool.size() - 1;
   }
 
+  public ConstantPoolEntry getConstant(int index) {
+    return this.constantPool.get(index);
+  }
+
   // --------------------------------------------------------------------------------------------------------------------
   // Method methods
   // --------------------------------------------------------------------------------------------------------------------
@@ -147,20 +196,20 @@ public class ClassFile implements BytecodeEnabled {
   // --------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void toBytecode(DataOutput dataOutput) throws IOException {
-    dataOutput.writeInt(this.magicNumber);
-    dataOutput.writeInt(this.version);
-    dataOutput.writeShort(this.constantPool.size());
-    this.constantPool.toBytecode(dataOutput);
-    dataOutput.writeShort(this.accessFlags);
-    dataOutput.writeShort(this.thisClass);
-    dataOutput.writeShort(this.superClass);
-    dataOutput.writeShort(this.interfaces.length);
-    dataOutput.writeShort(this.fields.size());
-    this.fields.toBytecode(dataOutput);
-    dataOutput.writeShort(this.methods.size());
-    this.methods.toBytecode(dataOutput);
-    dataOutput.writeShort(this.attributes.size());
-    this.attributes.toBytecode(dataOutput);
+  public void accept(Visitor visitor) {
+    visitor.visitMagicNumber(this.magicNumber);
+    visitor.visitVersion(this.version);
+    visitor.visitConstantPoolSize(this.constantPool.size());
+    this.constantPool.accept(visitor);
+    visitor.visitClassAccessFlags(this.accessFlags);
+    visitor.visitThisClass(this.thisClass);
+    visitor.visitSuperClass(this.superClass);
+    visitor.visitInterfacesSize(this.interfaces.length);
+    visitor.visitFieldsSize(this.fields.size());
+    this.fields.accept(visitor);
+    visitor.visitMethodsSize(this.methods.size());
+    this.methods.accept(visitor);
+    visitor.visitClassAttributeSize(this.attributes.size());
+    this.attributes.accept(visitor);
   }
 }

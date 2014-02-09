@@ -1,0 +1,30 @@
+.class public org/isk/pjb/MultiOne
+  .method public static add(II)I
+    iload_0
+    iload_1
+    iadd
+    ireturn
+  .methodend
+
+  .method public static sub(II)I
+    iload_0
+    iload_1
+    isub
+    ireturn
+  .methodend
+.classend
+
+.class public org/isk/pjb/MultiTwo
+  .method public static ishl(II)I
+    iload_0
+    iload_1
+    ishl
+    ireturn
+  .methodend
+
+  .method public static d2i(D)I
+    dload_0
+    d2i
+    ireturn
+  .methodend
+.classend

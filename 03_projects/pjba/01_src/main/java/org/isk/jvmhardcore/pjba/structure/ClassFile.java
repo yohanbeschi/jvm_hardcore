@@ -8,12 +8,18 @@ import org.isk.jvmhardcore.pjba.visitor.Visitable;
 import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class ClassFile implements Visitable {
+  final public static int MODIFIER_PUBLIC = 0x0001;
+  final public static int MODIFIER_FINAL = 0x0010;
+  final public static int MODIFIER_SUPER = 0x0020;
+  final public static int MODIFIER_ABSTRACT = 0x0200;
+  final public static int MODIFIER_INTERFACE = 0x0400;
+
   final private int magicNumber = 0xcafebabe;
-  private int version = 0x30; // 48.0 = 0x00 (version mineure) | 0x30 (version majeur)
+  private int version = 0x30; // 48.0 = 0x00 (minor version) | 0x30 (major version)
 
   private PjbaLinkedList<Constant.ConstantPoolEntry> constantPool;
 
-  private int accessFlags = 0x0001 | 0x0020; // public super
+  private int accessFlags = 0x0020; // super
 
   private int thisClass;
   private int superClass;
@@ -92,6 +98,10 @@ public class ClassFile implements Visitable {
 
   public void setAccessFlags(int accessFlags) {
     this.accessFlags = accessFlags;
+  }
+
+  public void addAccessFlags(int accessFlags) {
+    this.accessFlags |= accessFlags;
   }
 
   public void setThisClass(int thisClass) {
@@ -189,6 +199,10 @@ public class ClassFile implements Visitable {
 
   public void addMethod(final Method method) {
     this.methods.add(method);
+  }
+
+  public PjbaLinkedList<Method> getMethods() {
+    return methods;
   }
 
   // --------------------------------------------------------------------------------------------------------------------

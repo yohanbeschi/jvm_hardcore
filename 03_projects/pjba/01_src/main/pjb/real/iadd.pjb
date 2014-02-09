@@ -1,0 +1,8 @@
+.class public org/isk/pjb/TestIadd
+	.method public static add(II)I
+		iload_0
+		iload_1
+		iadd
+		ireturn
+	.methodend
+.classend

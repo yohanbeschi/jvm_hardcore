@@ -170,6 +170,16 @@ public class Assembler implements Visitor {
     this.writeByte(opcode);
   }
 
+  @Override
+  public void visitInstructionByte(int arg) {
+    this.writeByte(arg);
+  }
+
+  @Override
+  public void visitInstructionShort(int arg) {
+    this.writeShort(arg);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Write to the DataOutputStream
   // -------------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,10 @@
 package org.isk.jvmhardcore.pjba.dumper;
 
-import org.isk.jvmhardcore.pjba.instruction.Instructions;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.jvmhardcore.pjba.util.BytecodeUtils;
 import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class HexDumper implements Visitor {
@@ -206,11 +209,53 @@ public class HexDumper implements Visitor {
     this.pjb.append("    Code Attributes: ").append(size).append("\n");
   }
 
+  private MetaInstruction metaInstruction;
+
   @Override
   public void visitOpcode(int opcode) {
+    this.metaInstruction = MetaInstructions.getMetaInstruction(opcode);
     this.pjb.append(this.getHexAndAddByte()).append("\t");
-    this.pjb.append("      ").append(Instructions.getMnemonic(opcode)).append("\n");
+    this.pjb.append("      ").append(this.metaInstruction.getMnemonic());
+
+    if (this.metaInstruction.getArgsType() == ArgsType.NONE) {
+      this.pjb.append("\n");
+    }
   }
+
+  @Override
+  public void visitInstructionByte(int value) {
+    final ArgsType type = this.metaInstruction.getArgsType();
+    switch (type) {
+      case BYTE_VALUE:
+        this.pjb.append(" ").append(value).append("\n");
+        break;
+      case IFS_CONSTANT:
+        this.pjb.append(" #").append(BytecodeUtils.unsign((byte) value)).append("\n");
+        break;
+      default:
+        throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
+    }
+  }
+
+  @Override
+  public void visitInstructionShort(int value) {
+    final ArgsType type = this.metaInstruction.getArgsType();
+    switch (type) {
+      case SHORT_VALUE:
+        this.pjb.append(" ").append(value).append("\n");
+        break;
+      case W_IFS_CONSTANT:
+      case LD_CONSTANT:
+        this.pjb.append(" #").append(BytecodeUtils.unsign((short) value)).append("\n");
+        break;
+      default:
+        throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Utilities
+  // -------------------------------------------------------------------------------------------------------------------
 
   private String getHexAndAddByte() {
     final String hex = this.getHexPadded(this.hexCounter);

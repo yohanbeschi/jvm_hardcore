@@ -1,0 +1,4 @@
+.class org/isk/pjb/Test
+	.method (I[[Lorg/isk/pjb/Test;Z)V
+	.methodend
+.classend

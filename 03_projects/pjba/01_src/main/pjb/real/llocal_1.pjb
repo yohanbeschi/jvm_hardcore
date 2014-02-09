@@ -1,0 +1,6 @@
+.class public org/isk/pjb/TestIlocal_1
+	.method public static getSecond(III)I
+		iload_1
+		ireturn
+	.methodend
+.classend

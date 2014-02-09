@@ -1,0 +1,35 @@
+/*Multiline
+comment
+*//*Multiline
+comment
+*/
+.class public org/isk/pjb/Test /*Multiline
+comment
+*//*Multiline
+comment
+*/
+	.method/*Multiline
+comment
+*/ public static methodName(I[[Lorg/isk/pjb/Test;Z)V
+/*Multiline
+comment
+*/
+		iload_0/*Multiline
+comment
+*/
+		iload_1
+		iadd
+		ireturn
+		/*Multiline
+comment
+*/
+	.methodend/*Multiline
+comment
+*/
+/*Multiline
+comment
+*/
+.classend
+/*Multiline
+comment
+*/

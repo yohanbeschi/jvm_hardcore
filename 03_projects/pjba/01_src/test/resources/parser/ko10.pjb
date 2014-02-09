@@ -1,0 +1,5 @@
+.class org/isk/pjb/Test
+	.method methodName(I[[Lorg/isk/pjb/Test;Z)V
+		instruction
+	.methodend
+.classend

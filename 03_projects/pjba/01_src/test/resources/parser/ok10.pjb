@@ -1,0 +1,24 @@
+	
+	@comments=*éàç
+;comments=*éàç
+#comments=*éàç
+.class public org/isk/pjb/Test;comments=*éàç
+	@comments=*éàç
+  @comments=*éàç
+	.method public static methodName(I[[Lorg/isk/pjb/Test;Z)V@comments=*éàç
+		#comments=*éàç
+			@commentf=*éàç
+		iload_0#comments=*éàç
+		;comments7
+			@comments=*éàç
+		iload_1
+		iadd
+		ireturn
+			;comments=*éàç
+		@comments=*éàç
+	.methodend@comments=*éàç
+	@comments=*éàç
+		@comments=*éàç
+.classend@comments=*éàç
+	;comments=*éàç
+@comments=*éàç

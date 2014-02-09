@@ -1,0 +1,10 @@
+.class
+public
+org/isk/pjb/Test 
+.method
+public static 
+methodName 
+()V 
+.methodend	
+.classend
+	

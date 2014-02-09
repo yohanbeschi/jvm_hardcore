@@ -1,0 +1,6 @@
+.class public org/isk/pjb/TestLdc_Integer
+	.method public static getInteger()I
+		ldc 1000
+		ireturn
+	.methodend
+.classend

@@ -250,3 +250,12 @@ The Visitor Design Pattern and new features for PJBA (Plume Java Bytecode Assemb
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 13 – Bytecode - Ajouter des fonctionnalités à PJBA](http://blog.soat.fr/2014/02/14-jvm-hardcore-part-13-bytecode-ajouter-des-fonctionnalites-a-pjba)
+
+## part13
+### Summary
+Building a bytecode assembler (2/2).
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 14 – Bytecode – Assembleur de bytecode - 2/2](http://blog.soat.fr/2014/02/15-jvm-hardcore-part-14-bytecode-assembleur-2)

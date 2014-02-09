@@ -1,0 +1,4 @@
+.class org/isk/pjb/Test
+	.method methodName
+	.methodend
+.classend

@@ -54,4 +54,6 @@ public interface Visitor {
   // Instruction
   // -------------------------------------------------------------------------------------------------------------------
   void visitOpcode(int opcode);
+  void visitInstructionByte(int value);
+  void visitInstructionShort(int value);
 }

@@ -1,0 +1,6 @@
+.class public org/isk/pjb/TestIlocal_0_Short
+	.method public static getFirst(SII)S
+		iload_0
+		ireturn
+	.methodend
+.classend

@@ -4,7 +4,11 @@ import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 
-import org.isk.jvmhardcore.pjba.instruction.Instructions;
+import org.isk.jvmhardcore.pjba.instruction.meta.ByteArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
+import org.isk.jvmhardcore.pjba.instruction.meta.NoArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.ShortArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Constant;
 import org.isk.jvmhardcore.pjba.structure.Constant.ConstantPoolEntry;
@@ -12,6 +16,7 @@ import org.isk.jvmhardcore.pjba.structure.Instruction;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.isk.jvmhardcore.pjba.structure.attribute.Code;
 import org.isk.jvmhardcore.pjba.structure.attribute.constraint.MethodAttribute;
+import org.isk.jvmhardcore.pjba.util.BytecodeUtils;
 import org.isk.jvmhardcore.pjba.util.PjbaLinkedList;
 
 public class Disassembler {
@@ -189,7 +194,21 @@ public class Disassembler {
       final int opcode = this.readUnsignedByte();
       bytesProceed++;
 
-      final Instruction instruction = Instructions.getInstruction(opcode);
+      final MetaInstruction metaInstruction = MetaInstructions.getMetaInstruction(opcode);
+      Instruction instruction = null;
+
+      if (metaInstruction instanceof NoArgMetaInstruction) {
+        instruction = ((NoArgMetaInstruction) metaInstruction).buildInstruction();
+      } else if (metaInstruction instanceof ByteArgMetaInstruction) {
+        bytesProceed++;
+        final byte b = this.readByte();
+        instruction = ((ByteArgMetaInstruction) metaInstruction).buildInstruction(b);
+      } else if (metaInstruction instanceof ShortArgMetaInstruction) {
+        bytesProceed += 2;
+        final short s = this.readShort();
+        instruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction(s);
+      }
+
       instructions.add(instruction);
     }
 
@@ -301,7 +320,7 @@ public class Disassembler {
 
   public long readUnsignedInt() {
     final int i = this.readInt();
-    return i & 0xFFFFFFFF;
+    return BytecodeUtils.unsign(i);
   }
 
   // --------------------------------------------------------------------------------------------------------------------

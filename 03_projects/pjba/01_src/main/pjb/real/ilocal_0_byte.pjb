@@ -1,0 +1,6 @@
+.class public org/isk/pjb/TestIlocal_0_Byte
+	.method public static getFirst(BII)B
+		iload_0
+		ireturn
+	.methodend
+.classend

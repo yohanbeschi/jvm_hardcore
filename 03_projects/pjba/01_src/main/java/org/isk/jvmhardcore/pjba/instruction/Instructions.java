@@ -1,11 +1,7 @@
 package org.isk.jvmhardcore.pjba.instruction;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.isk.jvmhardcore.pjba.structure.Instruction;
+import org.isk.jvmhardcore.pjba.util.BytecodeUtils;
 
 public class Instructions {
 
@@ -132,179 +128,7 @@ public class Instructions {
   final public static Instruction ARETURN = new NoArgInstruction(0xb0, -1, 0);
   final public static Instruction RETURN = new NoArgInstruction(0xb1, 0, 0);
 
-  final static private Map<Integer, MetaInstruction> OPCODE_TO_METAINSTRUCTION;
-  final static private Map<String, MetaInstruction> MNEMONIC_TO_METAINSTRUCTION;
-
-  static {
-    OPCODE_TO_METAINSTRUCTION = new HashMap<>();
-    MNEMONIC_TO_METAINSTRUCTION = new HashMap<>();
-    final List<MetaInstruction> metaInstructions = init();
-    initList(metaInstructions);
-  }
-
   private Instructions() {
-  }
-
-  public static MetaInstruction getMetaInstruction(final String mnemonic) {
-    return MNEMONIC_TO_METAINSTRUCTION.get(mnemonic);
-  }
-
-  public static MetaInstruction getMetaInstruction(final int opcode) {
-    return OPCODE_TO_METAINSTRUCTION.get(opcode);
-  }
-
-  public static Instruction getInstruction(final String mnemonic) {
-    return getMetaInstruction(mnemonic).getInstruction();
-  }
-
-  public static Instruction getInstruction(final int opcode) {
-    return getMetaInstruction(opcode).getInstruction();
-  }
-
-  public static String getMnemonic(final int opcode) {
-    return getMetaInstruction(opcode).getMnemonic();
-  }
-
-  private static void initList(List<MetaInstruction> metaInstructions) {
-    for (MetaInstruction m : metaInstructions) {
-      OPCODE_TO_METAINSTRUCTION.put(m.getOpcode(), m);
-      MNEMONIC_TO_METAINSTRUCTION.put(m.getMnemonic(), m);
-    }
-  }
-
-  private static List<MetaInstruction> init() {
-    final List<MetaInstruction> list = new LinkedList<>();
-
-    list.add(new MetaInstruction("nop", NOP));
-    list.add(new MetaInstruction("aconst_null", ACONST_NULL));
-    list.add(new MetaInstruction("iconst_m1", ICONST_M1));
-    list.add(new MetaInstruction("iconst_0", ICONST_0));
-    list.add(new MetaInstruction("iconst_1", ICONST_1));
-    list.add(new MetaInstruction("iconst_2", ICONST_2));
-    list.add(new MetaInstruction("iconst_3", ICONST_3));
-    list.add(new MetaInstruction("iconst_4", ICONST_4));
-    list.add(new MetaInstruction("iconst_5", ICONST_5));
-    list.add(new MetaInstruction("lconst_0", LCONST_0));
-    list.add(new MetaInstruction("lconst_1", LCONST_1));
-    list.add(new MetaInstruction("fconst_0", FCONST_0));
-    list.add(new MetaInstruction("fconst_1", FCONST_1));
-    list.add(new MetaInstruction("fconst_2", FCONST_2));
-    list.add(new MetaInstruction("dconst_0", DCONST_0));
-    list.add(new MetaInstruction("dconst_1", DCONST_1));
-    // TODO: 0x10 to 0x19
-    list.add(new MetaInstruction("iload_0", ILOAD_0));
-    list.add(new MetaInstruction("iload_1", ILOAD_1));
-    list.add(new MetaInstruction("iload_2", ILOAD_2));
-    list.add(new MetaInstruction("iload_3", ILOAD_3));
-    list.add(new MetaInstruction("lload_0", LLOAD_0));
-    list.add(new MetaInstruction("lload_1", LLOAD_1));
-    list.add(new MetaInstruction("lload_2", LLOAD_2));
-    list.add(new MetaInstruction("lload_3", LLOAD_3));
-    list.add(new MetaInstruction("fload_0", FLOAD_0));
-    list.add(new MetaInstruction("fload_1", FLOAD_1));
-    list.add(new MetaInstruction("fload_2", FLOAD_2));
-    list.add(new MetaInstruction("fload_3", FLOAD_3));
-    list.add(new MetaInstruction("dload_0", DLOAD_0));
-    list.add(new MetaInstruction("dload_1", DLOAD_1));
-    list.add(new MetaInstruction("dload_2", DLOAD_2));
-    list.add(new MetaInstruction("dload_3", DLOAD_3));
-    list.add(new MetaInstruction("aload_0", ALOAD_0));
-    list.add(new MetaInstruction("aload_1", ALOAD_1));
-    list.add(new MetaInstruction("aload_2", ALOAD_2));
-    list.add(new MetaInstruction("aload_3", ALOAD_3));
-    // TODO: 0x2e to 0x3a
-    list.add(new MetaInstruction("istore_0", ISTORE_0));
-    list.add(new MetaInstruction("istore_1", ISTORE_1));
-    list.add(new MetaInstruction("istore_2", ISTORE_2));
-    list.add(new MetaInstruction("istore_3", ISTORE_3));
-    list.add(new MetaInstruction("lstore_0", LSTORE_0));
-    list.add(new MetaInstruction("lstore_1", LSTORE_1));
-    list.add(new MetaInstruction("lstore_2", LSTORE_2));
-    list.add(new MetaInstruction("lstore_3", LSTORE_3));
-    list.add(new MetaInstruction("fstore_0", FSTORE_0));
-    list.add(new MetaInstruction("fstore_1", FSTORE_1));
-    list.add(new MetaInstruction("fstore_2", FSTORE_2));
-    list.add(new MetaInstruction("fstore_3", FSTORE_3));
-    list.add(new MetaInstruction("dstore_0", DSTORE_0));
-    list.add(new MetaInstruction("dstore_1", DSTORE_1));
-    list.add(new MetaInstruction("dstore_2", DSTORE_2));
-    list.add(new MetaInstruction("dstore_3", DSTORE_3));
-    list.add(new MetaInstruction("astore_0", ASTORE_0));
-    list.add(new MetaInstruction("astore_1", ASTORE_1));
-    list.add(new MetaInstruction("astore_2", ASTORE_2));
-    list.add(new MetaInstruction("astore_3", ASTORE_3));
-    // TODO: 0x4f to 0x56
-    list.add(new MetaInstruction("pop", POP));
-    list.add(new MetaInstruction("pop2", POP2));
-    list.add(new MetaInstruction("dup", DUP));
-    list.add(new MetaInstruction("dup_x1", DUP_X1));
-    list.add(new MetaInstruction("dup_x2", DUP_X2));
-    list.add(new MetaInstruction("dup2", DUP2));
-    list.add(new MetaInstruction("dup2_x1", DUP2_X1));
-    list.add(new MetaInstruction("dup2_x2", DUP2_X2));
-    list.add(new MetaInstruction("swap", SWAP));
-    list.add(new MetaInstruction("iadd", IADD));
-    list.add(new MetaInstruction("ladd", LADD));
-    list.add(new MetaInstruction("fadd", FADD));
-    list.add(new MetaInstruction("dadd", DADD));
-    list.add(new MetaInstruction("isub", ISUB));
-    list.add(new MetaInstruction("lsub", LSUB));
-    list.add(new MetaInstruction("fsub", FSUB));
-    list.add(new MetaInstruction("dsub", DSUB));
-    list.add(new MetaInstruction("imul", IMUL));
-    list.add(new MetaInstruction("lmul", LMUL));
-    list.add(new MetaInstruction("fmul", FMUL));
-    list.add(new MetaInstruction("dmul", DMUL));
-    list.add(new MetaInstruction("idiv", IDIV));
-    list.add(new MetaInstruction("ldiv", LDIV));
-    list.add(new MetaInstruction("fdiv", FDIV));
-    list.add(new MetaInstruction("ddiv", DDIV));
-    list.add(new MetaInstruction("irem", IREM));
-    list.add(new MetaInstruction("lrem", LREM));
-    list.add(new MetaInstruction("frem", FREM));
-    list.add(new MetaInstruction("drem", DREM));
-    list.add(new MetaInstruction("ineg", INEG));
-    list.add(new MetaInstruction("lneg", LNEG));
-    list.add(new MetaInstruction("fneg", FNEG));
-    list.add(new MetaInstruction("dneg", DNEG));
-    list.add(new MetaInstruction("ishl", ISHL));
-    list.add(new MetaInstruction("lshl", LSHL));
-    list.add(new MetaInstruction("ishr", ISHR));
-    list.add(new MetaInstruction("lshr", LSHR));
-    list.add(new MetaInstruction("iushr", IUSHR));
-    list.add(new MetaInstruction("lushr", LUSHR));
-    list.add(new MetaInstruction("iand", IAND));
-    list.add(new MetaInstruction("land", LAND));
-    list.add(new MetaInstruction("ior", IOR));
-    list.add(new MetaInstruction("lor", LOR));
-    list.add(new MetaInstruction("ixor", IXOR));
-    list.add(new MetaInstruction("lxor", LXOR));
-    // TODO: 0x84
-    list.add(new MetaInstruction("i2l", I2L));
-    list.add(new MetaInstruction("i2f", I2F));
-    list.add(new MetaInstruction("i2d", I2D));
-    list.add(new MetaInstruction("l2i", L2I));
-    list.add(new MetaInstruction("l2f", L2F));
-    list.add(new MetaInstruction("l2d", L2D));
-    list.add(new MetaInstruction("f2i", F2I));
-    list.add(new MetaInstruction("f2l", F2L));
-    list.add(new MetaInstruction("f2d", F2D));
-    list.add(new MetaInstruction("d2i", D2I));
-    list.add(new MetaInstruction("d2l", D2L));
-    list.add(new MetaInstruction("d2f", D2F));
-    list.add(new MetaInstruction("i2b", I2B));
-    list.add(new MetaInstruction("i2c", I2C));
-    list.add(new MetaInstruction("i2s", I2S));
-    // TODO: 0x94 to 0xab
-    list.add(new MetaInstruction("ireturn", IRETURN));
-    list.add(new MetaInstruction("lreturn", LRETURN));
-    list.add(new MetaInstruction("freturn", FRETURN));
-    list.add(new MetaInstruction("dreturn", DRETURN));
-    list.add(new MetaInstruction("areturn", ARETURN));
-    list.add(new MetaInstruction("return", RETURN));
-    // TODO: 0xc4 to 0xc9
-
-    return list;
   }
 
   public static Instruction nop() {
@@ -369,6 +193,46 @@ public class Instructions {
 
   public static Instruction dconst_1() {
     return DCONST_1;
+  }
+
+  public static Instruction bipush(byte value) {
+    return new ByteArgInstruction(0x10, 1, 0, value);
+  }
+
+  public static Instruction sipush(short value) {
+    return new ShortArgInstruction(0x11, 1, 0, value);
+  }
+
+  public static Instruction ldc(byte indexInCP) {
+    return new ByteArgInstruction(0x12, 1, 0, indexInCP);
+  }
+
+  public static Instruction ldc_w(short indexInCP) {
+    return new ShortArgInstruction(0x13, 1, 0, indexInCP);
+  }
+
+  public static Instruction ldc2_w(short indexInCP) {
+    return new ShortArgInstruction(0x14, 2, 0, indexInCP);
+  }
+
+  public static Instruction iload(byte indexInLV) {
+    return new ByteArgInstruction(0x15, 1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
+  }
+
+  public static Instruction lload(byte indexInLV) {
+    return new ByteArgInstruction(0x16, 2, BytecodeUtils.unsign(indexInLV) + 2, indexInLV);
+  }
+
+  public static Instruction fload(byte indexInLV) {
+    return new ByteArgInstruction(0x17, 1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
+  }
+
+  public static Instruction dload(byte indexInLV) {
+    return new ByteArgInstruction(0x18, 2, BytecodeUtils.unsign(indexInLV) + 2, indexInLV);
+  }
+
+  public static Instruction aload(byte indexInLV) {
+    return new ByteArgInstruction(0x19, 1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
   }
 
   public static Instruction iload_0() {
@@ -449,6 +313,26 @@ public class Instructions {
 
   public static Instruction aload_3() {
     return ALOAD_3;
+  }
+
+  public static Instruction istore(byte indexInLV) {
+    return new ByteArgInstruction(0x36, -1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
+  }
+
+  public static Instruction lstore(byte indexInLV) {
+    return new ByteArgInstruction(0x37, -2, BytecodeUtils.unsign(indexInLV) + 2, indexInLV);
+  }
+
+  public static Instruction fstore(byte indexInLV) {
+    return new ByteArgInstruction(0x38, -1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
+  }
+
+  public static Instruction dstore(byte indexInLV) {
+    return new ByteArgInstruction(0x39, -2, BytecodeUtils.unsign(indexInLV) + 2, indexInLV);
+  }
+
+  public static Instruction astore(byte indexInLV) {
+    return new ByteArgInstruction(0x3a, -1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
   }
 
   public static Instruction istore_0() {

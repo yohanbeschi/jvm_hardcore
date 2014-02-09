@@ -10,6 +10,7 @@ public class PjbDumperTest {
   public void dump0() {
     final ClassFile classFile = new ClassFileBuilder("org/isk/jvmhardcore/pjba/MyFirstClass")
       .newMethod("add", "(II)I")
+        .ldc("Привет \\\" \\n мир по-русски")
         .iload_0()
         .iload_1()
         .iadd()
@@ -23,6 +24,8 @@ public class PjbDumperTest {
 
   final private static String EXPECTED = ".class org/isk/jvmhardcore/pjba/MyFirstClass\n"
                                        + "  .method add(II)I\n"
+                                         // actual string: Привет \" \n мир по-русски
+                                       + "    ldc \"Привет \\\\\\\" \\\\n мир по-русски\"\n"
                                        + "    iload_0\n"
                                        + "    iload_1\n"
                                        + "    iadd\n"

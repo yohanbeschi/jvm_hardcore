@@ -9,6 +9,7 @@ public class HexDumperTest {
   public void dump0() {
     final ClassFile classFile = new ClassFileBuilder("org/isk/jvmhardcore/pjba/MyFirstClass")
       .newMethod("add", "(II)I")
+        .ldc("Привет \\\" мир по-русски")
         .iload_0()
         .iload_1()
         .iadd()

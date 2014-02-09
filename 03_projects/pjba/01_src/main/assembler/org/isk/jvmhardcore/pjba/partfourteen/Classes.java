@@ -1,14 +1,30 @@
 package org.isk.jvmhardcore.pjba.partfourteen;
 
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
+import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.junit.Test;
 
 public class Classes {
+
   @Test
   public void assemble0() throws Exception {
-    final String fullyQualifiedName = "org/isk/jvmhardcore/pjba/NoArg";
+    final ClassFile classFile = this.buildClass("org/isk/jvmhardcore/pjba/AllInstructionsWithoutDummiesInCP", false);
+    org.isk.jvmhardcore.pjba.Assembling.createFile(classFile);
+  }
+
+  @Test
+  public void assemble1() throws Exception {
+    final ClassFile classFile = this.buildClass("org/isk/jvmhardcore/pjba/AllInstructionsWithDummiesInCP", true);
+    org.isk.jvmhardcore.pjba.Assembling.createFile(classFile);
+  }
+
+  private ClassFile buildClass(final String fullyQualifiedName, final boolean withDummies) {
     final ClassFileBuilder builder = new ClassFileBuilder(fullyQualifiedName);
+
+    if (withDummies) {
+      this.addDummyConstants(builder);
+    }
 
     this.buildNop(builder);
     this.buildAConstNull(builder);
@@ -26,6 +42,18 @@ public class Classes {
     this.buildFConst2(builder);
     this.buildDConst0(builder);
     this.buildDConst1(builder);
+    this.buildBipush(builder);
+    this.buildSipush(builder);
+    this.buildLdc(builder);
+    if (withDummies) {
+      this.buildLdcW(builder);
+    }
+    this.buildLdc2W(builder);
+    this.buildILoad(builder);
+    this.buildLLoad(builder);
+    this.buildFLoad(builder);
+    this.buildDLoad(builder);
+    this.buildALoad(builder);
     this.buildILoad0(builder);
     this.buildILoad1(builder);
     this.buildILoad2(builder);
@@ -46,6 +74,11 @@ public class Classes {
     this.buildALoad1(builder);
     this.buildALoad2(builder);
     this.buildALoad3(builder);
+    this.buildIStore(builder);
+    this.buildLStore(builder);
+    this.buildFStore(builder);
+    this.buildDStore(builder);
+    this.buildAStore(builder);
     this.buildIStore0(builder);
     this.buildIStore1(builder);
     this.buildIStore2(builder);
@@ -126,17 +159,39 @@ public class Classes {
     this.buildI2B(builder);
     this.buildI2C(builder);
     this.buildI2S(builder);
+
     // Used everywhere => No test needed
-//    this.buildIReturn(builder);
-//    this.buildLReturn(builder);
-//    this.buildFReturn(builder);
-//    this.buildDReturn(builder);
-//    this.buildAReturn(builder);
-//    this.buildReturn(builder);
+    // this.buildIReturn(builder);
+    // this.buildLReturn(builder);
+    // this.buildFReturn(builder);
+    // this.buildDReturn(builder);
+    // this.buildAReturn(builder);
+    // this.buildReturn(builder);
 
-    final ClassFile classFile = builder.build();
+    this.buildIStoreLoadUnsigned(builder);
+    this.buildLStoreLoadUnsigned(builder);
+    this.buildFStoreLoadUnsigned(builder);
+    this.buildDStoreLoadUnsigned(builder);
+    this.buildAStoreLoadUnsigned(builder);
 
-    org.isk.jvmhardcore.pjba.Assembling.createFile(classFile);
+    return builder.build();
+  }
+
+  // To test ldc_w and with short indexes instead of byte
+  private void addDummyConstants(ClassFileBuilder builder) {
+    final String s = "abcdefghijklmnopqrstuvwxyz";
+
+    final MethodBuilder mBuilder = builder.newMethod("dummy", "()V");
+
+    for (int i = 0; i < s.length(); i++) {
+      final StringBuilder sb = new StringBuilder();
+      for (int j = 0; j < 10; j++) {
+        sb.append(s.charAt(i));
+        mBuilder.ldc(sb.toString());
+      }
+    }
+
+    mBuilder.return_();
   }
 
   private void buildNop(ClassFileBuilder builder) {
@@ -233,6 +288,86 @@ public class Classes {
     builder.newMethod("dconst_1", "()D")
       .dconst_1()
       .dreturn();
+  }
+
+  private void buildBipush(ClassFileBuilder builder) {
+    builder.newMethod("bipush", "()I")
+      .bipush((byte)125)
+      .ireturn();
+  }
+
+  private void buildSipush(ClassFileBuilder builder) {
+    builder.newMethod("sipush", "()I")
+      .sipush((short)5_396)
+      .ireturn();
+  }
+
+  private void buildLdc(ClassFileBuilder builder) {
+    builder.newMethod("ldc_String", "()Ljava/lang/String;")
+      .ldc("Hello World")
+      .areturn();
+
+    builder.newMethod("ldc_int", "()I")
+      .ldc(167_980_564)
+      .ireturn();
+
+    builder.newMethod("ldc_float", "()F")
+      .ldc(3.5f)
+      .freturn();
+  }
+
+  private void buildLdcW(ClassFileBuilder builder) {
+    builder.newMethod("ldc_w_String", "()Ljava/lang/String;")
+    .ldc("Hello World Wide...")
+    .areturn();
+
+    builder.newMethod("ldc_w_int", "()I")
+      .ldc(999_999_999)
+      .ireturn();
+
+    builder.newMethod("ldc_w_float", "()F")
+      .ldc(999.9999f)
+      .freturn();
+  }
+
+  private void buildLdc2W(ClassFileBuilder builder) {
+    builder.newMethod("ldc_long", "()J")
+      .ldc(167_980_564_900l)
+      .lreturn();
+
+    builder.newMethod("ldc_double", "()D")
+      .ldc(3.578_978_979)
+      .dreturn();
+  }
+
+  private void buildILoad(ClassFileBuilder builder) {
+    builder.newMethod("iload", "(ZZZZZZZZZZI)I")
+      .iload((byte)10)
+      .ireturn();
+  }
+
+  private void buildLLoad(ClassFileBuilder builder) {
+    builder.newMethod("lload", "(ZZZZZZZZZZJ)J")
+      .lload((byte)10)
+      .lreturn();
+  }
+
+  private void buildFLoad(ClassFileBuilder builder) {
+    builder.newMethod("fload", "(ZZZZZZZZZZF)F")
+      .fload((byte)10)
+      .freturn();
+  }
+
+  private void buildDLoad(ClassFileBuilder builder) {
+    builder.newMethod("dload", "(ZZZZZZZZZZD)D")
+      .dload((byte)10)
+      .dreturn();
+  }
+
+  private void buildALoad(ClassFileBuilder builder) {
+    builder.newMethod("aload", "(ZZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;")
+      .aload((byte)10)
+      .areturn();
   }
 
   private void buildILoad0(ClassFileBuilder builder) {
@@ -355,6 +490,46 @@ public class Classes {
       .areturn();
   }
 
+  private void buildIStore(ClassFileBuilder builder) {
+    builder.newMethod("istore", "(IZZZZZZZZZI)I")
+    .iload_0()
+    .istore((byte) 10)
+    .iload((byte) 10)
+    .ireturn();
+  }
+
+  private void buildLStore(ClassFileBuilder builder) {
+    builder.newMethod("lstore", "(JZZZZZZZZJ)J")
+      .lload_0()
+      .lstore((byte) 10)
+      .lload((byte) 10)
+      .lreturn();
+  }
+
+  private void buildFStore(ClassFileBuilder builder) {
+    builder.newMethod("fstore", "(FZZZZZZZZZF)F")
+      .fload_0()
+      .fstore((byte) 10)
+      .fload((byte) 10)
+      .freturn();
+  }
+
+  private void buildDStore(ClassFileBuilder builder) {
+    builder.newMethod("dstore", "(DZZZZZZZZD)D")
+    .dload_0()
+    .dstore((byte) 10)
+    .dload((byte) 10)
+    .dreturn();
+  }
+
+  private void buildAStore(ClassFileBuilder builder) {
+    builder.newMethod("astore", "(Ljava/lang/Integer;ZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;")
+    .aload_0()
+    .astore((byte) 10)
+    .aload((byte) 10)
+    .areturn();
+  }
+
   private void buildIStore0(ClassFileBuilder builder) {
     // v0 + 5 + v1
     builder.newMethod("istore_0", "(II)I")
@@ -456,7 +631,7 @@ public class Classes {
   }
 
   private void buildFStore0(ClassFileBuilder builder) {
-    // v0 + 5 + v1 
+    // v0 + 5 + v1
     builder.newMethod("fstore_0", "(FF)F")
       .fload_0()
       .iconst_5()
@@ -1079,5 +1254,45 @@ public class Classes {
       .iload_0()
       .i2s()
       .ireturn();
+  }
+
+  private void buildIStoreLoadUnsigned(ClassFileBuilder builder) {
+    builder.newMethod("istore_load_unsigned", "()I")
+      .sipush((short)7_687)
+      .istore((byte)230)
+      .iload((byte)0xe6)
+      .ireturn();
+  }
+
+  private void buildLStoreLoadUnsigned(ClassFileBuilder builder) {
+    builder.newMethod("lstore_load_unsigned", "()J")
+      .ldc((long)7_687_000)
+      .lstore((byte)199)
+      .lload((byte)199)
+      .lreturn();
+  }
+
+  private void buildFStoreLoadUnsigned(ClassFileBuilder builder) {
+    builder.newMethod("fstore_load_unsigned", "()F")
+      .ldc(134.89f)
+      .fstore((byte)142)
+      .fload((byte)142)
+      .freturn();
+  }
+
+  private void buildDStoreLoadUnsigned(ClassFileBuilder builder) {
+    builder.newMethod("dstore_load_unsigned", "()D")
+      .ldc(33.33)
+      .dstore((byte)210)
+      .dload((byte)210)
+      .dreturn();
+  }
+
+  private void buildAStoreLoadUnsigned(ClassFileBuilder builder) {
+    builder.newMethod("astore_load_unsigned", "()Ljava/lang/Object;")
+      .aconst_null()
+      .astore((byte)175)
+      .aload((byte)175)
+      .areturn();
   }
 }

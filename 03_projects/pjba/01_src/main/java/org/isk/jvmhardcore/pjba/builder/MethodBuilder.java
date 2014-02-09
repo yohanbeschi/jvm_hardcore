@@ -98,6 +98,86 @@ public class MethodBuilder {
     return this;
   }
 
+  public MethodBuilder bipush(byte value) {
+    this.code.addInstruction(Instructions.bipush(value));
+    return this;
+  }
+
+  public MethodBuilder sipush(short value) {
+    this.code.addInstruction(Instructions.sipush(value));
+    return this;
+  }
+
+  public MethodBuilder ldc(String value) {
+    final int utf8Index = this.classFileBuilder.getClassFile().addConstantUTF8(value);
+    final int indexInCP = this.classFileBuilder.getClassFile().addConstantString(utf8Index);
+
+    this.internalLdc(indexInCP);
+
+    return this;
+  }
+
+  public MethodBuilder ldc(int value) {
+    final int indexInCP = this.classFileBuilder.getClassFile().addConstantInteger(value);
+
+    this.internalLdc(indexInCP);
+
+    return this;
+  }
+
+  public MethodBuilder ldc(float value) {
+    final int indexInCP = this.classFileBuilder.getClassFile().addConstantFloat(value);
+
+    this.internalLdc(indexInCP);
+
+    return this;
+  }
+
+  public MethodBuilder ldc(long value) {
+    final int indexInCP = this.classFileBuilder.getClassFile().addConstantLong(value);
+    this.code.addInstruction(Instructions.ldc2_w((short) indexInCP));
+    return this;
+  }
+
+  public MethodBuilder ldc(double value) {
+    final int indexInCP = this.classFileBuilder.getClassFile().addConstantDouble(value);
+    this.code.addInstruction(Instructions.ldc2_w((short) indexInCP));
+    return this;
+  }
+
+  private void internalLdc(final int indexInCP) {
+    if (indexInCP > 255) { // 255 = Byte.MAX_UNSIGNED_VALUE
+      this.code.addInstruction(Instructions.ldc_w((short) indexInCP));
+    } else {
+      this.code.addInstruction(Instructions.ldc((byte) indexInCP));
+    }
+  }
+
+  public MethodBuilder iload(byte indexInLV) {
+    this.code.addInstruction(Instructions.iload(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder lload(byte indexInLV) {
+    this.code.addInstruction(Instructions.lload(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder fload(byte indexInLV) {
+    this.code.addInstruction(Instructions.fload(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder dload(byte indexInLV) {
+    this.code.addInstruction(Instructions.dload(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder aload(byte indexInLV) {
+    this.code.addInstruction(Instructions.aload(indexInLV));
+    return this;
+  }
+
   public MethodBuilder iload_0() {
     this.code.addInstruction(Instructions.ILOAD_0);
     return this;
@@ -195,6 +275,31 @@ public class MethodBuilder {
 
   public MethodBuilder aload_3() {
     this.code.addInstruction(Instructions.ALOAD_3);
+    return this;
+  }
+
+  public MethodBuilder istore(byte indexInLV) {
+    this.code.addInstruction(Instructions.istore(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder lstore(byte indexInLV) {
+    this.code.addInstruction(Instructions.lstore(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder fstore(byte indexInLV) {
+    this.code.addInstruction(Instructions.fstore(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder dstore(byte indexInLV) {
+    this.code.addInstruction(Instructions.dstore(indexInLV));
+    return this;
+  }
+
+  public MethodBuilder astore(byte indexInLV) {
+    this.code.addInstruction(Instructions.astore(indexInLV));
     return this;
   }
 

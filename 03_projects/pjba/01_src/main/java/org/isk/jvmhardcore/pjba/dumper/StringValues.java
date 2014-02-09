@@ -1,5 +1,9 @@
 package org.isk.jvmhardcore.pjba.dumper;
 
+import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.jvmhardcore.pjba.structure.Constant;
+import org.isk.jvmhardcore.pjba.structure.Constant.ConstantPoolEntry;
+
 public class StringValues {
   private StringValues() {
   }
@@ -98,5 +102,30 @@ public class StringValues {
     }
 
     return sb.toString();
+  }
+
+  public static String getPrintableConstant(int index, ClassFile classFile) {
+    final ConstantPoolEntry constant = classFile.getConstant(index);
+
+    switch (constant.tag) {
+      case 3:
+        final Constant.Integer cInteger = (Constant.Integer) constant;
+        return String.valueOf(cInteger.integer);
+      case 4:
+        final Constant.Float cFloat = (Constant.Float) constant;
+        return String.valueOf(cFloat.floatValue);
+      case 5:
+        final Constant.Long cLong = (Constant.Long) constant;
+        return String.valueOf(cLong.longValue);
+      case 6:
+        final Constant.Double cDouble = (Constant.Double) constant;
+        return String.valueOf(cDouble.doubleValue);
+      case 8:
+        final Constant.String cString = (Constant.String) constant;
+        final String value = ((Constant.UTF8) classFile.getConstant(cString.utf8Index)).value;
+        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+      default:
+        return null;
+    }
   }
 }

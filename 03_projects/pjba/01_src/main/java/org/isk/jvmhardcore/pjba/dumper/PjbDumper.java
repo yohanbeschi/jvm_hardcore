@@ -1,8 +1,11 @@
 package org.isk.jvmhardcore.pjba.dumper;
 
-import org.isk.jvmhardcore.pjba.instruction.Instructions;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
+import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Constant;
+import org.isk.jvmhardcore.pjba.util.BytecodeUtils;
 import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class PjbDumper implements Visitor {
@@ -180,8 +183,54 @@ public class PjbDumper implements Visitor {
     // Do nothing
   }
 
+  private MetaInstruction metaInstruction;
+
   @Override
   public void visitOpcode(int opcode) {
-    this.pjb.append("    ").append(Instructions.getMnemonic(opcode)).append("\n");
+    this.metaInstruction = MetaInstructions.getMetaInstruction(opcode);
+    this.pjb.append("    ").append(this.metaInstruction.getPjbMnemonic());
+
+    if (this.metaInstruction.getArgsType() == ArgsType.NONE) {
+      this.pjb.append("\n");
+    }
+  }
+
+  @Override
+  public void visitInstructionByte(int value) {
+    Object printableValue = null;
+
+    final ArgsType type = this.metaInstruction.getArgsType();
+    switch (type) {
+      case BYTE_VALUE:
+        printableValue = value;
+        break;
+      case IFS_CONSTANT:
+        printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((byte) value), this.classFile);
+        break;
+      default:
+        throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
+    }
+
+    this.pjb.append(" ").append(printableValue).append("\n");
+  }
+
+  @Override
+  public void visitInstructionShort(int value) {
+    Object printableValue = null;
+
+    final ArgsType type = this.metaInstruction.getArgsType();
+    switch (type) {
+      case SHORT_VALUE:
+        printableValue = value;
+        break;
+      case W_IFS_CONSTANT:
+      case LD_CONSTANT:
+        printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) value), this.classFile);
+        break;
+      default:
+        throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
+    }
+
+    this.pjb.append(" ").append(printableValue).append("\n");
   }
 }

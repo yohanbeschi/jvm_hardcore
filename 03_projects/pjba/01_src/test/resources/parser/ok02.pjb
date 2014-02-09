@@ -1,0 +1,4 @@
+.class public Test
+	.method public static methodName()V
+	.methodend
+.classend

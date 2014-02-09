@@ -1,0 +1,10 @@
+@ Try to get the local at index 0
+@ The method not having parameters 
+@ and nothing having be storing at this index
+@ an exception is thrown
+.class public org/isk/pjb/TestIlocal_0_NoArgs
+	.method public static getFirst()I
+		iload_0
+		ireturn
+	.methodend
+.classend

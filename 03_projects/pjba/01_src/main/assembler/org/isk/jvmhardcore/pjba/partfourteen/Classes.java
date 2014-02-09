@@ -3,6 +3,7 @@ package org.isk.jvmhardcore.pjba.partfourteen;
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
 import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.jvmhardcore.pjba.structure.Method;
 import org.junit.Test;
 
 public class Classes {
@@ -20,7 +21,7 @@ public class Classes {
   }
 
   private ClassFile buildClass(final String fullyQualifiedName, final boolean withDummies) {
-    final ClassFileBuilder builder = new ClassFileBuilder(fullyQualifiedName);
+    final ClassFileBuilder builder = new ClassFileBuilder(ClassFile.MODIFIER_PUBLIC, fullyQualifiedName);
 
     if (withDummies) {
       this.addDummyConstants(builder);
@@ -181,7 +182,7 @@ public class Classes {
   private void addDummyConstants(ClassFileBuilder builder) {
     final String s = "abcdefghijklmnopqrstuvwxyz";
 
-    final MethodBuilder mBuilder = builder.newMethod("dummy", "()V");
+    final MethodBuilder mBuilder = builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dummy", "()V");
 
     for (int i = 0; i < s.length(); i++) {
       final StringBuilder sb = new StringBuilder();
@@ -195,303 +196,303 @@ public class Classes {
   }
 
   private void buildNop(ClassFileBuilder builder) {
-    builder.newMethod("nop", "()V")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "nop", "()V")
       .nop()
       .return_();
   }
 
   private void buildAConstNull(ClassFileBuilder builder) {
-    builder.newMethod("aconst_null", "()Ljava/lang/Object;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aconst_null", "()Ljava/lang/Object;")
       .aconst_null()
       .areturn();
   }
 
   private void buildIConstM1(ClassFileBuilder builder) {
-    builder.newMethod("iconst_m1", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_m1", "()I")
       .iconst_m1()
       .ireturn();
   }
 
   private void buildIConst0(ClassFileBuilder builder) {
-    builder.newMethod("iconst_0", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_0", "()I")
       .iconst_0()
       .ireturn();
   }
 
   private void buildIConst1(ClassFileBuilder builder) {
-    builder.newMethod("iconst_1", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_1", "()I")
       .iconst_1()
       .ireturn();
   }
 
   private void buildIConst2(ClassFileBuilder builder) {
-    builder.newMethod("iconst_2", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_2", "()I")
       .iconst_2()
       .ireturn();
   }
 
   private void buildIConst3(ClassFileBuilder builder) {
-    builder.newMethod("iconst_3", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_3", "()I")
       .iconst_3()
       .ireturn();
   }
 
   private void buildIConst4(ClassFileBuilder builder) {
-    builder.newMethod("iconst_4", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_4", "()I")
       .iconst_4()
       .ireturn();
   }
 
   private void buildIConst5(ClassFileBuilder builder) {
-    builder.newMethod("iconst_5", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iconst_5", "()I")
       .iconst_5()
       .ireturn();
   }
 
   private void buildLConst0(ClassFileBuilder builder) {
-    builder.newMethod("lconst_0", "()J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lconst_0", "()J")
       .lconst_0()
       .lreturn();
   }
 
   private void buildLConst1(ClassFileBuilder builder) {
-    builder.newMethod("lconst_1", "()J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lconst_1", "()J")
       .lconst_1()
       .lreturn();
   }
 
   private void buildFConst0(ClassFileBuilder builder) {
-    builder.newMethod("fconst_0", "()F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fconst_0", "()F")
       .fconst_0()
       .freturn();
   }
 
   private void buildFConst1(ClassFileBuilder builder) {
-    builder.newMethod("fconst_1", "()F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fconst_1", "()F")
       .fconst_1()
       .freturn();
   }
 
   private void buildFConst2(ClassFileBuilder builder) {
-    builder.newMethod("fconst_2", "()F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fconst_2", "()F")
       .fconst_2()
       .freturn();
   }
 
   private void buildDConst0(ClassFileBuilder builder) {
-    builder.newMethod("dconst_0", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dconst_0", "()D")
       .dconst_0()
       .dreturn();
   }
 
   private void buildDConst1(ClassFileBuilder builder) {
-    builder.newMethod("dconst_1", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dconst_1", "()D")
       .dconst_1()
       .dreturn();
   }
 
   private void buildBipush(ClassFileBuilder builder) {
-    builder.newMethod("bipush", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "bipush", "()I")
       .bipush((byte)125)
       .ireturn();
   }
 
   private void buildSipush(ClassFileBuilder builder) {
-    builder.newMethod("sipush", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "sipush", "()I")
       .sipush((short)5_396)
       .ireturn();
   }
 
   private void buildLdc(ClassFileBuilder builder) {
-    builder.newMethod("ldc_String", "()Ljava/lang/String;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_String", "()Ljava/lang/String;")
       .ldc("Hello World")
       .areturn();
 
-    builder.newMethod("ldc_int", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_int", "()I")
       .ldc(167_980_564)
       .ireturn();
 
-    builder.newMethod("ldc_float", "()F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_float", "()F")
       .ldc(3.5f)
       .freturn();
   }
 
   private void buildLdcW(ClassFileBuilder builder) {
-    builder.newMethod("ldc_w_String", "()Ljava/lang/String;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_w_String", "()Ljava/lang/String;")
     .ldc("Hello World Wide...")
     .areturn();
 
-    builder.newMethod("ldc_w_int", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_w_int", "()I")
       .ldc(999_999_999)
       .ireturn();
 
-    builder.newMethod("ldc_w_float", "()F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_w_float", "()F")
       .ldc(999.9999f)
       .freturn();
   }
 
   private void buildLdc2W(ClassFileBuilder builder) {
-    builder.newMethod("ldc_long", "()J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_long", "()J")
       .ldc(167_980_564_900l)
       .lreturn();
 
-    builder.newMethod("ldc_double", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldc_double", "()D")
       .ldc(3.578_978_979)
       .dreturn();
   }
 
   private void buildILoad(ClassFileBuilder builder) {
-    builder.newMethod("iload", "(ZZZZZZZZZZI)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iload", "(ZZZZZZZZZZI)I")
       .iload((byte)10)
       .ireturn();
   }
 
   private void buildLLoad(ClassFileBuilder builder) {
-    builder.newMethod("lload", "(ZZZZZZZZZZJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lload", "(ZZZZZZZZZZJ)J")
       .lload((byte)10)
       .lreturn();
   }
 
   private void buildFLoad(ClassFileBuilder builder) {
-    builder.newMethod("fload", "(ZZZZZZZZZZF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fload", "(ZZZZZZZZZZF)F")
       .fload((byte)10)
       .freturn();
   }
 
   private void buildDLoad(ClassFileBuilder builder) {
-    builder.newMethod("dload", "(ZZZZZZZZZZD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dload", "(ZZZZZZZZZZD)D")
       .dload((byte)10)
       .dreturn();
   }
 
   private void buildALoad(ClassFileBuilder builder) {
-    builder.newMethod("aload", "(ZZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aload", "(ZZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;")
       .aload((byte)10)
       .areturn();
   }
 
   private void buildILoad0(ClassFileBuilder builder) {
-    builder.newMethod("iload_0", "(I)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iload_0", "(I)I")
       .iload_0()
       .ireturn();
   }
 
   private void buildILoad1(ClassFileBuilder builder) {
-    builder.newMethod("iload_1", "(ZI)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iload_1", "(ZI)I")
       .iload_1()
       .ireturn();
   }
 
   private void buildILoad2(ClassFileBuilder builder) {
-    builder.newMethod("iload_2", "(ZZI)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iload_2", "(ZZI)I")
       .iload_2()
       .ireturn();
   }
 
   private void buildILoad3(ClassFileBuilder builder) {
-    builder.newMethod("iload_3", "(ZZZI)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iload_3", "(ZZZI)I")
       .iload_3()
       .ireturn();
   }
 
   private void buildLLoad0(ClassFileBuilder builder) {
-    builder.newMethod("lload_0", "(J)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lload_0", "(J)J")
       .lload_0()
       .lreturn();
   }
 
   private void buildLLoad1(ClassFileBuilder builder) {
-    builder.newMethod("lload_1", "(ZJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lload_1", "(ZJ)J")
       .lload_1()
       .lreturn();
   }
 
   private void buildLLoad2(ClassFileBuilder builder) {
-    builder.newMethod("lload_2", "(ZZJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lload_2", "(ZZJ)J")
       .lload_2()
       .lreturn();
   }
 
   private void buildLLoad3(ClassFileBuilder builder) {
-    builder.newMethod("lload_3", "(ZZZJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lload_3", "(ZZZJ)J")
       .lload_3()
       .lreturn();
   }
 
   private void buildFLoad0(ClassFileBuilder builder) {
-    builder.newMethod("fload_0", "(F)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fload_0", "(F)F")
       .fload_0()
       .freturn();
   }
 
   private void buildFLoad1(ClassFileBuilder builder) {
-    builder.newMethod("fload_1", "(ZF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fload_1", "(ZF)F")
       .fload_1()
       .freturn();
   }
 
   private void buildFLoad2(ClassFileBuilder builder) {
-    builder.newMethod("fload_2", "(ZZF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fload_2", "(ZZF)F")
       .fload_2()
       .freturn();
   }
 
   private void buildFLoad3(ClassFileBuilder builder) {
-    builder.newMethod("fload_3", "(ZZZF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fload_3", "(ZZZF)F")
       .fload_3()
       .freturn();
   }
 
   private void buildDLoad0(ClassFileBuilder builder) {
-    builder.newMethod("dload_0", "(D)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dload_0", "(D)D")
       .dload_0()
       .dreturn();
   }
 
   private void buildDLoad1(ClassFileBuilder builder) {
-    builder.newMethod("dload_1", "(ZD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dload_1", "(ZD)D")
       .dload_1()
       .dreturn();
   }
 
   private void buildDLoad2(ClassFileBuilder builder) {
-    builder.newMethod("dload_2", "(ZZD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dload_2", "(ZZD)D")
       .dload_2()
       .dreturn();
   }
 
   private void buildDLoad3(ClassFileBuilder builder) {
-    builder.newMethod("dload_3", "(ZZZD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dload_3", "(ZZZD)D")
       .dload_3()
       .dreturn();
   }
 
   private void buildALoad0(ClassFileBuilder builder) {
-    builder.newMethod("aload_0", "(Ljava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aload_0", "(Ljava/lang/Integer;)Ljava/lang/Integer;")
       .aload_0()
       .areturn();
   }
 
   private void buildALoad1(ClassFileBuilder builder) {
-    builder.newMethod("aload_1", "(ZLjava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aload_1", "(ZLjava/lang/Integer;)Ljava/lang/Integer;")
       .aload_1()
       .areturn();
   }
 
   private void buildALoad2(ClassFileBuilder builder) {
-    builder.newMethod("aload_2", "(ZZLjava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aload_2", "(ZZLjava/lang/Integer;)Ljava/lang/Integer;")
       .aload_2()
       .areturn();
   }
 
   private void buildALoad3(ClassFileBuilder builder) {
-    builder.newMethod("aload_3", "(ZZZLjava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aload_3", "(ZZZLjava/lang/Integer;)Ljava/lang/Integer;")
       .aload_3()
       .areturn();
   }
 
   private void buildIStore(ClassFileBuilder builder) {
-    builder.newMethod("istore", "(IZZZZZZZZZI)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore", "(IZZZZZZZZZI)I")
     .iload_0()
     .istore((byte) 10)
     .iload((byte) 10)
@@ -499,7 +500,7 @@ public class Classes {
   }
 
   private void buildLStore(ClassFileBuilder builder) {
-    builder.newMethod("lstore", "(JZZZZZZZZJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lstore", "(JZZZZZZZZJ)J")
       .lload_0()
       .lstore((byte) 10)
       .lload((byte) 10)
@@ -507,7 +508,7 @@ public class Classes {
   }
 
   private void buildFStore(ClassFileBuilder builder) {
-    builder.newMethod("fstore", "(FZZZZZZZZZF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fstore", "(FZZZZZZZZZF)F")
       .fload_0()
       .fstore((byte) 10)
       .fload((byte) 10)
@@ -515,7 +516,7 @@ public class Classes {
   }
 
   private void buildDStore(ClassFileBuilder builder) {
-    builder.newMethod("dstore", "(DZZZZZZZZD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dstore", "(DZZZZZZZZD)D")
     .dload_0()
     .dstore((byte) 10)
     .dload((byte) 10)
@@ -523,7 +524,7 @@ public class Classes {
   }
 
   private void buildAStore(ClassFileBuilder builder) {
-    builder.newMethod("astore", "(Ljava/lang/Integer;ZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "astore", "(Ljava/lang/Integer;ZZZZZZZZZLjava/lang/Integer;)Ljava/lang/Integer;")
     .aload_0()
     .astore((byte) 10)
     .aload((byte) 10)
@@ -532,7 +533,7 @@ public class Classes {
 
   private void buildIStore0(ClassFileBuilder builder) {
     // v0 + 5 + v1
-    builder.newMethod("istore_0", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore_0", "(II)I")
       .iload_0()
       .iconst_5()
       .iadd()
@@ -545,7 +546,7 @@ public class Classes {
 
   private void buildIStore1(ClassFileBuilder builder) {
     // v0 + 5 + v0
-    builder.newMethod("istore_1", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore_1", "(II)I")
       .iload_0()
       .iconst_5()
       .iadd()
@@ -558,7 +559,7 @@ public class Classes {
 
   private void buildIStore2(ClassFileBuilder builder) {
     // v0 + v1
-    builder.newMethod("istore_2", "(III)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore_2", "(III)I")
       .iload_0()
       .istore_2()
       .iload_1()
@@ -569,7 +570,7 @@ public class Classes {
 
   private void buildIStore3(ClassFileBuilder builder) {
     // v0 + v2
-    builder.newMethod("istore_3", "(IIII)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore_3", "(IIII)I")
       .iload_0()
       .istore_3()
       .iload_2()
@@ -580,7 +581,7 @@ public class Classes {
 
   private void buildLStore0(ClassFileBuilder builder) {
     // v0 + 5 + v1
-    builder.newMethod("lstore_0", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lstore_0", "(JJ)J")
       .lload_0()
       .iconst_5()
       .i2l()
@@ -594,7 +595,7 @@ public class Classes {
 
   private void buildLStore1(ClassFileBuilder builder) {
     // v0 + 5 + v0
-    builder.newMethod("lstore_1", "(IJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lstore_1", "(IJ)J")
       .iload_0()
       .iconst_5()
       .iadd()
@@ -609,7 +610,7 @@ public class Classes {
 
   private void buildLStore2(ClassFileBuilder builder) {
     // v0 + 1
-    builder.newMethod("lstore_2", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lstore_2", "(JJ)J")
       .lload_0()
       .lstore_2()
       .lconst_1()
@@ -620,7 +621,7 @@ public class Classes {
 
   private void buildLStore3(ClassFileBuilder builder) {
     // v0 + v1
-    builder.newMethod("lstore_3", "(JI)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lstore_3", "(JI)J")
       .lload_0()
       .lstore_3()
       .iload_2()
@@ -632,7 +633,7 @@ public class Classes {
 
   private void buildFStore0(ClassFileBuilder builder) {
     // v0 + 5 + v1
-    builder.newMethod("fstore_0", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fstore_0", "(FF)F")
       .fload_0()
       .iconst_5()
       .i2f()
@@ -646,7 +647,7 @@ public class Classes {
 
   private void buildFStore1(ClassFileBuilder builder) {
     // v0 + 5 + v0
-    builder.newMethod("fstore_1", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fstore_1", "(FF)F")
       .fload_0()
       .iconst_5()
       .i2f()
@@ -660,7 +661,7 @@ public class Classes {
 
   private void buildFStore2(ClassFileBuilder builder) {
     // v0 + v1
-    builder.newMethod("fstore_2", "(FFF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fstore_2", "(FFF)F")
       .fload_0()
       .fstore_2()
       .fload_1()
@@ -671,7 +672,7 @@ public class Classes {
 
   private void buildFStore3(ClassFileBuilder builder) {
     // v0 + v2
-    builder.newMethod("fstore_3", "(FFFF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fstore_3", "(FFFF)F")
       .fload_0()
       .fstore_3()
       .fload_2()
@@ -682,7 +683,7 @@ public class Classes {
 
   private void buildDStore0(ClassFileBuilder builder) {
     // v0 + 5 + v1
-    builder.newMethod("dstore_0", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dstore_0", "(DD)D")
       .dload_0()
       .iconst_5()
       .i2d()
@@ -696,7 +697,7 @@ public class Classes {
 
   private void buildDStore1(ClassFileBuilder builder) {
     // v0 + 5 + v0
-    builder.newMethod("dstore_1", "(FD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dstore_1", "(FD)D")
       .fload_0()
       .f2d()
       .iconst_5()
@@ -712,7 +713,7 @@ public class Classes {
 
   private void buildDStore2(ClassFileBuilder builder) {
     // v0 + 1
-    builder.newMethod("dstore_2", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dstore_2", "(DD)D")
       .dload_0()
       .dstore_2()
       .dconst_1()
@@ -723,7 +724,7 @@ public class Classes {
 
   private void buildDStore3(ClassFileBuilder builder) {
     // v0 + v2
-    builder.newMethod("dstore_3", "(DF)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dstore_3", "(DF)D")
       .dload_0()
       .dstore_3()
       .fload_2()
@@ -734,7 +735,7 @@ public class Classes {
   }
 
   private void buildAStore0(ClassFileBuilder builder) {
-    builder.newMethod("astore_0", "(Ljava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "astore_0", "(Ljava/lang/Integer;)Ljava/lang/Integer;")
       .aload_0()
       .aconst_null()
       .astore_0()
@@ -744,7 +745,7 @@ public class Classes {
   }
 
   private void buildAStore1(ClassFileBuilder builder) {
-    builder.newMethod("astore_1", "(Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "astore_1", "(Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/lang/Integer;")
       .aload_0()
       .astore_1()
       .aload_1()
@@ -752,7 +753,7 @@ public class Classes {
   }
 
   private void buildAStore2(ClassFileBuilder builder) {
-    builder.newMethod("astore_2", "(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "astore_2", "(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/lang/Integer;")
       .aload_0()
       .astore_2()
       .aload_2()
@@ -760,7 +761,7 @@ public class Classes {
   }
 
   private void buildAStore3(ClassFileBuilder builder) {
-    builder.newMethod("astore_3", "(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/lang/Integer;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "astore_3", "(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/lang/Integer;")
       .aload_0()
       .astore_3()
       .aload_3()
@@ -768,7 +769,7 @@ public class Classes {
   }
 
   private void buildPop(ClassFileBuilder builder) {
-    builder.newMethod("pop", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "pop", "()D")
       .dconst_0()
       .iconst_1()
       .pop()
@@ -776,7 +777,7 @@ public class Classes {
   }
 
   private void buildPop2(ClassFileBuilder builder) {
-    builder.newMethod("pop2", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "pop2", "()I")
       .iconst_3()
       .iconst_1()
       .iconst_1()
@@ -785,7 +786,7 @@ public class Classes {
   }
 
   private void buildDup(ClassFileBuilder builder) {
-    builder.newMethod("dup", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dup", "()I")
       .iconst_2()
       .iconst_1()
       .dup()
@@ -794,7 +795,7 @@ public class Classes {
   }
 
   private void buildDupX1(ClassFileBuilder builder) {
-    builder.newMethod("dup_x1", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dup_x1", "()I")
       .iconst_2()
       .iconst_1()
       .dup_x1()
@@ -803,7 +804,7 @@ public class Classes {
   }
 
   private void buildDupX2(ClassFileBuilder builder) {
-    builder.newMethod("dup_x2", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dup_x2", "()I")
       .iconst_3()
       .iconst_2()
       .iconst_1()
@@ -814,7 +815,7 @@ public class Classes {
   }
 
   private void buildDup2(ClassFileBuilder builder) {
-    builder.newMethod("dup2", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dup2", "()D")
       .dconst_1()
       .dup2()
       .dadd()
@@ -822,7 +823,7 @@ public class Classes {
   }
 
   private void buildDup2X1(ClassFileBuilder builder) {
-    builder.newMethod("dup2_x1", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dup2_x1", "()D")
       .iconst_3()
       .dconst_1()
       .dup2_x1()
@@ -832,7 +833,7 @@ public class Classes {
   }
 
   private void buildDup2X2(ClassFileBuilder builder) {
-    builder.newMethod("dup2_x2", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dup2_x2", "()D")
       .dconst_0()
       .dconst_1()
       .dup2_x2()
@@ -842,7 +843,7 @@ public class Classes {
   }
 
   private void buildSwap(ClassFileBuilder builder) {
-    builder.newMethod("swap", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "swap", "()I")
     .iconst_1()
     .iconst_2()
     .swap()
@@ -850,7 +851,7 @@ public class Classes {
   }
 
   private void buildIAdd(ClassFileBuilder builder) {
-    builder.newMethod("iadd", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iadd", "(II)I")
       .iload_0()
       .iload_1()
       .iadd()
@@ -858,7 +859,7 @@ public class Classes {
   }
 
   private void buildLAdd(ClassFileBuilder builder) {
-    builder.newMethod("ladd", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ladd", "(JJ)J")
       .lload_0()
       .lload_2()
       .ladd()
@@ -866,7 +867,7 @@ public class Classes {
   }
 
   private void buildFAdd(ClassFileBuilder builder) {
-    builder.newMethod("fadd", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fadd", "(FF)F")
       .fload_0()
       .fload_1()
       .fadd()
@@ -874,7 +875,7 @@ public class Classes {
   }
 
   private void buildDAdd(ClassFileBuilder builder) {
-    builder.newMethod("dadd", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dadd", "(DD)D")
       .dload_0()
       .dload_2()
       .dadd()
@@ -882,7 +883,7 @@ public class Classes {
   }
 
   private void buildISub(ClassFileBuilder builder) {
-    builder.newMethod("isub", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "isub", "(II)I")
       .iload_0()
       .iload_1()
       .isub()
@@ -890,7 +891,7 @@ public class Classes {
   }
 
   private void buildLSub(ClassFileBuilder builder) {
-    builder.newMethod("lsub", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lsub", "(JJ)J")
       .lload_0()
       .lload_2()
       .lsub()
@@ -898,7 +899,7 @@ public class Classes {
   }
 
   private void buildFSub(ClassFileBuilder builder) {
-    builder.newMethod("fsub", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fsub", "(FF)F")
       .fload_0()
       .fload_1()
       .fsub()
@@ -906,7 +907,7 @@ public class Classes {
   }
 
   private void buildDSub(ClassFileBuilder builder) {
-    builder.newMethod("dsub", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dsub", "(DD)D")
       .dload_0()
       .dload_2()
       .dsub()
@@ -914,7 +915,7 @@ public class Classes {
   }
 
   private void buildIMul(ClassFileBuilder builder) {
-    builder.newMethod("imul", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "imul", "(II)I")
       .iload_0()
       .iload_1()
       .imul()
@@ -922,7 +923,7 @@ public class Classes {
   }
 
   private void buildLMul(ClassFileBuilder builder) {
-    builder.newMethod("lmul", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lmul", "(JJ)J")
       .lload_0()
       .lload_2()
       .lmul()
@@ -930,7 +931,7 @@ public class Classes {
   }
 
   private void buildFMul(ClassFileBuilder builder) {
-    builder.newMethod("fmul", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fmul", "(FF)F")
       .fload_0()
       .fload_1()
       .fmul()
@@ -938,7 +939,7 @@ public class Classes {
   }
 
   private void buildDMul(ClassFileBuilder builder) {
-    builder.newMethod("dmul", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dmul", "(DD)D")
       .dload_0()
       .dload_2()
       .dmul()
@@ -946,7 +947,7 @@ public class Classes {
   }
 
   private void buildIDiv(ClassFileBuilder builder) {
-    builder.newMethod("idiv", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "idiv", "(II)I")
       .iload_0()
       .iload_1()
       .idiv()
@@ -954,7 +955,7 @@ public class Classes {
   }
 
   private void buildLDiv(ClassFileBuilder builder) {
-    builder.newMethod("ldiv", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ldiv", "(JJ)J")
       .lload_0()
       .lload_2()
       .ldiv()
@@ -962,7 +963,7 @@ public class Classes {
   }
 
   private void buildFDiv(ClassFileBuilder builder) {
-    builder.newMethod("fdiv", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fdiv", "(FF)F")
       .fload_0()
       .fload_1()
       .fdiv()
@@ -970,7 +971,7 @@ public class Classes {
   }
 
   private void buildDDiv(ClassFileBuilder builder) {
-    builder.newMethod("ddiv", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ddiv", "(DD)D")
       .dload_0()
       .dload_2()
       .ddiv()
@@ -978,7 +979,7 @@ public class Classes {
   }
 
   private void buildIRem(ClassFileBuilder builder) {
-    builder.newMethod("irem", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "irem", "(II)I")
       .iload_0()
       .iload_1()
       .irem()
@@ -986,7 +987,7 @@ public class Classes {
   }
 
   private void buildLRem(ClassFileBuilder builder) {
-    builder.newMethod("lrem", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lrem", "(JJ)J")
       .lload_0()
       .lload_2()
       .lrem()
@@ -994,7 +995,7 @@ public class Classes {
   }
 
   private void buildFRem(ClassFileBuilder builder) {
-    builder.newMethod("frem", "(FF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "frem", "(FF)F")
       .fload_0()
       .fload_1()
       .frem()
@@ -1002,7 +1003,7 @@ public class Classes {
   }
 
   private void buildDRem(ClassFileBuilder builder) {
-    builder.newMethod("drem", "(DD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "drem", "(DD)D")
       .dload_0()
       .dload_2()
       .drem()
@@ -1010,35 +1011,35 @@ public class Classes {
   }
 
   private void buildINeg(ClassFileBuilder builder) {
-    builder.newMethod("ineg", "(I)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ineg", "(I)I")
       .iload_0()
       .ineg()
       .ireturn();
   }
 
   private void buildLNeg(ClassFileBuilder builder) {
-    builder.newMethod("lneg", "(J)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lneg", "(J)J")
       .lload_0()
       .lneg()
       .lreturn();
   }
 
   private void buildFNeg(ClassFileBuilder builder) {
-    builder.newMethod("fneg", "(F)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fneg", "(F)F")
       .fload_0()
       .fneg()
       .freturn();
   }
 
   private void buildDNeg(ClassFileBuilder builder) {
-    builder.newMethod("dneg", "(D)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dneg", "(D)D")
       .dload_0()
       .dneg()
       .dreturn();
   }
 
   private void buildIShl(ClassFileBuilder builder) {
-    builder.newMethod("ishl", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ishl", "(II)I")
       .iload_0()
       .iload_1()
       .ishl()
@@ -1046,7 +1047,7 @@ public class Classes {
   }
 
   private void buildLShl(ClassFileBuilder builder) {
-    builder.newMethod("lshl", "(JI)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lshl", "(JI)J")
       .lload_0()
       .iload_2()
       .lshl()
@@ -1054,7 +1055,7 @@ public class Classes {
   }
 
   private void buildIShr(ClassFileBuilder builder) {
-    builder.newMethod("ishr", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ishr", "(II)I")
       .iload_0()
       .iload_1()
       .ishr()
@@ -1062,7 +1063,7 @@ public class Classes {
   }
 
   private void buildLShr(ClassFileBuilder builder) {
-    builder.newMethod("lshr", "(JI)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lshr", "(JI)J")
       .lload_0()
       .iload_2()
       .lshr()
@@ -1070,7 +1071,7 @@ public class Classes {
   }
 
   private void buildIUshr(ClassFileBuilder builder) {
-    builder.newMethod("iushr", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iushr", "(II)I")
       .iload_0()
       .iload_1()
       .iushr()
@@ -1078,7 +1079,7 @@ public class Classes {
   }
 
   private void buildLUshr(ClassFileBuilder builder) {
-    builder.newMethod("lushr", "(JI)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lushr", "(JI)J")
       .lload_0()
       .iload_2()
       .lushr()
@@ -1086,7 +1087,7 @@ public class Classes {
   }
 
   private void buildIAnd(ClassFileBuilder builder) {
-    builder.newMethod("iand", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iand", "(II)I")
       .iload_0()
       .iload_1()
       .iand()
@@ -1094,7 +1095,7 @@ public class Classes {
   }
 
   private void buildLAnd(ClassFileBuilder builder) {
-    builder.newMethod("land", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "land", "(JJ)J")
       .lload_0()
       .lload_2()
       .land()
@@ -1102,7 +1103,7 @@ public class Classes {
   }
 
   private void buildIOr(ClassFileBuilder builder) {
-    builder.newMethod("ior", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ior", "(II)I")
       .iload_0()
       .iload_1()
       .ior()
@@ -1110,7 +1111,7 @@ public class Classes {
   }
 
   private void buildLOr(ClassFileBuilder builder) {
-    builder.newMethod("lor", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lor", "(JJ)J")
       .lload_0()
       .lload_2()
       .lor()
@@ -1118,7 +1119,7 @@ public class Classes {
   }
 
   private void buildIXor(ClassFileBuilder builder) {
-    builder.newMethod("ixor", "(II)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ixor", "(II)I")
       .iload_0()
       .iload_1()
       .ixor()
@@ -1126,7 +1127,7 @@ public class Classes {
   }
 
   private void buildLXor(ClassFileBuilder builder) {
-    builder.newMethod("lxor", "(JJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lxor", "(JJ)J")
       .lload_0()
       .lload_2()
       .lxor()
@@ -1134,7 +1135,7 @@ public class Classes {
   }
 
   private void buildI2L(ClassFileBuilder builder) {
-    builder.newMethod("i2l", "(IJ)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2l", "(IJ)J")
       .iload_0()
       .i2l()
       .lload_1()
@@ -1143,7 +1144,7 @@ public class Classes {
   }
 
   private void buildI2F(ClassFileBuilder builder) {
-    builder.newMethod("i2f", "(II)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2f", "(II)F")
       .iload_0()
       .i2f()
       .iload_1()
@@ -1153,7 +1154,7 @@ public class Classes {
   }
 
   private void buildI2D(ClassFileBuilder builder) {
-    builder.newMethod("i2d", "(II)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2d", "(II)D")
       .iload_0()
       .i2d()
       .iload_1()
@@ -1163,14 +1164,14 @@ public class Classes {
   }
 
   private void buildL2I(ClassFileBuilder builder) {
-    builder.newMethod("l2i", "(J)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "l2i", "(J)I")
       .lload_0()
       .l2i()
       .ireturn();
   }
 
   private void buildL2F(ClassFileBuilder builder) {
-    builder.newMethod("l2f", "(JJ)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "l2f", "(JJ)F")
       .lload_0()
       .l2f()
       .lload_2()
@@ -1180,7 +1181,7 @@ public class Classes {
   }
 
   private void buildL2D(ClassFileBuilder builder) {
-    builder.newMethod("l2d", "(JJ)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "l2d", "(JJ)D")
       .lload_0()
       .l2d()
       .lload_2()
@@ -1190,21 +1191,21 @@ public class Classes {
   }
 
   private void buildF2I(ClassFileBuilder builder) {
-    builder.newMethod("f2i", "(F)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "f2i", "(F)I")
       .fload_0()
       .f2i()
       .ireturn();
   }
 
   private void buildF2L(ClassFileBuilder builder) {
-    builder.newMethod("f2l", "(F)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "f2l", "(F)J")
       .fload_0()
       .f2l()
       .lreturn();
   }
 
   private void buildF2D(ClassFileBuilder builder) {
-    builder.newMethod("f2d", "(FD)D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "f2d", "(FD)D")
       .fload_0()
       .f2d()
       .dload_1()
@@ -1213,21 +1214,21 @@ public class Classes {
   }
 
   private void buildD2I(ClassFileBuilder builder) {
-    builder.newMethod("d2i", "(D)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "d2i", "(D)I")
       .dload_0()
       .d2i()
       .ireturn();
   }
 
   private void buildD2L(ClassFileBuilder builder) {
-    builder.newMethod("d2l", "(D)J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "d2l", "(D)J")
       .dload_0()
       .d2l()
       .lreturn();
   }
 
   private void buildD2F(ClassFileBuilder builder) {
-    builder.newMethod("d2f", "(DF)F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "d2f", "(DF)F")
       .dload_0()
       .d2f()
       .fload_2()
@@ -1236,28 +1237,28 @@ public class Classes {
   }
 
   private void buildI2B(ClassFileBuilder builder) {
-    builder.newMethod("i2b", "(I)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2b", "(I)I")
       .iload_0()
       .i2b()
       .ireturn();
   }
 
   private void buildI2C(ClassFileBuilder builder) {
-    builder.newMethod("i2c", "(I)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2c", "(I)I")
       .iload_0()
       .i2c()
       .ireturn();
   }
 
   private void buildI2S(ClassFileBuilder builder) {
-    builder.newMethod("i2s", "(I)I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2s", "(I)I")
       .iload_0()
       .i2s()
       .ireturn();
   }
 
   private void buildIStoreLoadUnsigned(ClassFileBuilder builder) {
-    builder.newMethod("istore_load_unsigned", "()I")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore_load_unsigned", "()I")
       .sipush((short)7_687)
       .istore((byte)230)
       .iload((byte)0xe6)
@@ -1265,7 +1266,7 @@ public class Classes {
   }
 
   private void buildLStoreLoadUnsigned(ClassFileBuilder builder) {
-    builder.newMethod("lstore_load_unsigned", "()J")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lstore_load_unsigned", "()J")
       .ldc((long)7_687_000)
       .lstore((byte)199)
       .lload((byte)199)
@@ -1273,7 +1274,7 @@ public class Classes {
   }
 
   private void buildFStoreLoadUnsigned(ClassFileBuilder builder) {
-    builder.newMethod("fstore_load_unsigned", "()F")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fstore_load_unsigned", "()F")
       .ldc(134.89f)
       .fstore((byte)142)
       .fload((byte)142)
@@ -1281,7 +1282,7 @@ public class Classes {
   }
 
   private void buildDStoreLoadUnsigned(ClassFileBuilder builder) {
-    builder.newMethod("dstore_load_unsigned", "()D")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dstore_load_unsigned", "()D")
       .ldc(33.33)
       .dstore((byte)210)
       .dload((byte)210)
@@ -1289,7 +1290,7 @@ public class Classes {
   }
 
   private void buildAStoreLoadUnsigned(ClassFileBuilder builder) {
-    builder.newMethod("astore_load_unsigned", "()Ljava/lang/Object;")
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "astore_load_unsigned", "()Ljava/lang/Object;")
       .aconst_null()
       .astore((byte)175)
       .aload((byte)175)

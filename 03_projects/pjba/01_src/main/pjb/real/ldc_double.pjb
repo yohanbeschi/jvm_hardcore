@@ -1,0 +1,6 @@
+.class public org/isk/pjb/TestLdc_Double
+	.method public static getDouble()D
+		ldc2_w -14.70e-43
+		dreturn
+	.methodend
+.classend

@@ -1,0 +1,5 @@
+.class public org/isk/pjb/Test
+	.method public static methodName(I[[Lorg/isk/pjb/Test;Z)V
+		iload_0
+	.methodend
+.classend

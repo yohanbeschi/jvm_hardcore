@@ -9,10 +9,19 @@ import org.isk.jvmhardcore.pjba.visitor.Visitable;
 import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class Method implements Visitable {
-  private static final String ENCODING = "UTF-8";
+  final private static String ENCODING = "UTF-8";
 
-  private int accessFlags = 0x0001 | 0x0008; // public static
+  final public static int MODIFIER_PUBLIC = 0x0001;
+  final public static int MODIFIER_PRIVATE = 0x0002;
+  final public static int MODIFIER_PROTECTED = 0x0004;
+  final public static int MODIFIER_STATIC = 0x0008;
+  final public static int MODIFIER_FINAL = 0x0010;
+  final public static int MODIFIER_SYNCHRONIZED = 0x0020;
+  final public static int MODIFIER_NATIVE = 0x0100;
+  final public static int MODIFIER_ABSTRACT = 0x0400;
+  final public static int MODIFIER_STRICTFP = 0x0800;
 
+  private int accessFlags;
   private int nameIndex;
   private int descriptorIndex;
 
@@ -26,6 +35,10 @@ public class Method implements Visitable {
 
   public void setAccessFlags(int accessFlags) {
     this.accessFlags = accessFlags;
+  }
+
+  public void addAccessFlags(int accessFlags) {
+    this.accessFlags |= accessFlags;
   }
 
   public void setNameIndex(int utf8NameIndex) {

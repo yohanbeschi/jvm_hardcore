@@ -17,11 +17,13 @@ public class Classes {
 
     // ClassFile
     final ClassFile classFile = new ClassFile(className);
+    classFile.addAccessFlags(ClassFile.MODIFIER_PUBLIC);
 
     // Method
     final int methodIndex = classFile.addConstantUTF8(methodName);
     final int descriptorIndex = classFile.addConstantUTF8(methodDescriptor);
     final Method method = new Method();
+    method.addAccessFlags(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC);
     method.setNameIndex(methodIndex);
     method.setDescriptorIndex(descriptorIndex);
     classFile.addMethod(method);

@@ -22,7 +22,7 @@ public class NoArgMetaInstruction extends MetaInstruction {
     this.opcode = instruction.getOpcode();
   }
 
-  public Instruction getInstruction() {
+  public Instruction buildInstruction() {
     return instruction;
   }
 }

@@ -24,7 +24,7 @@ public class ByteArgMetaInstruction extends MetaInstruction {
     this.opcode = instructionBuilder.buildInstruction(BYTE_ZERO).getOpcode();
   }
 
-  public Instruction getInstruction(byte b) {
+  public Instruction buildInstruction(byte b) {
     return this.instructionBuilder.buildInstruction(b);
   }
 }

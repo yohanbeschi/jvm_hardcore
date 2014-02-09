@@ -7,17 +7,19 @@ public class ClassFileBuilder {
 
   private ClassFile classFile;
 
-  public ClassFileBuilder(final String fullyQualifiedName) {
+  public ClassFileBuilder(final int classModifiers, final String fullyQualifiedName) {
     super();
     this.classFile = new ClassFile(fullyQualifiedName);
+    this.classFile.addAccessFlags(classModifiers);
   }
 
-  public MethodBuilder newMethod(String methodName, String methodDescriptor) {
+  public MethodBuilder newMethod(final int methodModifiers, final String methodName, final String methodDescriptor) {
     final int methodIndex = this.classFile.addConstantUTF8(methodName);
     final int descriptorIndex = this.classFile.addConstantUTF8(methodDescriptor);
     final Method method = new Method();
     method.setNameIndex(methodIndex);
     method.setDescriptorIndex(descriptorIndex);
+    method.setAccessFlags(methodModifiers);
     this.classFile.addMethod(method);
     final int parametersCount = method.countParameters(methodDescriptor);
 

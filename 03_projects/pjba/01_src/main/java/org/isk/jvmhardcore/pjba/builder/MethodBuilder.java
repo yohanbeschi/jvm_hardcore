@@ -1,6 +1,7 @@
 package org.isk.jvmhardcore.pjba.builder;
 
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
+import org.isk.jvmhardcore.pjba.structure.Instruction;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.isk.jvmhardcore.pjba.structure.attribute.Code;
 
@@ -16,6 +17,11 @@ public class MethodBuilder {
     this.code = new Code(codeAttributeIndex);
     this.code.setParameterCount(parametersCount);
     method.addAttibute(this.code);
+  }
+
+  public MethodBuilder instruction(Instruction instruction) {
+    this.code.addInstruction(instruction);
+    return this;
   }
 
   public MethodBuilder nop() {

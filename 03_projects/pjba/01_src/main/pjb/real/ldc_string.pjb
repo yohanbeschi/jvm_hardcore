@@ -1,0 +1,6 @@
+.class public org/isk/pjb/TestLdc_String
+	.method public static getString()Ljava/lang/String;
+		ldc "Привет \\\" мир по-русски"
+		areturn
+	.methodend
+.classend

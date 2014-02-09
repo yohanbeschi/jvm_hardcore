@@ -45,7 +45,7 @@ public class PjbDumper implements Visitor {
 
   @Override
   public void visitClassAccessFlags(int accessFlags) {
-    // Do nothing
+    this.pjb.append(StringValues.getClassModifiers(accessFlags));
   }
 
   @Override
@@ -126,7 +126,7 @@ public class PjbDumper implements Visitor {
       this.pjb.append("  .methodend\n\n");
     }
 
-    this.pjb.append("  .method ");
+    this.pjb.append("  .method ").append(StringValues.getMethodModifiers(accessFlags));
 
     this.methodCount++;
   }

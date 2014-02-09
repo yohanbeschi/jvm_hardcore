@@ -1,5 +1,6 @@
 package org.isk.jvmhardcore.pjba;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
@@ -11,7 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.List;
 
+import org.isk.jvmhardcore.pjba.dumper.PjbDumper;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.junit.Test;
 
@@ -86,7 +89,17 @@ public class Disassembling {
     final Disassembler disassambler = new Disassembler(dataInput);
     final ClassFile classFile = disassambler.disassemble();
 
-    this.createFile(classFile);
+    // this.createFile(classFile);
+
+    final PjbDumper pjbDumper = new PjbDumper(classFile);
+    final String dump = pjbDumper.dump();
+    // System.out.println(dump);
+    final InputStream is = new ByteArrayInputStream(dump.getBytes("UTF-8"));
+    final PjbParser parser = new PjbParser(file.getCanonicalPath(), is);
+    final List<ClassFile> classFiles = parser.parse();
+    for (ClassFile cf : classFiles) {
+      this.createFile(cf);
+    }
   }
 
   /**
@@ -103,7 +116,9 @@ public class Disassembling {
       directory.mkdirs();
     }
 
-    final FileOutputStream file = new FileOutputStream(directoryStr + classFile.getClassName() + ".class");
+    final String filepath = directoryStr + classFile.getClassName() + ".class";
+    System.out.println("Disassembled: " + filepath);
+    final FileOutputStream file = new FileOutputStream(filepath);
     final DataOutput bytecode = new DataOutputStream(file);
     final Assembler assembler = new Assembler(classFile, bytecode);
     assembler.assemble();

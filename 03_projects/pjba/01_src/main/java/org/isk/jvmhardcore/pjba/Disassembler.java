@@ -198,15 +198,15 @@ public class Disassembler {
       Instruction instruction = null;
 
       if (metaInstruction instanceof NoArgMetaInstruction) {
-        instruction = ((NoArgMetaInstruction) metaInstruction).getInstruction();
+        instruction = ((NoArgMetaInstruction) metaInstruction).buildInstruction();
       } else if (metaInstruction instanceof ByteArgMetaInstruction) {
         bytesProceed++;
         final byte b = this.readByte();
-        instruction = ((ByteArgMetaInstruction) metaInstruction).getInstruction(b);
+        instruction = ((ByteArgMetaInstruction) metaInstruction).buildInstruction(b);
       } else if (metaInstruction instanceof ShortArgMetaInstruction) {
         bytesProceed += 2;
         final short s = this.readShort();
-        instruction = ((ShortArgMetaInstruction) metaInstruction).getInstruction(s);
+        instruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction(s);
       }
 
       instructions.add(instruction);

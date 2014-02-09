@@ -1,0 +1,37 @@
+classes = class {class}
+class = ws classStartIdentifier ws classModifiers
+        className methods classEndIdentifier ws
+methods = {method}
+method = ws methodStartIdentifier ws methodsModifiers methodName ws 
+         methodSignature methodContent methodEndIdentifier ws
+className = identifier {identifierSeparator identifier}
+methodName = identifier
+methodSignature = parametersStart parametersDescriptor parametersEnd returnDescriptor
+parametersDescriptor = descriptor {descriptor}
+returnDescriptor = descriptor | 'V'
+methodContent = {ws instruction ws}
+instruction = mnemonic mws {arg mws}
+identifier = asciiJavaLetter {asciiJavaLetter | digit}
+mnemonic = ? known mnemonic ?
+arg = ? authorized argument for mnemonic ?
+classModifiers = {classModifier ws}
+methodsModifiers = {methodsModifier ws}
+classStartIdentifier = '.class'
+classEndIdentifier = '.endclass'
+methodStartIdentifier = '.method'
+methodEndIdentifier = '.endMethod'
+classModifier = 'public' | 'final' | 'abstract' | 'interface' | 'super' 
+methodsModifier = 'public' | 'protected' | 'private' | 'static' | 'final' | 
+                  'strictfp' | 'synchronized' | 'abstract'  | 'native'
+descriptor = 'B' | 'C' | 'D' | 'F' | 'I' | 'J' | 'S' | 'Z' | 
+             '[' ['descriptor | 'L' className ';'
+parametersStart = '('
+parametersEnd = ')'
+comment = singlelineComment | multilineComment
+singlelineComment = ('@' | ';' | '#') ? All characters but LF and EOF ? (LF | EOF)
+multilineComment = '/*' ? All characters but '*/'? '*/'
+asciiJavaLetter = ? a-z | A-Z | '_' | '$' ?
+digit = ? 0-9 ?
+identifierSeparator = '/'
+mws = TAB | SPACE | NEW_LINE
+ws = ? {mws | comment | BLANK} ?

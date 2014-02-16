@@ -1,0 +1,16 @@
+.class public org/isk/pjb/TestWide
+  .method public static wide_istore_iload(I)I
+    iload_0
+    istore 65231
+    iload 65231
+    ireturn
+  .methodend
+  
+  .method public static iinc(I)I
+     iload_0
+     istore 350
+     iinc 350 -30999
+     iload 350
+     ireturn
+  .methodend
+.classend

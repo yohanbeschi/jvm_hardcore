@@ -251,7 +251,7 @@ The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 13 – Bytecode - Ajouter des fonctionnalités à PJBA](http://blog.soat.fr/2014/02/14-jvm-hardcore-part-13-bytecode-ajouter-des-fonctionnalites-a-pjba)
 
-## part13
+## part14
 ### Summary
 Building a bytecode assembler (2/2).
 
@@ -259,3 +259,12 @@ Building a bytecode assembler (2/2).
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 14 – Bytecode – Assembleur de bytecode - 2/2](http://blog.soat.fr/2014/02/15-jvm-hardcore-part-14-bytecode-assembleur-2)
+
+## part15
+### Summary
+Local variables and math instructions (iinc and wide).
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 15 – Bytecode – Variables locales et Maths, le retour](http://blog.soat.fr/2014/02/16-jvm-hardcore-part-15-bytecode-variables-locales-et-maths-le-retour)

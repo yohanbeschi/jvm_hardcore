@@ -595,6 +595,10 @@ public class Instructions {
     return LXOR;
   }
 
+  public static Instruction iinc(byte indexInLV, byte constant) {
+    return new IincInstruction(0x84, 0, indexInLV + 1, indexInLV, constant);
+  }
+
   public static Instruction i2l() {
     return I2L;
   }
@@ -677,5 +681,76 @@ public class Instructions {
 
   public static Instruction return_() {
     return RETURN;
+  }
+
+  public static Instruction wide_iload(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, 1, BytecodeUtils.unsign(indexInLV) + 1, 0x15, indexInLV);
+  }
+
+  public static Instruction wide_lload(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, 2, BytecodeUtils.unsign(indexInLV) + 2, 0x16, indexInLV);
+  }
+
+  public static Instruction wide_fload(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, 1, BytecodeUtils.unsign(indexInLV) + 1, 0x17, indexInLV);
+  }
+
+  public static Instruction wide_dload(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, 2, BytecodeUtils.unsign(indexInLV) + 2, 0x18, indexInLV);
+  }
+
+  public static Instruction wide_aload(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, 1, BytecodeUtils.unsign(indexInLV) + 1, 0x19, indexInLV);
+  }
+
+  public static Instruction wide_istore(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, -1, BytecodeUtils.unsign(indexInLV) + 1, 0x36, indexInLV);
+  }
+
+  public static Instruction wide_lstore(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, -2, BytecodeUtils.unsign(indexInLV) + 2, 0x37, indexInLV);
+  }
+
+  public static Instruction wide_fstore(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, -1, BytecodeUtils.unsign(indexInLV) + 1, 0x38, indexInLV);
+  }
+
+  public static Instruction wide_dstore(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, -2, BytecodeUtils.unsign(indexInLV) + 2, 0x39, indexInLV);
+  }
+
+  public static Instruction wide_astore(short indexInLV) {
+    return new WideLoadStoreInstruction(0xc4, -1, BytecodeUtils.unsign(indexInLV) + 1, 0x3a, indexInLV);
+  }
+
+  public static Instruction wide_iinc(short indexInLV, short constant) {
+    return new WideIincInstruction(0xc4, 0, indexInLV + 1, 0x84, indexInLV, constant);
+  }
+
+  public static Instruction wide_load_store(byte widenedOpcode, short indexInLV) {
+    switch (widenedOpcode) {
+      case 0x15:
+        return wide_iload(indexInLV);
+      case 0x16:
+        return wide_lload(indexInLV);
+      case 0x17:
+        return wide_fload(indexInLV);
+      case 0x18:
+        return wide_dload(indexInLV);
+      case 0x19:
+        return wide_aload(indexInLV);
+      case 0x36:
+        return wide_istore(indexInLV);
+      case 0x37:
+        return wide_lstore(indexInLV);
+      case 0x38:
+        return wide_fstore(indexInLV);
+      case 0x39:
+        return wide_dstore(indexInLV);
+      case 0x3a:
+        return wide_astore(indexInLV);
+      default:
+        return null;
+    }
   }
 }

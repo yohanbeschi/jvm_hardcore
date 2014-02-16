@@ -11,8 +11,8 @@ public class ClassFile implements Visitable {
   final public static int MODIFIER_PUBLIC = 0x0001;
   final public static int MODIFIER_FINAL = 0x0010;
   final public static int MODIFIER_SUPER = 0x0020;
-  final public static int MODIFIER_ABSTRACT = 0x0200;
-  final public static int MODIFIER_INTERFACE = 0x0400;
+  final public static int MODIFIER_INTERFACE = 0x0200;
+  final public static int MODIFIER_ABSTRACT = 0x0400;
 
   final private int magicNumber = 0xcafebabe;
   private int version = 0x30; // 48.0 = 0x00 (minor version) | 0x30 (major version)

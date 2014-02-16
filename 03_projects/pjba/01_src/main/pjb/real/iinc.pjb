@@ -1,0 +1,7 @@
+.class public org/isk/pjb/TestIinc
+  .method public static iinc(I)I
+     iinc 0 -1
+     iload_0
+     ireturn
+  .methodend
+.classend

@@ -56,4 +56,7 @@ public interface Visitor {
   void visitOpcode(int opcode);
   void visitInstructionByte(int value);
   void visitInstructionShort(int value);
+  void visitInstructionIinc(int indexInLV, int constant);
+  void visitInstructionWideIinc(int widenedOpcode, int indexInLV, int constant);
+  void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV);
 }

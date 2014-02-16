@@ -1,4 +1,4 @@
-package org.isk.jvmhardcore.pjba.partfourteen;
+package org.isk.jvmhardcore.pjba;
 
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
 import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
@@ -145,6 +145,7 @@ public class Classes {
     this.buildLOr(builder);
     this.buildIXor(builder);
     this.buildLXor(builder);
+    this.buildIinc(builder);
     this.buildI2L(builder);
     this.buildI2F(builder);
     this.buildI2D(builder);
@@ -160,6 +161,12 @@ public class Classes {
     this.buildI2B(builder);
     this.buildI2C(builder);
     this.buildI2S(builder);
+    this.buildWideIinc(builder);
+    this.buildWideIStoreLoad(builder);
+    this.buildWideLStoreLoad(builder);
+    this.buildWideFStoreLoad(builder);
+    this.buildWideDStoreLoad(builder);
+    this.buildWideAStoreLoad(builder);
 
     // Used everywhere => No test needed
     // this.buildIReturn(builder);
@@ -1134,6 +1141,13 @@ public class Classes {
       .lreturn();
   }
 
+  private void buildIinc(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iinc", "(I)I")
+      .iinc((byte)0, (byte)-5)
+      .iload_0()
+      .ireturn();
+  }
+
   private void buildI2L(ClassFileBuilder builder) {
     builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2l", "(IJ)J")
       .iload_0()
@@ -1294,6 +1308,62 @@ public class Classes {
       .aconst_null()
       .astore((byte)175)
       .aload((byte)175)
+      .areturn();
+  }
+
+  private void buildWideIinc(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "wide_iinc", "(I)J")
+      .iinc((short)0, (short)-30_000)
+      .iconst_5()
+      .istore((short)10_000)
+      .iinc((short)10_000, (short)1)
+      .iload((short)10_000)
+      .i2l()
+      .iload_0()
+      .i2l()
+      .bipush((byte)32)
+      .lshl()
+      .lor()
+      .lreturn();
+  }
+
+  private void buildWideIStoreLoad(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "wide_istore_iload", "()I")
+      .iconst_3()
+      .istore((short)0xffff)
+      .iload((short)0xffff)
+      .ireturn();
+  }
+
+  private void buildWideLStoreLoad(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "wide_lstore_lload", "()J")
+      .lconst_1()
+      .lstore((short)354)
+      .lload((short)354)
+      .lreturn();
+  }
+
+  private void buildWideFStoreLoad(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "wide_fstore_fload", "()F")
+      .fconst_1()
+      .fstore((short)14_999)
+      .fload((short)14_999)
+      .freturn();
+  }
+
+  private void buildWideDStoreLoad(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "wide_dstore_dload", "()D")
+      .dconst_1()
+      .dstore((short)7_908)
+      .dload((short)7_908)
+      .dreturn();
+  }
+
+  private void buildWideAStoreLoad(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "wide_astore_aload", "()Ljava/lang/Object;")
+      .aconst_null()
+      .astore((short)-24_365)
+      .aload((short)-24_365)
       .areturn();
   }
 }

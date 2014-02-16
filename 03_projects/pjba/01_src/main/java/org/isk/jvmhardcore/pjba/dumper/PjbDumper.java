@@ -187,11 +187,15 @@ public class PjbDumper implements Visitor {
 
   @Override
   public void visitOpcode(int opcode) {
+    // Opcode/Mnemonic
     this.metaInstruction = MetaInstructions.getMetaInstruction(opcode);
-    this.pjb.append("    ").append(this.metaInstruction.getPjbMnemonic());
 
-    if (this.metaInstruction.getArgsType() == ArgsType.NONE) {
-      this.pjb.append("\n");
+    if (this.metaInstruction.getArgsType() != ArgsType.WIDE) {
+      this.pjb.append("    ").append(this.metaInstruction.getPjbMnemonic());
+
+      if (this.metaInstruction.getArgsType() == ArgsType.NONE) {
+        this.pjb.append("\n");
+      }
     }
   }
 
@@ -203,6 +207,9 @@ public class PjbDumper implements Visitor {
     switch (type) {
       case BYTE_VALUE:
         printableValue = value;
+        break;
+      case LV_INDEX:
+        printableValue = BytecodeUtils.unsign((byte) value);
         break;
       case IFS_CONSTANT:
         printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((byte) value), this.classFile);
@@ -232,5 +239,23 @@ public class PjbDumper implements Visitor {
     }
 
     this.pjb.append(" ").append(printableValue).append("\n");
+  }
+
+  @Override
+  public void visitInstructionIinc(int indexInLV, int constant) {
+    this.pjb.append(" ").append(indexInLV).append(" ").append(constant).append("\n");
+  }
+
+  @Override
+  public void visitInstructionWideIinc(int widenedOpcode, int indexInLV, int constant) {
+    this.pjb.append("    ").append(MetaInstructions.getMetaInstruction(widenedOpcode).getPjbMnemonic())
+            .append(" ").append(BytecodeUtils.unsign((short) indexInLV))
+            .append(" ").append(constant).append("\n");
+  }
+
+  @Override
+  public void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV) {;
+    this.pjb.append("    ").append(MetaInstructions.getMetaInstruction(widenedOpcode).getPjbMnemonic())
+            .append(" ").append(BytecodeUtils.unsign((short) indexInLV)).append("\n");
   }
 }

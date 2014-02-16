@@ -5,10 +5,12 @@ import java.io.EOFException;
 import java.io.IOException;
 
 import org.isk.jvmhardcore.pjba.instruction.meta.ByteArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.IincMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
 import org.isk.jvmhardcore.pjba.instruction.meta.NoArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.ShortArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.WideMetaInstruction;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Constant;
 import org.isk.jvmhardcore.pjba.structure.Constant.ConstantPoolEntry;
@@ -207,6 +209,27 @@ public class Disassembler {
         bytesProceed += 2;
         final short s = this.readShort();
         instruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction(s);
+      } else if (metaInstruction instanceof IincMetaInstruction) {
+        bytesProceed += 2;
+        final byte indexInLV = this.readByte();
+        final byte constant = this.readByte();
+        instruction = ((IincMetaInstruction) metaInstruction).buildInstruction(indexInLV, constant);
+      } else if (metaInstruction instanceof WideMetaInstruction) {
+        final int widenedOpcode = this.readUnsignedByte();
+        final MetaInstruction widenedMetaInstruction = MetaInstructions.getMetaInstruction(widenedOpcode);
+
+        switch (widenedMetaInstruction.getArgsType()) {
+          case IINC:
+            bytesProceed += 5;
+            final short iincIndexInLV = this.readShort();
+            final short constant = this.readShort();
+            instruction = ((WideMetaInstruction) metaInstruction).buildInstruction(iincIndexInLV, constant);
+            break;
+          default: // load and store
+            bytesProceed += 3;
+            final short otherIndexInLV = this.readShort();
+            instruction = ((WideMetaInstruction) metaInstruction).buildInstruction((byte)widenedOpcode, otherIndexInLV);
+        }
       }
 
       instructions.add(instruction);

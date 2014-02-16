@@ -42,6 +42,9 @@ public abstract class MetaInstruction {
     SHORT_VALUE, // => 1 short
     IFS_CONSTANT, // int, float and String => 1 byte
     W_IFS_CONSTANT, // int, float and String => 1 short
-    LD_CONSTANT // long and double => 1 short
+    LD_CONSTANT, // long and double => 1 short
+    IINC, // byte, byte
+    WIDE, // 1 byte + 1 short or 1 byte + 1 short + 1 short 
+    LV_INDEX // => 1 byte or 1 short
   }
 }

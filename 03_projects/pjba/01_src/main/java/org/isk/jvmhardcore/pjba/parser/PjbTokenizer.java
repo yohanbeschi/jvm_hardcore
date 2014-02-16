@@ -214,7 +214,7 @@ public class PjbTokenizer extends Tokenizer {
     throw new ParserException("Unknown instruction. Got: " + instructionStr, false);
   }
 
-  public byte getByteValue() {
+  private String getNumber() {
     int character = this.next();
 
     if (this.isDigit(character) || character == Ascii.PLUS_SIGN || character == Ascii.HYPHEN) {
@@ -229,29 +229,25 @@ public class PjbTokenizer extends Tokenizer {
 
     this.rewind();
 
-    final String value = this.generator.toString();
+    return this.generator.toString();
+  }
+
+  public byte getByteValue() {
+    final String value = this.getNumber();
 
     return Byte.valueOf(value);
   }
 
   public short getShortValue() {
-    int character = this.next();
-
-    if (this.isDigit(character) || character == Ascii.PLUS_SIGN || character == Ascii.HYPHEN) {
-      this.generator.appendChar(character);
-    } else {
-      throw new ParserException("Expected: a number");
-    }
-
-    while (this.isDigit(character = this.next())) {
-      this.generator.appendChar(character);
-    }
-
-    this.rewind();
-
-    final String value = this.generator.toString();
+    final String value = this.getNumber();
 
     return Short.valueOf(value);
+  }
+
+  public int getIntValue() {
+    final String value = this.getNumber();
+
+    return Integer.valueOf(value);
   }
 
   public Object getIfsConstant() {
@@ -535,11 +531,11 @@ public class PjbTokenizer extends Tokenizer {
     while (this.isAsciiLetter(character = this.next())) {
       this.generator.appendChar(character);
     }
-    
+
     this.reset();
-    
+
     final String modifier = this.generator.toString();
-    
+
     return "public".equals(modifier)
         || "final".equals(modifier)
         || "abstract".equals(modifier)
@@ -554,11 +550,11 @@ public class PjbTokenizer extends Tokenizer {
     while (this.isAsciiLetter(character = this.next())) {
       this.generator.appendChar(character);
     }
-    
+
     this.reset();
-    
+
     final String modifier = this.generator.toString();
-    
+
     return "public".equals(modifier)
         || "private".equals(modifier)
         || "protected".equals(modifier)

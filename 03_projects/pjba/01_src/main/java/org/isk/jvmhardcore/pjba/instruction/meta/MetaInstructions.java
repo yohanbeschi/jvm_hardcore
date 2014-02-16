@@ -7,7 +7,9 @@ import java.util.Map;
 
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
 import org.isk.jvmhardcore.pjba.instruction.factory.ByteArgInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.IincInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.ShortArgInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.WideInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
 
@@ -95,35 +97,35 @@ public class MetaInstructions {
         return Instructions.ldc2_w(s);
       }
     }));
-    list.add(new ByteArgMetaInstruction("iload", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("iload", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.iload(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("lload", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("lload", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.lload(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("fload", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("fload", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.fload(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("dload", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("dload", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.dload(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("aload", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("aload", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
@@ -151,35 +153,35 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("aload_2", ArgsType.NONE, Instructions.ALOAD_2));
     list.add(new NoArgMetaInstruction("aload_3", ArgsType.NONE, Instructions.ALOAD_3));
     // TODO: 0x2e to 0x35
-    list.add(new ByteArgMetaInstruction("istore", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("istore", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.istore(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("lstore", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("lstore", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.lstore(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("fstore", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("fstore", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.fstore(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("dstore", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("dstore", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
         return Instructions.dstore(b);
       }
     }));
-    list.add(new ByteArgMetaInstruction("astore", ArgsType.BYTE_VALUE, new ByteArgInstructionFactory() {
+    list.add(new ByteArgMetaInstruction("astore", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
       public Instruction buildInstruction(byte b) {
@@ -252,7 +254,13 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("lor", ArgsType.NONE, Instructions.LOR));
     list.add(new NoArgMetaInstruction("ixor", ArgsType.NONE, Instructions.IXOR));
     list.add(new NoArgMetaInstruction("lxor", ArgsType.NONE, Instructions.LXOR));
-    // TODO: 0x84
+    list.add(new IincMetaInstruction("iinc", ArgsType.IINC, new IincInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(byte indexInLV, byte constant) {
+        return Instructions.iinc(indexInLV, constant);
+      }
+    }));
     list.add(new NoArgMetaInstruction("i2l", ArgsType.NONE, Instructions.I2L));
     list.add(new NoArgMetaInstruction("i2f", ArgsType.NONE, Instructions.I2F));
     list.add(new NoArgMetaInstruction("i2d", ArgsType.NONE, Instructions.I2D));
@@ -275,7 +283,19 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("dreturn", ArgsType.NONE, Instructions.DRETURN));
     list.add(new NoArgMetaInstruction("areturn", ArgsType.NONE, Instructions.ARETURN));
     list.add(new NoArgMetaInstruction("return", ArgsType.NONE, Instructions.RETURN));
-    // TODO: 0xc4 to 0xc9
+    list.add(new WideMetaInstruction("wide", ArgsType.WIDE, new WideInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInLV, short constant) {
+        return Instructions.wide_iinc(indexInLV, constant);
+      }
+
+      @Override
+      public Instruction buildInstruction(byte widenedOpcode, short indexInLV) {
+        return Instructions.wide_load_store(widenedOpcode, indexInLV);
+      }
+    }));
+    // TODO: 0xc5 to 0xc9
 
     return list;
   }

@@ -40,6 +40,10 @@ public class Code extends Attribute implements MethodAttribute {
     this.codeLength = codeLength;
   }
 
+  public int getCodeLength() {
+    return this.codeLength;
+  }
+
   public void setInstructions(PjbaLinkedList<Instruction> instructions) {
     this.instructions = instructions;
   }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
 import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
+import org.isk.jvmhardcore.pjba.instruction.Instructions;
 import org.isk.jvmhardcore.pjba.instruction.meta.ByteArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.NoArgMetaInstruction;
@@ -138,6 +139,26 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
           this.methodBuilder.ldc((double) ld);
         }
 
+        break;
+      case IINC:
+        this.tokenizer.consumeWhitespaces();
+        final int iincIndexInLV = this.tokenizer.getIntValue();
+        this.tokenizer.consumeWhitespaces();
+        final short constant = this.tokenizer.getShortValue();
+        this.methodBuilder.iinc((short) iincIndexInLV, constant);
+        break;
+      case LV_INDEX:
+        this.tokenizer.consumeWhitespaces();
+        final int lvIndexInLV = this.tokenizer.getIntValue();
+        
+        if (lvIndexInLV >= Byte.MIN_VALUE && lvIndexInLV <= Byte.MAX_VALUE) {
+          instruction = ((ByteArgMetaInstruction) metaInstruction).buildInstruction((byte) lvIndexInLV);
+        } else {
+          instruction = Instructions.wide_load_store((byte) metaInstruction.getOpcode(), (short) lvIndexInLV);
+        }
+        
+        this.methodBuilder.instruction(instruction);
+        
         break;
       case W_IFS_CONSTANT:
       default:

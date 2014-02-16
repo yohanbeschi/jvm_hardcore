@@ -180,6 +180,25 @@ public class Assembler implements Visitor {
     this.writeShort(arg);
   }
 
+  @Override
+  public void visitInstructionIinc(int indexInLV, int constant) {
+    this.writeByte(indexInLV);
+    this.writeByte(constant);
+  }
+
+  @Override
+  public void visitInstructionWideIinc(int widenedOpcode, int indexInLV, int constant) {
+    this.writeByte(widenedOpcode);
+    this.writeShort(indexInLV);
+    this.writeShort(constant);
+  }
+
+  @Override
+  public void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV) {
+    this.writeByte(widenedOpcode);
+    this.writeShort(indexInLV);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Write to the DataOutputStream
   // -------------------------------------------------------------------------------------------------------------------

@@ -767,6 +767,12 @@ public class AllInstructionsWithDummiesInCPTest {
   }
 
   @Test
+  public void iinc() {
+    final int i = AllInstructionsWithDummiesInCP.iinc(10);
+    Assert.assertEquals(5, i);
+  }
+
+  @Test
   public void i2l() {
     final long l = AllInstructionsWithDummiesInCP.i2l(5, 4l);
     Assert.assertEquals(9, l);
@@ -883,6 +889,42 @@ public class AllInstructionsWithDummiesInCPTest {
   @Test
   public void astore_load_unsigned() {
     final Object o = AllInstructionsWithDummiesInCP.astore_load_unsigned();
+    Assert.assertNull(o);
+  }
+
+  @Test
+  public void wide_iinc() {
+    final long l = AllInstructionsWithDummiesInCP.wide_iinc(10_000);
+    Assert.assertEquals(((long) -20_000 << 32) | 6, l);
+  }
+
+  @Test
+  public void wide_istore_iload() {
+    final int i = AllInstructionsWithDummiesInCP.wide_istore_iload();
+    Assert.assertEquals(3, i);
+  }
+
+  @Test
+  public void wide_lstore_lload() {
+    final long l = AllInstructionsWithDummiesInCP.wide_lstore_lload();
+    Assert.assertEquals(1, l);
+  }
+
+  @Test
+  public void wide_fstore_fload() {
+    final float f = AllInstructionsWithDummiesInCP.wide_fstore_fload();
+    Assert.assertEquals(1f, f, 0.0001);
+  }
+
+  @Test
+  public void wide_dstore_dload() {
+    final double d = AllInstructionsWithDummiesInCP.wide_dstore_dload();
+    Assert.assertEquals(1, d, 0.0001);
+  }
+
+  @Test
+  public void wide_astore_aload() {
+    final Object o = AllInstructionsWithDummiesInCP.wide_astore_aload();
     Assert.assertNull(o);
   }
 }

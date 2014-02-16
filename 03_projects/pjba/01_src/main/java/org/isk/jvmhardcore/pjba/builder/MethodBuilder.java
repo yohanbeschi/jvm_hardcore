@@ -1,6 +1,7 @@
 package org.isk.jvmhardcore.pjba.builder;
 
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
+import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.isk.jvmhardcore.pjba.structure.attribute.Code;
@@ -159,28 +160,48 @@ public class MethodBuilder {
     }
   }
 
-  public MethodBuilder iload(byte indexInLV) {
-    this.code.addInstruction(Instructions.iload(indexInLV));
+  public MethodBuilder iload(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.iload((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_iload(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder lload(byte indexInLV) {
-    this.code.addInstruction(Instructions.lload(indexInLV));
+  public MethodBuilder lload(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.lload((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_lload(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder fload(byte indexInLV) {
-    this.code.addInstruction(Instructions.fload(indexInLV));
+  public MethodBuilder fload(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.fload((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_fload(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder dload(byte indexInLV) {
-    this.code.addInstruction(Instructions.dload(indexInLV));
+  public MethodBuilder dload(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.dload((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_dload(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder aload(byte indexInLV) {
-    this.code.addInstruction(Instructions.aload(indexInLV));
+  public MethodBuilder aload(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.aload((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_aload(indexInLV));
+    }
     return this;
   }
 
@@ -284,28 +305,48 @@ public class MethodBuilder {
     return this;
   }
 
-  public MethodBuilder istore(byte indexInLV) {
-    this.code.addInstruction(Instructions.istore(indexInLV));
+  public MethodBuilder istore(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.istore((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_istore(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder lstore(byte indexInLV) {
-    this.code.addInstruction(Instructions.lstore(indexInLV));
+  public MethodBuilder lstore(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.lstore((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_lstore(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder fstore(byte indexInLV) {
-    this.code.addInstruction(Instructions.fstore(indexInLV));
+  public MethodBuilder fstore(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.fstore((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_fstore(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder dstore(byte indexInLV) {
-    this.code.addInstruction(Instructions.dstore(indexInLV));
+  public MethodBuilder dstore(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.dstore((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_dstore(indexInLV));
+    }
     return this;
   }
 
-  public MethodBuilder astore(byte indexInLV) {
-    this.code.addInstruction(Instructions.astore(indexInLV));
+  public MethodBuilder astore(short indexInLV) {
+    if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.astore((byte) indexInLV));
+    } else {
+      this.code.addInstruction(Instructions.wide_astore(indexInLV));
+    }
     return this;
   }
 
@@ -634,6 +675,16 @@ public class MethodBuilder {
     return this;
   }
 
+  public MethodBuilder iinc(short indexInLV, short constant) {
+    if (   indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE
+        && constant >= Byte.MIN_VALUE && constant <= Byte.MAX_VALUE) {
+      this.code.addInstruction(Instructions.iinc((byte) indexInLV, (byte) constant));
+    } else {
+      this.code.addInstruction(Instructions.wide_iinc(indexInLV, constant));
+    }
+    return this;
+  }
+
   public MethodBuilder i2l() {
     this.code.addInstruction(Instructions.I2L);
     return this;
@@ -709,33 +760,37 @@ public class MethodBuilder {
     return this;
   }
 
-  public ClassFileBuilder ireturn() {
+  public MethodBuilder ireturn() {
     this.code.addInstruction(Instructions.IRETURN);
-    return this.classFileBuilder;
+    return this;
   }
 
-  public ClassFileBuilder lreturn() {
+  public MethodBuilder lreturn() {
     this.code.addInstruction(Instructions.LRETURN);
-    return this.classFileBuilder;
+    return this;
   }
 
-  public ClassFileBuilder freturn() {
+  public MethodBuilder freturn() {
     this.code.addInstruction(Instructions.FRETURN);
-    return this.classFileBuilder;
+    return this;
   }
 
-  public ClassFileBuilder dreturn() {
+  public MethodBuilder dreturn() {
     this.code.addInstruction(Instructions.DRETURN);
-    return this.classFileBuilder;
+    return this;
   }
 
-  public ClassFileBuilder areturn() {
+  public MethodBuilder areturn() {
     this.code.addInstruction(Instructions.ARETURN);
-    return this.classFileBuilder;
+    return this;
   }
 
-  public ClassFileBuilder return_() {
+  public MethodBuilder return_() {
     this.code.addInstruction(Instructions.RETURN);
-    return this.classFileBuilder;
+    return this;
+  }
+
+  public ClassFile build() {
+    return this.classFileBuilder.build();
   }
 }

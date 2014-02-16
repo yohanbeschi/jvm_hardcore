@@ -229,12 +229,17 @@ public class HexDumper implements Visitor {
       case BYTE_VALUE:
         this.pjb.append(" ").append(value).append("\n");
         break;
+      case LV_INDEX:
+        this.pjb.append(" ").append(BytecodeUtils.unsign((byte) value)).append("\n");
+        break;
       case IFS_CONSTANT:
         this.pjb.append(" #").append(BytecodeUtils.unsign((byte) value)).append("\n");
         break;
       default:
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
+
+    this.getHexAndAdd(1);
   }
 
   @Override
@@ -251,11 +256,44 @@ public class HexDumper implements Visitor {
       default:
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
+
+    this.getHexAndAdd(2);
+  }
+
+  @Override
+  public void visitInstructionIinc(int indexInLV, int constant) {
+    this.pjb.append(" ").append(BytecodeUtils.unsign((byte) indexInLV))
+            .append(" ").append(constant).append("\n");
+
+    this.getHexAndAdd(2);
+  }
+
+  @Override
+  public void visitInstructionWideIinc(int widenedOpcode, int indexInLV, int constant) {
+    this.pjb.append(" ").append(MetaInstructions.getMnemonic(widenedOpcode))
+            .append(" ").append(BytecodeUtils.unsign((short) indexInLV))
+            .append(" ").append(constant).append("\n");
+
+    this.getHexAndAdd(5);
+  }
+
+  @Override
+  public void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV) {
+    this.pjb.append(" ").append(MetaInstructions.getMnemonic(widenedOpcode))
+            .append(" ").append(BytecodeUtils.unsign((short) indexInLV)).append("\n");
+
+    this.getHexAndAdd(3);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Utilities
   // -------------------------------------------------------------------------------------------------------------------
+
+  private String getHexAndAdd(int nbOfBytes) {
+    final String hex = this.getHexPadded(this.hexCounter);
+    this.hexCounter += nbOfBytes;
+    return hex;
+  }
 
   private String getHexAndAddByte() {
     final String hex = this.getHexPadded(this.hexCounter);
@@ -290,13 +328,17 @@ public class HexDumper implements Visitor {
 
   private String getHexPadded(int value) {
     final String hexString = Integer.toHexString(value);
+    return this.pad(hexString, 4, "0");
+  }
+
+  private String pad(String value, int pad, String placeholder) {
     final StringBuilder sb = new StringBuilder();
 
-    for (int i = hexString.length(); i < 8; i++) {
-      sb.append("0");
+    for (int i = value.length(); i < pad; i++) {
+      sb.append(placeholder);
     }
 
-    sb.append(hexString);
+    sb.append(value);
     return sb.toString();
   }
 

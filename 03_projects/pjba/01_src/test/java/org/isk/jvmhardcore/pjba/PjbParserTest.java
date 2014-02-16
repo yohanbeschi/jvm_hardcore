@@ -110,31 +110,31 @@ public class PjbParserTest {
   @Test
   public void parseFailure1() {
     try {
-      this.test("parser/ko1.pjb");
+      this.test("parser/ko01.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko1.pjb\nLine 1, column 1 - Expected directive: '.class' Got: c", e.getMessage());
+      Assert.assertEquals("parser/ko01.pjb\nLine 1, column 1 - Expected directive: '.class' Got: c", e.getMessage());
     }
   }
 
   @Test
   public void parseFailure2() {
     try {
-      this.test("parser/ko2.pjb");
+      this.test("parser/ko02.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko2.pjb\nLine 4, column 1 - Expected directive: '.classend' Got: c", e.getMessage());
+      Assert.assertEquals("parser/ko02.pjb\nLine 4, column 1 - Expected directive: '.classend' Got: c", e.getMessage());
     }
   }
 
   @Test
   public void parseFailure3() {
     try {
-      this.test("parser/ko3.pjb");
+      this.test("parser/ko03.pjb");
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko3.pjb\nLine 2, column 2 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
+          "parser/ko03.pjb\nLine 2, column 2 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
           e.getMessage());
     }
   }
@@ -142,11 +142,11 @@ public class PjbParserTest {
   @Test
   public void parseFailure4() {
     try {
-      this.test("parser/ko4.pjb");
+      this.test("parser/ko04.pjb");
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko4.pjb\nLine 3, column 2 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
+          "parser/ko04.pjb\nLine 3, column 2 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
           e.getMessage());
     }
   }
@@ -154,11 +154,11 @@ public class PjbParserTest {
   @Test
   public void parseFailure5() {
     try {
-      this.test("parser/ko5.pjb");
+      this.test("parser/ko05.pjb");
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko5.pjb\nLine 2, column 10 - An identifier must start with an ASCII letter or '_' or '$'. Got: (",
+          "parser/ko05.pjb\nLine 2, column 10 - An identifier must start with an ASCII letter or '_' or '$'. Got: (",
           e.getMessage());
     }
   }
@@ -166,11 +166,11 @@ public class PjbParserTest {
   @Test
   public void parseFailure6() {
     try {
-      this.test("parser/ko6.pjb");
+      this.test("parser/ko06.pjb");
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko6.pjb\nLine 3, column 2 - An identifier must start with a left parenthesis '('. Got: .",
+          "parser/ko06.pjb\nLine 3, column 2 - An identifier must start with a left parenthesis '('. Got: .",
           e.getMessage());
     }
   }
@@ -178,30 +178,30 @@ public class PjbParserTest {
   @Test
   public void parseFailure7() {
     try {
-      this.test("parser/ko7.pjb");
+      this.test("parser/ko07.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko7.pjb\nLine 3, column 0 - Missing return descriptor. Got: \n", e.getMessage());
+      Assert.assertEquals("parser/ko07.pjb\nLine 3, column 0 - Missing return descriptor. Got: \n", e.getMessage());
     }
   }
 
   @Test
   public void parseFailure8() {
     try {
-      this.test("parser/ko8.pjb");
+      this.test("parser/ko08.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko8.pjb\nLine 2, column 2 - Expected directive: '.classend' Got: m", e.getMessage());
+      Assert.assertEquals("parser/ko08.pjb\nLine 2, column 2 - Expected directive: '.classend' Got: m", e.getMessage());
     }
   }
 
   @Test
   public void parseFailure9() {
     try {
-      this.test("parser/ko9.pjb");
+      this.test("parser/ko09.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko9.pjb\nLine 3, column 2 - Unknown instruction. Got: methodend", e.getMessage());
+      Assert.assertEquals("parser/ko09.pjb\nLine 3, column 2 - Unknown instruction. Got: methodend", e.getMessage());
     }
   }
 
@@ -318,5 +318,26 @@ public class PjbParserTest {
 
     final double resultD2I = MultiTwo.d2i(15.786);
     Assert.assertEquals(15, resultD2I, 0.0001);
+  }
+
+  @Test
+  public void iinc() {
+    final int i = TestIinc.iinc(10);
+    
+    Assert.assertEquals(9, i);
+  }
+
+  @Test
+  public void wide_istore_iload() {
+    final int i = TestWide.wide_istore_iload(99_999);
+
+    Assert.assertEquals(99_999, i);
+  }
+
+  @Test
+  public void wide_iinc() {
+    final int i = TestWide.iinc(31000);
+
+    Assert.assertEquals(1, i);
   }
 }

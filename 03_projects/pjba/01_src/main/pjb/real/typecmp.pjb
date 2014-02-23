@@ -1,0 +1,38 @@
+.class public org/isk/pjb/TestTypeCmp
+  @ a compareTo b
+  .method public static lcmp(JJ)I
+    lload_0
+    lload_2
+    lcmp
+    ireturn
+  .methodend
+
+  @ a > b
+  .method public static lcmp_ifle(JJ)Z
+    lload_0
+    lload_2
+    lcmp
+    ifle ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a compareTo b
+  .method public static dcmpl(DD)I
+    dload_0
+    dload_2
+    dcmpl
+    ireturn
+  .methodend
+
+  @ a compareTo b
+  .method public static dcmpg(DD)I
+    dload_0
+    dload_2
+    dcmpg
+    ireturn
+  .methodend
+.classend

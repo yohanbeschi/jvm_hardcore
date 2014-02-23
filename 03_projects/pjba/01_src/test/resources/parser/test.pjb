@@ -1,0 +1,23 @@
+.class public org/isk/pjb/TestIfeq
+
+  @ a && (b || c) && (d || e)
+  .method public static and(ZZZZZ)Z
+    iload_0   @ a
+    ifeq ko
+    iload_1   @ b
+    ifne and1
+    iload_2   @ c
+    ifeq ko
+    and1:
+    iload_3   @ d
+    ifne ok
+    iload 4   @ e
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn   @ true
+    ko:
+    iconst_0
+    ireturn   @ false
+  .methodend
+.classend

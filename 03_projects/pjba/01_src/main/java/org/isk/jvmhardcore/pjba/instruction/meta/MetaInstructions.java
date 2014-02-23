@@ -276,13 +276,103 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("i2b", ArgsType.NONE, Instructions.I2B));
     list.add(new NoArgMetaInstruction("i2c", ArgsType.NONE, Instructions.I2C));
     list.add(new NoArgMetaInstruction("i2s", ArgsType.NONE, Instructions.I2S));
-    // TODO: 0x94 to 0xab
+    list.add(new NoArgMetaInstruction("lcmp", ArgsType.NONE, Instructions.LCMP));
+    list.add(new NoArgMetaInstruction("fcmpl", ArgsType.NONE, Instructions.FCMPL));
+    list.add(new NoArgMetaInstruction("fcmpg", ArgsType.NONE, Instructions.FCMPG));
+    list.add(new NoArgMetaInstruction("dcmpl", ArgsType.NONE, Instructions.DCMPL));
+    list.add(new NoArgMetaInstruction("dcmpg", ArgsType.NONE, Instructions.DCMPG));
+    list.add(new ShortArgMetaInstruction("ifeq", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifeq(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("ifne", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifne(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("iflt", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.iflt(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("ifge", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifge(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("ifgt", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifgt(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("ifle", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifle(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_icmpeq", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_icmpeq(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_icmpne", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_icmpne(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_icmplt", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_icmplt(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_icmpge", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_icmpge(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_icmpgt", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_icmpgt(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_icmple", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_icmple(branch);
+      }
+    }));
+    // TODO: 0xa5 to 0xab
     list.add(new NoArgMetaInstruction("ireturn", ArgsType.NONE, Instructions.IRETURN));
     list.add(new NoArgMetaInstruction("lreturn", ArgsType.NONE, Instructions.LRETURN));
     list.add(new NoArgMetaInstruction("freturn", ArgsType.NONE, Instructions.FRETURN));
     list.add(new NoArgMetaInstruction("dreturn", ArgsType.NONE, Instructions.DRETURN));
     list.add(new NoArgMetaInstruction("areturn", ArgsType.NONE, Instructions.ARETURN));
     list.add(new NoArgMetaInstruction("return", ArgsType.NONE, Instructions.RETURN));
+    // TODO: 0xb2 to 0xc3
     list.add(new WideMetaInstruction("wide", ArgsType.WIDE, new WideInstructionFactory() {
 
       @Override

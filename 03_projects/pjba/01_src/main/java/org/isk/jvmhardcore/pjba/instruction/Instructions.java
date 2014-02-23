@@ -121,6 +121,11 @@ public class Instructions {
   final public static Instruction I2B = new NoArgInstruction(0x91, 0, 0);
   final public static Instruction I2C = new NoArgInstruction(0x92, 0, 0);
   final public static Instruction I2S = new NoArgInstruction(0x93, 0, 0);
+  final public static Instruction LCMP = new NoArgInstruction(0x94, -3, 0); // -4 (2 long) + 1 (int)
+  final public static Instruction FCMPL = new NoArgInstruction(0x95, -1, 0); // -2 (2 float) + 1 (int)
+  final public static Instruction FCMPG = new NoArgInstruction(0x96, -1, 0); // -2 (2 float) + 1 (int)
+  final public static Instruction DCMPL = new NoArgInstruction(0x97, -3, 0); // -4 (2 double) + 1 (int)
+  final public static Instruction DCMPG = new NoArgInstruction(0x98, -3, 0); // -4 (2 double) + 1 (int)
   final public static Instruction IRETURN = new NoArgInstruction(0xac, -1, 0);
   final public static Instruction LRETURN = new NoArgInstruction(0xad, -2, 0);
   final public static Instruction FRETURN = new NoArgInstruction(0xae, -1, 0);
@@ -657,6 +662,74 @@ public class Instructions {
 
   public static Instruction i2s() {
     return I2S;
+  }
+
+  public static Instruction lcmp() {
+    return LCMP;
+  }
+
+  public static Instruction fcmpl() {
+    return FCMPL;
+  }
+
+  public static Instruction fcmpg() {
+    return FCMPG;
+  }
+
+  public static Instruction dcmpl() {
+    return DCMPL;
+  }
+
+  public static Instruction dcmpg() {
+    return DCMPG;
+  }
+
+  public static Instruction ifeq(short branch) {
+    return new ShortArgInstruction(0x99, -1, 0, branch);
+  }
+
+  public static Instruction ifne(short branch) {
+    return new ShortArgInstruction(0x9a, -1, 0, branch);
+  }
+
+  public static Instruction iflt(short branch) {
+    return new ShortArgInstruction(0x9b, -1, 0, branch);
+  }
+
+  public static Instruction ifge(short branch) {
+    return new ShortArgInstruction(0x9c, -1, 0, branch);
+  }
+
+  public static Instruction ifgt(short branch) {
+    return new ShortArgInstruction(0x9d, -1, 0, branch);
+  }
+
+  public static Instruction ifle(short branch) {
+    return new ShortArgInstruction(0x9e, -1, 0, branch);
+  }
+
+  public static Instruction if_icmpeq(short branch) {
+    return new ShortArgInstruction(0x9f, -2, 0, branch);
+  }
+
+  public static Instruction if_icmpne(short branch) {
+    return new ShortArgInstruction(0xa0, -2, 0, branch);
+  }
+
+  public static Instruction if_icmplt(short branch) {
+    return new ShortArgInstruction(0xa1, -2, 0, branch);
+  }
+
+  public static Instruction if_icmpge(short branch) {
+    return new ShortArgInstruction(0xa2, -2, 0, branch);
+  }
+
+  public static Instruction if_icmpgt(short branch) {
+    return new ShortArgInstruction(0xa3, -2, 0, branch);
+  }
+
+  public static Instruction if_icmple(short branch) {
+    return new ShortArgInstruction(0xa4, -2, 0, branch);
   }
 
   public static Instruction ireturn() {

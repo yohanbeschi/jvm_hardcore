@@ -180,7 +180,12 @@ public class Productions {
       if (!tokenizer.isMethodEnd()) {
         productionStack.push(table[Symbols.METHOD_CONTENT]);
         productionStack.push(table[Symbols.WS]);
-        productionStack.push(table[Symbols.INSTRUCTION]);
+
+        if (tokenizer.isLabel()) {
+          productionStack.push(table[Symbols.LABEL]);
+        } else {
+          productionStack.push(table[Symbols.INSTRUCTION]);
+        }
       }
 
       return null;
@@ -192,6 +197,14 @@ public class Productions {
                              Production<EventType, PjbTokenizer>[] table,
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       return EventType.INSTRUCTION;
+    }
+  }
+
+  public static class Label implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.LABEL;
     }
   }
 

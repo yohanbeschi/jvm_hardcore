@@ -198,7 +198,7 @@ public class PjbTokenizer extends Tokenizer {
     while ((character = this.next()) != Ascii.SPACE
                         && character != Ascii.TAB
                         && character != Ascii.LF
-                        && this.isInstructionChar(character)) {
+                        && this.isInstructionOrLabelChar(character)) {
       this.generator.appendChar(character);
     }
 
@@ -379,6 +379,42 @@ public class PjbTokenizer extends Tokenizer {
     }
   }
 
+  public String getLabelAsArg() {
+    int character = 0;
+
+    while (this.isInstructionOrLabelChar(character = this.next())) {
+      this.generator.appendChar(character);
+    }
+
+    if (character == Ascii.COLON) {
+      throw new ParserException("A label following an instruction should not end with a colon.");
+    }
+
+    this.rewind();
+    
+    return this.generator.toString();
+  }
+
+  public String getLabel() {
+    int character = 0;
+
+    while (this.isInstructionOrLabelChar(character = this.next())) {
+      this.generator.appendChar(character);
+    }
+
+    if (character != Ascii.COLON) {
+      throw new ParserException("Excepted colon and got: " + character);
+    }
+
+    final String label = this.generator.toString();
+    
+    if (label.isEmpty()) {
+      throw new ParserException("Empty Label.");
+    }
+
+    return label;
+  }
+
   //--------------------------------------------------------------------------------------------------------------------
   // Check while reading
   //--------------------------------------------------------------------------------------------------------------------
@@ -520,8 +556,23 @@ public class PjbTokenizer extends Tokenizer {
         || character == Ascii.DOLLAR_SIGN;
   }
 
-  private boolean isInstructionChar(int character) {
+  private boolean isInstructionOrLabelChar(int character) {
     return this.isAsciiLetter(character) || this.isDigit(character) || character == Ascii.UNDERSCORE;
+  }
+  
+  public boolean isLabel() {
+    this.mark();
+    int character = 0;
+
+    while (this.isInstructionOrLabelChar(character = this.next())) {}
+    
+    this.reset();
+    
+    if (character == Ascii.COLON) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public boolean isClassModifier() {

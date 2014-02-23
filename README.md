@@ -268,3 +268,12 @@ Local variables and math instructions (iinc and wide).
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 15 – Bytecode – Variables locales et Maths, le retour](http://blog.soat.fr/2014/02/16-jvm-hardcore-part-15-bytecode-variables-locales-et-maths-le-retour)
+
+## part16
+### Summary
+Comparisons and control (1/3).
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 16 – Bytecode – Comparaisons et contrôle - 1/3](http://blog.soat.fr/2014/02/17-jvm-hardcore-part-16-bytecode-comparaisons-et-controle-13)

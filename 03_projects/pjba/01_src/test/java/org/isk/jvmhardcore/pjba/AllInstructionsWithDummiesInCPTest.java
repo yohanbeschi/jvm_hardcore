@@ -863,33 +863,235 @@ public class AllInstructionsWithDummiesInCPTest {
   }
 
   @Test
-  public void istore_load_unsigned() {
-    final int i = AllInstructionsWithDummiesInCP.istore_load_unsigned();
-    Assert.assertEquals(7_687, i);
+  public void lcmp() {
+    final int i1 = AllInstructionsWithDummiesInCP.lcmp(5, 10);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = AllInstructionsWithDummiesInCP.lcmp(5, 5);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = AllInstructionsWithDummiesInCP.lcmp(10, 5);
+    Assert.assertEquals(1, i3);
   }
 
   @Test
-  public void lstore_load_unsigned() {
-    final long l = AllInstructionsWithDummiesInCP.lstore_load_unsigned();
-    Assert.assertEquals(7_687_000, l);
+  public void fcmpl() {
+    final int i1 = AllInstructionsWithDummiesInCP.fcmpl(5.5f, 10.1f);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = AllInstructionsWithDummiesInCP.fcmpl(5.5f, 5.5f);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = AllInstructionsWithDummiesInCP.fcmpl(10.1f, 5.5f);
+    Assert.assertEquals(1, i3);
+
+    // returns -1 if one of the value is NaN
+    final int i4 = AllInstructionsWithDummiesInCP.fcmpl(Float.NaN, 5.5f);
+    Assert.assertEquals(-1, i4);
+
+    final int i5 = AllInstructionsWithDummiesInCP.fcmpl(5.5f, Float.NaN);
+    Assert.assertEquals(-1, i5);
   }
 
   @Test
-  public void fstore_load_unsigned() {
-    final float f = AllInstructionsWithDummiesInCP.fstore_load_unsigned();
-    Assert.assertEquals(134.89f, f, 0.0001);
+  public void fcmpg() {
+    final int i1 = AllInstructionsWithDummiesInCP.fcmpg(5.5f, 10.1f);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = AllInstructionsWithDummiesInCP.fcmpg(5.5f, 5.5f);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = AllInstructionsWithDummiesInCP.fcmpg(10.1f, 5.5f);
+    Assert.assertEquals(1, i3);
+
+    // returns 1 if one of the value is NaN
+    final int i4 = AllInstructionsWithDummiesInCP.fcmpg(Float.NaN, 5.5f);
+    Assert.assertEquals(1, i4);
+
+    final int i5 = AllInstructionsWithDummiesInCP.fcmpg(5.5f, Float.NaN);
+    Assert.assertEquals(1, i5);
   }
 
   @Test
-  public void dstore_load_unsigned() {
-    final double d = AllInstructionsWithDummiesInCP.dstore_load_unsigned();
-    Assert.assertEquals(33.33, d, 0.0001);
+  public void dcmpl() {
+    final int i1 = AllInstructionsWithDummiesInCP.dcmpl(5.5, 10.1);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = AllInstructionsWithDummiesInCP.dcmpl(5.5, 5.5);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = AllInstructionsWithDummiesInCP.dcmpl(10.1, 5.5);
+    Assert.assertEquals(1, i3);
+
+    // returns -1 if one of the value is NaN
+    final int i4 = AllInstructionsWithDummiesInCP.dcmpl(Double.NaN, 5.5);
+    Assert.assertEquals(-1, i4);
+
+    final int i5 = AllInstructionsWithDummiesInCP.dcmpl(5.5, Double.NaN);
+    Assert.assertEquals(-1, i5);
   }
 
   @Test
-  public void astore_load_unsigned() {
-    final Object o = AllInstructionsWithDummiesInCP.astore_load_unsigned();
-    Assert.assertNull(o);
+  public void dcmpg() {
+    final int i1 = AllInstructionsWithDummiesInCP.dcmpg(5.5, 10.1);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = AllInstructionsWithDummiesInCP.dcmpg(5.5, 5.5);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = AllInstructionsWithDummiesInCP.dcmpg(10.1, 5.5);
+    Assert.assertEquals(1, i3);
+
+    // returns 1 if one of the value is NaN
+    final int i4 = AllInstructionsWithDummiesInCP.dcmpg(Double.NaN, 5.5);
+    Assert.assertEquals(1, i4);
+
+    final int i5 = AllInstructionsWithDummiesInCP.dcmpg(5.5, Double.NaN);
+    Assert.assertEquals(1, i5);
+  }
+
+  @Test
+  public void ifeq() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.ifeq(0);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.ifeq(-5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.ifeq(5);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void ifne() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.ifne(5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.ifne(-5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.ifne(0);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void iflt() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.iflt(5);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.iflt(-5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.iflt(0);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void ifge() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.ifge(5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.ifge(-5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.ifge(0);
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void ifgt() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.ifgt(5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.ifgt(-5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.ifgt(0);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void ifle() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.ifle(5);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.ifle(-5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.ifle(0);
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void if_icmpeq() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.if_icmpeq(5, 5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.if_icmpeq(-5, 5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.if_icmpeq(5, -5);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void if_icmpne() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.if_icmpne(5, 5);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.if_icmpne(-5, 5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.if_icmpne(5, -5);
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void if_icmplt() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.if_icmplt(5, 5);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.if_icmplt(-5, 5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.if_icmplt(5, -5);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void if_icmpge() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.if_icmpge(5, 5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.if_icmpge(-5, 5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.if_icmpge(5, -5);
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void if_icmpgt() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.if_icmpgt(5, 5);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.if_icmpgt(-5, 5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.if_icmpgt(5, -5);
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void if_icmple() {
+    final boolean b1 = AllInstructionsWithDummiesInCP.if_icmple(5, 5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithDummiesInCP.if_icmple(-5, 5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithDummiesInCP.if_icmple(5, -5);
+    Assert.assertFalse(b3);
   }
 
   @Test
@@ -925,6 +1127,36 @@ public class AllInstructionsWithDummiesInCPTest {
   @Test
   public void wide_astore_aload() {
     final Object o = AllInstructionsWithDummiesInCP.wide_astore_aload();
+    Assert.assertNull(o);
+  }
+
+  @Test
+  public void istore_load_unsigned() {
+    final int i = AllInstructionsWithDummiesInCP.istore_load_unsigned();
+    Assert.assertEquals(7_687, i);
+  }
+
+  @Test
+  public void lstore_load_unsigned() {
+    final long l = AllInstructionsWithDummiesInCP.lstore_load_unsigned();
+    Assert.assertEquals(7_687_000, l);
+  }
+
+  @Test
+  public void fstore_load_unsigned() {
+    final float f = AllInstructionsWithDummiesInCP.fstore_load_unsigned();
+    Assert.assertEquals(134.89f, f, 0.0001);
+  }
+
+  @Test
+  public void dstore_load_unsigned() {
+    final double d = AllInstructionsWithDummiesInCP.dstore_load_unsigned();
+    Assert.assertEquals(33.33, d, 0.0001);
+  }
+
+  @Test
+  public void astore_load_unsigned() {
+    final Object o = AllInstructionsWithDummiesInCP.astore_load_unsigned();
     Assert.assertNull(o);
   }
 }

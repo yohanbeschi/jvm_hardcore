@@ -26,6 +26,7 @@ public class Symbols {
   final public static int METHOD_CONTENT = number++;
 
   final public static int INSTRUCTION = number++;
+  final public static int LABEL = number++;
 
   final public static int WS = number++;
 

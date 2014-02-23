@@ -1,5 +1,8 @@
 package org.isk.jvmhardcore.pjba.dumper;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
@@ -12,7 +15,14 @@ public class PjbDumper implements Visitor {
 
   final private ClassFile classFile;
   final private StringBuilder pjb;
+
   private int methodCount;
+
+  private int currentMethodLength;
+  private StringBuilder currentInstruction;
+  private List<InstructionWrapper> instructions;
+  private int labelCount;
+  private List<LabelWrapper> labels;
 
   public PjbDumper(ClassFile classFile) {
     super();
@@ -23,6 +33,7 @@ public class PjbDumper implements Visitor {
   public String dump() {
     this.classFile.accept(this);
 
+    this.finalizeMethod();
     this.pjb.append("  .methodend\n");
     this.pjb.append(".classend");
     return this.pjb.toString();
@@ -123,12 +134,39 @@ public class PjbDumper implements Visitor {
   @Override
   public void visitMethodAccessFlags(int accessFlags) {
     if (this.methodCount > 0) {
+      this.finalizeMethod();
       this.pjb.append("  .methodend\n\n");
     }
 
+    this.currentMethodLength = 0;
+    this.labelCount = 1;
+    this.labels = new LinkedList<>();
+    this.instructions = new LinkedList<>();
     this.pjb.append("  .method ").append(StringValues.getMethodModifiers(accessFlags));
 
     this.methodCount++;
+  }
+
+  private void finalizeMethod() {
+    for (LabelWrapper label : this.labels) {
+      final int index = this.getInstructionIndex(label.expectedPosition);
+      this.instructions.add(index, new InstructionWrapper("    " + label.label + ":\n", 0));
+    }
+
+    for (InstructionWrapper instruction : this.instructions) {
+      this.pjb.append(instruction.instruction);
+    }
+  }
+
+  private int getInstructionIndex(int expectedPosition) {
+    for (int i = 0; i < this.instructions.size(); i++) {
+      final InstructionWrapper instruction = this.instructions.get(i);
+      if (instruction.position == expectedPosition) {
+        return i;
+      }
+    }
+
+    throw new RuntimeException("Instruction not found starting at: " + expectedPosition);
   }
 
   @Override
@@ -187,14 +225,20 @@ public class PjbDumper implements Visitor {
 
   @Override
   public void visitOpcode(int opcode) {
+    if (this.currentInstruction == null) {
+      this.currentInstruction = new StringBuilder();
+    }
+
     // Opcode/Mnemonic
     this.metaInstruction = MetaInstructions.getMetaInstruction(opcode);
 
     if (this.metaInstruction.getArgsType() != ArgsType.WIDE) {
-      this.pjb.append("    ").append(this.metaInstruction.getPjbMnemonic());
+      this.currentInstruction.append("    ").append(this.metaInstruction.getPjbMnemonic());
 
       if (this.metaInstruction.getArgsType() == ArgsType.NONE) {
-        this.pjb.append("\n");
+        this.currentInstruction.append("\n");
+        this.writeInstruction();
+        this.currentMethodLength += 1;
       }
     }
   }
@@ -218,7 +262,9 @@ public class PjbDumper implements Visitor {
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
 
-    this.pjb.append(" ").append(printableValue).append("\n");
+    this.currentInstruction.append(" ").append(printableValue).append("\n");
+    this.writeInstruction();
+    this.currentMethodLength += 2;
   }
 
   @Override
@@ -234,28 +280,92 @@ public class PjbDumper implements Visitor {
       case LD_CONSTANT:
         printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) value), this.classFile);
         break;
+      case LABEL:
+        printableValue = this.getLabel(value);
+        break;
       default:
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
 
-    this.pjb.append(" ").append(printableValue).append("\n");
+    this.currentInstruction.append(" ").append(printableValue).append("\n");
+    this.writeInstruction();
+    this.currentMethodLength += 3;
   }
 
   @Override
   public void visitInstructionIinc(int indexInLV, int constant) {
-    this.pjb.append(" ").append(indexInLV).append(" ").append(constant).append("\n");
+    this.currentInstruction.append(" ").append(indexInLV).append(" ").append(constant).append("\n");
+    this.writeInstruction();
+    this.currentMethodLength += 3;
   }
 
   @Override
   public void visitInstructionWideIinc(int widenedOpcode, int indexInLV, int constant) {
-    this.pjb.append("    ").append(MetaInstructions.getMetaInstruction(widenedOpcode).getPjbMnemonic())
-            .append(" ").append(BytecodeUtils.unsign((short) indexInLV))
-            .append(" ").append(constant).append("\n");
+    this.currentInstruction.append("    ").append(MetaInstructions.getMetaInstruction(widenedOpcode).getPjbMnemonic())
+        .append(" ").append(BytecodeUtils.unsign((short) indexInLV)).append(" ").append(constant).append("\n");
+
+    this.writeInstruction();
+    this.currentMethodLength += 6;
   }
 
   @Override
-  public void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV) {;
-    this.pjb.append("    ").append(MetaInstructions.getMetaInstruction(widenedOpcode).getPjbMnemonic())
-            .append(" ").append(BytecodeUtils.unsign((short) indexInLV)).append("\n");
+  public void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV) {
+    this.currentInstruction.append("    ").append(MetaInstructions.getMetaInstruction(widenedOpcode).getPjbMnemonic())
+        .append(" ").append(BytecodeUtils.unsign((short) indexInLV)).append("\n");
+
+    this.writeInstruction();
+    this.currentMethodLength += 4;
+  }
+
+  private void writeInstruction() {
+    this.instructions.add(new InstructionWrapper(this.currentInstruction.toString(), this.currentMethodLength));
+    this.currentInstruction = new StringBuilder();
+  }
+
+  private String getLabel(int offset) {
+    String printableValue;
+
+    final int expectedPosition = this.currentMethodLength + offset;
+    final String label = this.getLabelAtExpectedPosition(expectedPosition);
+
+    if (label != null) {
+      printableValue = label;
+    } else {
+      printableValue = "label" + this.labelCount++;
+      this.labels.add(new LabelWrapper(printableValue.toString(), expectedPosition));
+    }
+
+    return printableValue;
+  }
+
+  private String getLabelAtExpectedPosition(int expectedPosition) {
+    for (LabelWrapper lw : this.labels) {
+      if (lw.expectedPosition == expectedPosition) {
+        return lw.label;
+      }
+    }
+    return null;
+  }
+
+  private class LabelWrapper {
+    final String label;
+    final int expectedPosition;
+
+    public LabelWrapper(String label, int expectedPosition) {
+      super();
+      this.label = label;
+      this.expectedPosition = expectedPosition;
+    }
+  }
+
+  private class InstructionWrapper {
+    final String instruction;
+    final int position;
+
+    public InstructionWrapper(String instruction, int position) {
+      super();
+      this.instruction = instruction;
+      this.position = position;
+    }
   }
 }

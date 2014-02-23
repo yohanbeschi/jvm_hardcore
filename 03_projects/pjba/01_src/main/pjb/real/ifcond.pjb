@@ -1,0 +1,73 @@
+.class public org/isk/pjb/TestIfcond
+  .method public static ifeq(Z)Z
+    iload_0
+    ifeq ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a && b
+  .method public static and(ZZ)Z
+    iload_0
+    ifeq ko
+    iload_1
+    ifeq ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a || b
+  .method public static or(ZZ)Z
+    iload_0
+    ifne ok
+    iload_1
+    ifeq ko
+    ok: 
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a && (b || c) && (d || e)
+  .method public static and_or(ZZZZZ)Z
+    iload_0   @ a
+    ifeq ko
+    iload_1   @ b
+    ifne and1
+    iload_2   @ c
+    ifeq ko
+    and1:
+    iload_3   @ d
+    ifne ok
+    iload 4   @ e
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn   @ true
+    ko:
+    iconst_0
+    ireturn   @ false
+  .methodend
+
+  .method public static ifeq_neg()I
+    bipush -10
+    istore_0
+    iconst_0
+    istore_1
+    before:
+    iinc 0 1
+    iinc 1 1
+    iload_0
+    iflt before
+    iload_1
+    ireturn
+  .methodend
+.classend

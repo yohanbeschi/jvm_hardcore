@@ -108,6 +108,13 @@ public class PjbParserTest {
   }
 
   @Test
+  public void parseSuccessful12() {
+    List<ClassFile> list = this.test("parser/ok12.pjb");
+    Assert.assertEquals(1, list.size());
+    Assert.assertEquals(1, list.get(0).getMethods().size());
+  }
+
+  @Test
   public void parseFailure1() {
     try {
       this.test("parser/ko01.pjb");
@@ -212,6 +219,28 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals("parser/ko10.pjb\nLine 3, column 3 - Unknown instruction. Got: instruction", e.getMessage());
+    }
+  }
+
+  @Test
+  public void parseFailure11() {
+    try {
+      this.test("parser/ko11.pjb");
+      Assert.fail();
+    } catch (ParserException e) {
+      Assert.assertEquals(
+          "parser/ko11.pjb\nLine 4, column 17 - A label following an instruction should not end with a colon. Got: :",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void parseFailure12() {
+    try {
+      this.test("parser/ko12.pjb");
+      Assert.fail();
+    } catch (ParserException e) {
+      Assert.assertEquals("parser/ko12.pjb\nLine 7, column 5 - Unknown instruction. Got: label_1", e.getMessage());
     }
   }
 
@@ -323,7 +352,7 @@ public class PjbParserTest {
   @Test
   public void iinc() {
     final int i = TestIinc.iinc(10);
-    
+
     Assert.assertEquals(9, i);
   }
 
@@ -339,5 +368,170 @@ public class PjbParserTest {
     final int i = TestWide.iinc(31000);
 
     Assert.assertEquals(1, i);
+  }
+
+  @Test
+  public void ifeq() {
+    final boolean b1 = TestIfcond.ifeq(true);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestIfcond.ifeq(false);
+    Assert.assertFalse(b2);
+  }
+
+  @Test
+  public void ifeq_and() {
+    final boolean b1 = TestIfcond.and(true, true);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestIfcond.and(false, false);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = TestIfcond.and(true, false);
+    Assert.assertFalse(b3);
+
+    final boolean b4 = TestIfcond.and(false, true);
+    Assert.assertFalse(b4);
+  }
+
+  @Test
+  public void ifeq_or() {
+    final boolean b1 = TestIfcond.or(true, true);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestIfcond.or(false, false);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = TestIfcond.or(true, false);
+    Assert.assertTrue(b3);
+
+    final boolean b4 = TestIfcond.or(false, true);
+    Assert.assertTrue(b4);
+  }
+
+  @Test
+  public void ifeq_and_or() {
+    // a && (b || c) && (d || e)
+
+    final boolean b1 = TestIfcond.and_or(true, false, true, false, true);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestIfcond.and_or(true, true, false, true, false);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = TestIfcond.and_or(false, true, false, true, false);
+    Assert.assertFalse(b3);
+
+    final boolean b4 = TestIfcond.and_or(true, false, false, true, false);
+    Assert.assertFalse(b4);
+
+    final boolean b5 = TestIfcond.and_or(true, true, false, false, false);
+    Assert.assertFalse(b5);
+  }
+
+  @Test
+  public void ifeq_neg() {
+    final int i = TestIfcond.ifeq_neg();
+    Assert.assertEquals(10, i);
+  }
+
+  @Test
+  public void if_icmpge() {
+    final boolean b1 = TestIfICompCond.if_icmpge(5, 5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestIfICompCond.if_icmpge(10, 5);
+    Assert.assertTrue(b2);
+
+    final boolean b3 = TestIfICompCond.if_icmpge(5, 10);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void if_cmp_or_and() {
+    // (a >= b || c == d) && a != d
+    // a >= b && a != d
+    final boolean b1 = TestIfICompCond.or_and(5, 4, 9, 10);
+    Assert.assertTrue(b1);
+
+    // c == d && a != d
+    final boolean b2 = TestIfICompCond.or_and(1, 4, 10, 10);
+    Assert.assertTrue(b2);
+
+    // a >= b but a == d
+    final boolean b3 = TestIfICompCond.or_and(10, 4, 10, 10);
+    Assert.assertFalse(b3);
+
+    // a < b && c != d
+    final boolean b4 = TestIfICompCond.or_and(1, 4, 9, 10);
+    Assert.assertFalse(b4);
+  }
+
+  @Test
+  public void if_icmplt_neg() {
+    final int i = TestIfICompCond.if_icmplt_neg();
+    Assert.assertEquals(10, i);
+  }
+
+  @Test
+  public void lcmp() {
+    final int i1 = TestTypeCmp.lcmp(10, 1);
+    Assert.assertEquals(1, i1);
+
+    final int i2 = TestTypeCmp.lcmp(10, 10);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = TestTypeCmp.lcmp(1, 10);
+    Assert.assertEquals(-1, i3);
+  }
+
+  @Test
+  public void lcmp_ifle() {
+    final boolean b1 = TestTypeCmp.lcmp_ifle(10, 5);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestTypeCmp.lcmp_ifle(5, 5);
+    Assert.assertFalse(b2);
+
+    final boolean b3 = TestTypeCmp.lcmp_ifle(5, 10);
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void dcmpl() {
+    final int i1 = TestTypeCmp.dcmpl(5.5, 10.1);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = TestTypeCmp.dcmpl(5.5, 5.5);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = TestTypeCmp.dcmpl(10.1, 5.5);
+    Assert.assertEquals(1, i3);
+
+    // returns -1 if one of the value is NaN
+    final int i4 = TestTypeCmp.dcmpl(Double.NaN, 5.5);
+    Assert.assertEquals(-1, i4);
+
+    final int i5 = TestTypeCmp.dcmpl(5.5, Double.NaN);
+    Assert.assertEquals(-1, i5);
+  }
+
+  @Test
+  public void dcmpg() {
+    final int i1 = TestTypeCmp.dcmpg(5.5, 10.1);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = TestTypeCmp.dcmpg(5.5, 5.5);
+    Assert.assertEquals(0, i2);
+
+    final int i3 = TestTypeCmp.dcmpg(10.1, 5.5);
+    Assert.assertEquals(1, i3);
+
+    // returns 1 if one of the value is NaN
+    final int i4 = TestTypeCmp.dcmpg(Double.NaN, 5.5);
+    Assert.assertEquals(1, i4);
+
+    final int i5 = TestTypeCmp.dcmpg(5.5, Double.NaN);
+    Assert.assertEquals(1, i5);
   }
 }

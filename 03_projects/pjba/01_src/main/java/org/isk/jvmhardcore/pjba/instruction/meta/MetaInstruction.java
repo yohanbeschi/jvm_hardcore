@@ -45,6 +45,7 @@ public abstract class MetaInstruction {
     LD_CONSTANT, // long and double => 1 short
     IINC, // byte, byte
     WIDE, // 1 byte + 1 short or 1 byte + 1 short + 1 short 
-    LV_INDEX // => 1 byte or 1 short
+    LV_INDEX, // => 1 byte or 1 short
+    LABEL;
   }
 }

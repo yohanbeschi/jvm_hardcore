@@ -12,6 +12,8 @@ public class HexDumper implements Visitor {
   final private ClassFile classFile;
   final private StringBuilder pjb;
   private int hexCounter;
+  private int currentMethodLength;
+  private int methodCounterMax;
   private int constantCount = 1;
 
   public HexDumper(ClassFile classFile) {
@@ -146,6 +148,7 @@ public class HexDumper implements Visitor {
 
   @Override
   public void visitMethodAccessFlags(int accessFlags) {
+    this.currentMethodLength = 0;
     this.pjb.append(this.getHexAndAddShort()).append("\t");
     this.pjb.append("+ Access Flags: ").append(StringValues.getMethodModifiers(accessFlags)).append("\n");
   }
@@ -194,6 +197,7 @@ public class HexDumper implements Visitor {
 
   @Override
   public void visitCodeLength(int codeLength) {
+    methodCounterMax = String.valueOf(codeLength).length();
     this.getHexAndAddInt();
   }
 
@@ -215,11 +219,14 @@ public class HexDumper implements Visitor {
   public void visitOpcode(int opcode) {
     this.metaInstruction = MetaInstructions.getMetaInstruction(opcode);
     this.pjb.append(this.getHexAndAddByte()).append("\t");
-    this.pjb.append("      ").append(this.metaInstruction.getMnemonic());
+    this.pjb.append("      ").append(this.getDecPadded(this.currentMethodLength))
+            .append("  ").append(this.metaInstruction.getMnemonic());
 
     if (this.metaInstruction.getArgsType() == ArgsType.NONE) {
       this.pjb.append("\n");
     }
+
+    this.currentMethodLength += 1;
   }
 
   @Override
@@ -239,6 +246,7 @@ public class HexDumper implements Visitor {
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
 
+    this.currentMethodLength += 1;
     this.getHexAndAdd(1);
   }
 
@@ -253,18 +261,22 @@ public class HexDumper implements Visitor {
       case LD_CONSTANT:
         this.pjb.append(" #").append(BytecodeUtils.unsign((short) value)).append("\n");
         break;
+      case LABEL:
+        this.pjb.append(" <").append(value).append(">\n");
+        break;
       default:
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
 
+    this.currentMethodLength += 2;
     this.getHexAndAdd(2);
   }
 
   @Override
   public void visitInstructionIinc(int indexInLV, int constant) {
-    this.pjb.append(" ").append(BytecodeUtils.unsign((byte) indexInLV))
-            .append(" ").append(constant).append("\n");
+    this.pjb.append(" ").append(BytecodeUtils.unsign((byte)indexInLV)).append(" ").append(constant).append("\n");
 
+    this.currentMethodLength += 2;
     this.getHexAndAdd(2);
   }
 
@@ -274,6 +286,7 @@ public class HexDumper implements Visitor {
             .append(" ").append(BytecodeUtils.unsign((short) indexInLV))
             .append(" ").append(constant).append("\n");
 
+    this.currentMethodLength += 5;
     this.getHexAndAdd(5);
   }
 
@@ -282,6 +295,7 @@ public class HexDumper implements Visitor {
     this.pjb.append(" ").append(MetaInstructions.getMnemonic(widenedOpcode))
             .append(" ").append(BytecodeUtils.unsign((short) indexInLV)).append("\n");
 
+    this.currentMethodLength += 3;
     this.getHexAndAdd(3);
   }
 
@@ -329,6 +343,11 @@ public class HexDumper implements Visitor {
   private String getHexPadded(int value) {
     final String hexString = Integer.toHexString(value);
     return this.pad(hexString, 4, "0");
+  }
+
+  private String getDecPadded(int value) {
+    final String s = String.valueOf(value);
+    return this.pad(s, this.methodCounterMax, " ");
   }
 
   private String pad(String value, int pad, String placeholder) {

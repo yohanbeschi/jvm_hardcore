@@ -1,0 +1,44 @@
+.class public org/isk/pjb/TestIfICompCond
+  @ a >= b
+  .method public static if_icmpge(II)Z
+    iload_0
+    iload_1
+    if_icmplt ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ (a >= b || c == d) && a != d
+  .method public static or_and(IIII)Z
+    iload_0
+    iload_1
+    if_icmpge and
+    iload_2
+    iload_3
+    if_icmpne ko
+    and:
+    iload_0
+    iload_3
+    if_icmpeq ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  .method public static if_icmplt_neg()I
+    iconst_0
+    istore_0
+    before:
+    iinc 0 1
+    iload_0
+    bipush 10
+    if_icmplt before
+    iload_0
+    ireturn
+  .methodend
+.classend

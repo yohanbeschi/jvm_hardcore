@@ -7,7 +7,7 @@ public class Instruction implements Visitable {
   final private int opcode;
   final private int stack;
   final private int locals;
-  final private int length;
+  private int length;
 
   public Instruction(int opcode, int stack, int locals, int length) {
     this.opcode = opcode;
@@ -30,6 +30,10 @@ public class Instruction implements Visitable {
 
   public int getLength() {
     return this.length;
+  }
+
+  protected void setLength(int length) {
+    this.length = length;
   }
 
   @Override

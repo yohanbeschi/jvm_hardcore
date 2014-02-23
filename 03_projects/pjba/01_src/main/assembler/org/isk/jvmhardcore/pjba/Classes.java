@@ -161,6 +161,23 @@ public class Classes {
     this.buildI2B(builder);
     this.buildI2C(builder);
     this.buildI2S(builder);
+    this.buildLCmp(builder);
+    this.buildFCmpl(builder);
+    this.buildFCmpg(builder);
+    this.buildDCmpl(builder);
+    this.buildDCmpg(builder);
+    this.buildIfeq(builder);
+    this.buildIfne(builder);
+    this.buildIflt(builder);
+    this.buildIfge(builder);
+    this.buildIfgt(builder);
+    this.buildIfle(builder);
+    this.buildIfIcmpeq(builder);
+    this.buildIfIcmpne(builder);
+    this.buildIfIcmplt(builder);
+    this.buildIfIcmpge(builder);
+    this.buildIfIcmpgt(builder);
+    this.buildIfIcmple(builder);
     this.buildWideIinc(builder);
     this.buildWideIStoreLoad(builder);
     this.buildWideLStoreLoad(builder);
@@ -1268,6 +1285,184 @@ public class Classes {
     builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "i2s", "(I)I")
       .iload_0()
       .i2s()
+      .ireturn();
+  }
+
+  private void buildLCmp(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lcmp", "(JJ)I")
+      .lload_0()
+      .lload_2()
+      .lcmp()
+      .ireturn();
+  }
+
+  private void buildFCmpl(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fcmpl", "(FF)I")
+      .fload_0()
+      .fload_1()
+      .fcmpl()
+      .ireturn();
+  }
+
+  private void buildFCmpg(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fcmpg", "(FF)I")
+      .fload_0()
+      .fload_1()
+      .fcmpg()
+      .ireturn();
+  }
+
+  private void buildDCmpl(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dcmpl", "(DD)I")
+      .dload_0()
+      .dload_2()
+      .dcmpl()
+      .ireturn();
+  }
+
+  private void buildDCmpg(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dcmpg", "(DD)I")
+      .dload_0()
+      .dload_2()
+      .dcmpg()
+      .ireturn();
+  }
+
+  private void buildIfeq(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifeq", "(I)Z")
+      .iload_0()
+      .ifeq("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfne(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifne", "(I)Z")
+      .iload_0()
+      .ifne("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIflt(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iflt", "(I)Z")
+      .iload_0()
+      .iflt("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfge(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifge", "(I)Z")
+      .iload_0()
+      .ifge("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfgt(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifgt", "(I)Z")
+      .iload_0()
+      .ifgt("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfle(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifle", "(I)Z")
+      .iload_0()
+      .ifle("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfIcmpeq(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_icmpeq", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmpeq("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfIcmpne(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_icmpne", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmpne("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfIcmplt(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_icmplt", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmplt("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfIcmpge(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_icmpge", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmpge("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfIcmpgt(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_icmpgt", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmpgt("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfIcmple(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_icmple", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmple("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
       .ireturn();
   }
 

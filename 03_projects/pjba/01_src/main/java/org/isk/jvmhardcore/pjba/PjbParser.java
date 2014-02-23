@@ -74,7 +74,7 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
           break;
         case METHOD_SIGNATURE:
           final String methodDescriptor = this.tokenizer.getMethodSignature();
-          this.methodBuilder = this.classFileBuilder.newMethod(methodModifiers, methodName, methodDescriptor);
+          this.methodBuilder = this.classFileBuilder.newMethod(methodModifiers, methodName, methodDescriptor, false);
           break;
         case METHOD_END:
           this.tokenizer.checkMethodEnd();
@@ -82,6 +82,10 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
           break;
         case INSTRUCTION:
           this.processInstruction();
+          break;
+        case LABEL:
+          final String label = this.tokenizer.getLabel();
+          this.methodBuilder.label(label);
           break;
         case EOF:
           this.tokenizer.checkEndOfFile();
@@ -160,6 +164,12 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
         this.methodBuilder.instruction(instruction);
         
         break;
+      case LABEL:
+        this.tokenizer.consumeWhitespaces();
+        final String label = this.tokenizer.getLabelAsArg();
+        final Instruction ifInstruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction((byte)0);
+        this.methodBuilder.instruction(ifInstruction, label);
+        break;
       case W_IFS_CONSTANT:
       default:
         break;
@@ -193,6 +203,7 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
     this.table[Symbols.METHOD_SIGNATURE] = new Productions.MethodSignature();
     this.table[Symbols.METHOD_CONTENT] = new Productions.MethodContent();
     this.table[Symbols.INSTRUCTION] = new Productions.Instruction();
+    this.table[Symbols.LABEL] = new Productions.Label();
     this.table[Symbols.WS] = new Productions.Whitespaces();
   }
 }

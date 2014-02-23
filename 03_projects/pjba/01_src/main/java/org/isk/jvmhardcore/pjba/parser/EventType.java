@@ -11,5 +11,6 @@ public enum EventType {
   METHOD_NAME,
   METHOD_SIGNATURE,
   METHOD_END,
-  INSTRUCTION;
+  INSTRUCTION,
+  LABEL;
 }

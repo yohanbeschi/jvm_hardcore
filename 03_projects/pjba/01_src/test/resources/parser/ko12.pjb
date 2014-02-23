@@ -1,0 +1,11 @@
+.class public org/isk/pjb/TestIfeq
+  .method public static ifeq(B)B
+    iload_0
+    ifeq label_1
+    iconst_1
+    ireturn
+    label_1
+    iconst_0
+    ireturn
+  .methodend
+.classend

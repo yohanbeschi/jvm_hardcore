@@ -1,0 +1,43 @@
+.class public org/isk/pjb/TestObject
+  .method public static if_acmpeq(Ljava/lang/Object;Ljava/lang/Object;)Z
+    aload_0
+    aload_1
+    if_acmpeq ok
+    iconst_0 
+    ireturn
+    ok:
+    iconst_1 
+    ireturn
+  .methodend
+
+  .method public static if_acmpne(Ljava/lang/Object;Ljava/lang/Object;)Z
+    aload_0
+    aload_1
+    if_acmpne ok
+    iconst_0 
+    ireturn
+    ok:
+    iconst_1 
+    ireturn
+  .methodend
+
+  .method public static ifnull(Ljava/lang/Object;)Z
+    aload_0
+    ifnull ok
+    iconst_0 
+    ireturn
+    ok:
+    iconst_1 
+    ireturn
+  .methodend
+
+  .method public static ifnonnull(Ljava/lang/Object;)Z
+    aload_0
+    ifnonnull ok
+    iconst_0 
+    ireturn
+    ok:
+    iconst_1 
+    ireturn
+  .methodend
+.classend

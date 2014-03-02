@@ -181,6 +181,11 @@ public class Assembler implements Visitor {
   }
 
   @Override
+  public void visitInstructionInt(int arg) {
+    this.writeInt(arg);
+  }
+
+  @Override
   public void visitInstructionIinc(int indexInLV, int constant) {
     this.writeByte(indexInLV);
     this.writeByte(constant);
@@ -197,6 +202,36 @@ public class Assembler implements Visitor {
   public void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV) {
     this.writeByte(widenedOpcode);
     this.writeShort(indexInLV);
+  }
+
+  @Override
+  public void visitInstructionTableSwitch(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets) {
+    for (int i = padding; i > 0; i--) {
+      this.writeByte(0);
+    }
+
+    this.writeInt(defaultOffset);
+    this.writeInt(lowValue);
+    this.writeInt(highValue);
+
+    for (int i : jumpOffsets) {
+      this.writeInt(i);
+    }
+  }
+
+  @Override
+  public void visitInstructionLookupSwitch(int padding, int defaultOffset, int nbPairs, int[] keys, int[] jumpOffsets) {
+    for (int i = padding; i > 0; i--) {
+      this.writeByte(0);
+    }
+    
+    this.writeInt(defaultOffset);
+    this.writeInt(nbPairs);
+
+    for (int i = 0; i < keys.length; i++) {
+      this.writeInt(keys[i]);
+      this.writeInt(jumpOffsets[i]);
+    }
   }
 
   // -------------------------------------------------------------------------------------------------------------------

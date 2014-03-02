@@ -732,6 +732,26 @@ public class Instructions {
     return new ShortArgInstruction(0xa4, -2, 0, branch);
   }
 
+  public static Instruction if_acmpeq(short branch) {
+    return new ShortArgInstruction(0xa5, -2, 0, branch);
+  }
+
+  public static Instruction if_acmpne(short branch) {
+    return new ShortArgInstruction(0xa6, -2, 0, branch);
+  }
+
+  public static Instruction goto_(short branch) {
+    return new ShortArgInstruction(0xa7, 0, 0, branch);
+  }
+
+  public static Instruction tableswitch(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets) {
+    return new TableswitchInstruction(0xaa, -1, 0, padding, defaultOffset, lowValue, highValue, jumpOffsets);
+  }
+
+  public static Instruction lookupswitch(int padding, int defaultOffset, int nbPairs, int[] keys, int[] offsets) {
+    return new LookupswitchInstruction(0xab, -1, 0, padding, defaultOffset, nbPairs, keys, offsets);
+  }
+
   public static Instruction ireturn() {
     return IRETURN;
   }
@@ -825,5 +845,17 @@ public class Instructions {
       default:
         return null;
     }
+  }
+
+  public static Instruction ifnull(short branch) {
+    return new ShortArgInstruction(0xc6, -2, 0, branch);
+  }
+
+  public static Instruction ifnonnull(short branch) {
+    return new ShortArgInstruction(0xc7, -2, 0, branch);
+  }
+
+  public static Instruction goto_w(int branch) {
+    return new IntArgInstruction(0xc8, 0, 0, branch);
   }
 }

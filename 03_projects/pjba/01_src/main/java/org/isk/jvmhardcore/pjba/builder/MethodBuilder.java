@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
+import org.isk.jvmhardcore.pjba.instruction.LookupswitchInstruction;
+import org.isk.jvmhardcore.pjba.instruction.TableswitchInstruction;
 import org.isk.jvmhardcore.pjba.instruction.interfaces.LabeledInstruction;
+import org.isk.jvmhardcore.pjba.instruction.interfaces.SwitchInstruction;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
 import org.isk.jvmhardcore.pjba.structure.Method;
@@ -22,6 +25,7 @@ public class MethodBuilder {
   private int currentMethodLength;
 
   final private List<InstructionWrapper> instructions;
+  final private List<InstructionWrapper> gotos;
   final private List<InstructionWrapper> labels;
   final private Map<String, InstructionWrapper> labelsAsMap;
   final private Map<String, List<LabelWrapper>> labelAsArgs;
@@ -32,10 +36,12 @@ public class MethodBuilder {
 
     if (eagerConstruction) {
       this.instructions = null;
+      this.gotos = null;
       this.labels = null;
       this.labelsAsMap = new HashMap<>();
     } else {
       this.instructions = new LinkedList<>();
+      this.gotos = new LinkedList<>();
       this.labels = new LinkedList<>();
       this.labelsAsMap = null;
     }
@@ -895,6 +901,55 @@ public class MethodBuilder {
     return this;
   }
 
+  public MethodBuilder if_acmpeq(String label) {
+    final Instruction instruction = Instructions.if_acmpeq(SHORT_ZERO);
+    this.instruction(instruction, label);
+
+    return this;
+  }
+
+  public MethodBuilder if_acmpne(String label) {
+    final Instruction instruction = Instructions.if_acmpne(SHORT_ZERO);
+    this.instruction(instruction, label);
+
+    return this;
+  }
+
+  public MethodBuilder goto_(String label) {
+    this.instructionGoto(label);
+
+    return this;
+  }
+
+  public TableswitchBuilder tableswitch(String defaultLabel, int lowValue, int highValue) {
+    final int positionBeforeInstruction = this.code.getCodeLength();
+    final int padding = 3 - positionBeforeInstruction % 4;
+    final int nbOffsets = highValue - lowValue + 1;
+
+    final TableswitchInstruction instruction = (TableswitchInstruction)
+        Instructions.tableswitch(padding, 0, lowValue, highValue, new int[nbOffsets]);
+
+    instruction.setDefaultLabel(defaultLabel);
+    final InstructionWrapper instructionWrapper = new InstructionWrapper(instruction, this.currentMethodLength);
+    this.instruction(instructionWrapper, defaultLabel);
+
+    return new TableswitchBuilder(instruction, instructionWrapper, this);
+  }
+
+  public LookupwitchBuilder lookupswitch(String defaultLabel, int nbPairs) {
+    final int positionBeforeInstruction = this.code.getCodeLength();
+    final int padding = 3 - positionBeforeInstruction % 4;
+
+    final LookupswitchInstruction instruction = (LookupswitchInstruction)
+        Instructions.lookupswitch(padding, 0, nbPairs, new int[nbPairs], new int[nbPairs]);
+
+    instruction.setDefaultLabel(defaultLabel);
+    final InstructionWrapper instructionWrapper = new InstructionWrapper(instruction, this.currentMethodLength);
+    this.instruction(instructionWrapper, defaultLabel);
+
+    return new LookupwitchBuilder(instruction, instructionWrapper, this);
+  }
+
   public MethodBuilder ireturn() {
     this.instruction(Instructions.IRETURN);
     return this;
@@ -922,6 +977,20 @@ public class MethodBuilder {
 
   public MethodBuilder return_() {
     this.instruction(Instructions.RETURN);
+    return this;
+  }
+
+  public MethodBuilder ifnull(String label) {
+    final Instruction instruction = Instructions.ifnull(SHORT_ZERO);
+    this.instruction(instruction, label);
+
+    return this;
+  }
+
+  public MethodBuilder ifnonnull(String label) {
+    final Instruction instruction = Instructions.ifnonnull(SHORT_ZERO);
+    this.instruction(instruction, label);
+
     return this;
   }
 
@@ -960,6 +1029,40 @@ public class MethodBuilder {
     return this;
   }
 
+  private void instructionGoto(String label) {
+    if (this.eagerConstruction) {
+      this.eagerGoto(label);
+    } else {
+      this.lazyGoto(label);
+    }
+  }
+
+  private void eagerGoto(String label) {
+    final InstructionWrapper labelInstructionWrapper = this.labelsAsMap.get(label);
+
+    if (labelInstructionWrapper != null) {
+      final int offset = labelInstructionWrapper.position - this.currentMethodLength;
+
+      if (offset >= Short.MIN_VALUE && offset <= Short.MAX_VALUE) {
+        this.instruction(Instructions.goto_((short) offset));
+      } else {
+        this.instruction(Instructions.goto_w(offset));
+      }
+      return;
+    }
+
+    // Label not declared
+    final Instruction instruction = Instructions.goto_(SHORT_ZERO); // Eager construction never use goto_w
+    this.instruction(instruction, label);
+  }
+
+  private void lazyGoto(String label) {
+    final Instruction instruction = Instructions.goto_w(0);
+    final InstructionWrapper instructionWrapper = new InstructionWrapper(label, instruction, this.currentMethodLength);
+    this.instruction(instructionWrapper, label);
+    this.gotos.add(instructionWrapper);
+  }
+
   public MethodBuilder label(String label) {
     if (this.eagerConstruction) {
       this.eagerLabel(label);
@@ -989,6 +1092,14 @@ public class MethodBuilder {
     final InstructionWrapper instructionWrapper = new InstructionWrapper(new LabelInstruction(label), this.currentMethodLength);
     this.instruction(instructionWrapper);
     this.labels.add(instructionWrapper);
+
+    final List<LabelWrapper> labelWrappers = this.labelAsArgs.get(label);
+
+    if (labelWrappers != null) {
+      for (LabelWrapper labelWrapper : labelWrappers) {
+        labelWrapper.setBestEffortPosition(this.currentMethodLength);
+      }
+    }
   }
 
   protected void addLabel(InstructionWrapper instructionWrapper, String label) {
@@ -1022,6 +1133,7 @@ public class MethodBuilder {
 
   void buildMethod() {
     if (!this.eagerConstruction) {
+      this.checkGotoInstructions();
       this.setPositions();
       this.setOffsets();
       this.addInstructions();
@@ -1031,11 +1143,34 @@ public class MethodBuilder {
   // -------------------------------------------------------------------------------------------------------------------
   // Lazy building
   // -------------------------------------------------------------------------------------------------------------------
+
+  private void checkGotoInstructions() {
+    // For each goto check the label associated and change goto_w into goto if needed
+    for (InstructionWrapper instructionWrapper : this.gotos) {
+      final List<LabelWrapper> labelWrappers = this.labelAsArgs.get(instructionWrapper.label);
+
+      final int bestEffortOffset = labelWrappers.get(0).bestEffortPosition - instructionWrapper.position;
+
+      // If the best effort position doesn't require a 'goto_w' we use a simple 'goto'
+      if (bestEffortOffset >= Short.MIN_VALUE && bestEffortOffset <= Short.MAX_VALUE) {
+        instructionWrapper.reset(Instructions.goto_(SHORT_ZERO));
+      }
+    }
+  }
+
   private void setPositions() {
     // Set all positions
     int currentPosition = 0;
     for (InstructionWrapper instructionWrapper : this.instructions) {
       instructionWrapper.setPosition(currentPosition);
+
+      // Set [Table/Lookup]Switch padding
+      final Instruction instruction = instructionWrapper.instruction;
+      if (instruction instanceof SwitchInstruction) {
+        final int positionBeforeInstruction = instructionWrapper.position;
+        final int padding = 3 - positionBeforeInstruction % 4;
+        ((SwitchInstruction) instruction).setPadding(padding);
+      }
 
       currentPosition += instructionWrapper.instruction.getLength();
     }
@@ -1077,14 +1212,20 @@ public class MethodBuilder {
 
   private class LabelWrapper {
     final InstructionWrapper instruction;
+    int bestEffortPosition;
 
     public LabelWrapper(InstructionWrapper instruction) {
       super();
       this.instruction = instruction;
     }
+
+    private void setBestEffortPosition(int position) {
+      this.bestEffortPosition = position;
+    }
   }
 
   class InstructionWrapper {
+    String label; // Only used for goto in lazy mode
     Instruction instruction;
     int position;
 
@@ -1092,6 +1233,12 @@ public class MethodBuilder {
       super();
       this.instruction = instruction;
       this.position = position;
+    }
+
+    // Only used for goto in lazy mode
+    public InstructionWrapper(String label, Instruction instruction, int bestEffortPosition) {
+      this(instruction, bestEffortPosition);
+      this.label = label;
     }
 
     public void reset(Instruction instruction) {

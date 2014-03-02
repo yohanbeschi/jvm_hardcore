@@ -1,0 +1,119 @@
+.class public org/isk/pjb/TestSwitch
+  .method public static tableswitch(I)I
+    iload_0
+    tableswitch default 5 7
+      label_5
+      label_6
+      label_7
+    label_5:
+    bipush 10
+    goto return
+    label_6:
+    bipush 12
+    goto return
+    label_7:
+    bipush 14
+    goto return
+    default:
+    bipush 100
+    return:
+    ireturn
+  .methodend
+
+.method public static tableswitch_signed(I)I
+    iload_0
+    tableswitch default -1 1
+      label_m1
+      label_0
+      label_1
+    label_0:
+    bipush 10
+    goto return
+    label_1:
+    bipush 12
+    goto return
+    label_m1:
+    bipush 14
+    goto return
+    default:
+    bipush 100
+    return:
+    ireturn
+  .methodend
+
+  .method public static tableswitch_neg(I)I
+    loop:
+    iload_0
+    ifgt ok
+    iload_0
+    tableswitch ok 0 1
+      label_0
+      ok
+    label_0:
+    iconst_3
+    istore_0
+    goto loop
+    ok:
+    iload_0
+    ireturn
+  .methodend
+
+  .method public static lookupswitch(I)I
+    iload_0
+    lookupswitch default 3
+      5  label_5
+      10 label_10
+      15 label_15
+    label_5:
+    bipush 10
+    goto return
+    label_10:
+    bipush 20
+    goto return
+    label_15:
+    bipush 30
+    goto return
+    default:
+    bipush 100
+    return:
+    ireturn
+  .methodend
+
+  .method public static lookupswitch_signed(I)I
+    iload_0
+    lookupswitch default 3
+      -10  label_m10
+      -5 label_m5
+      15 label_15
+    label_m5:
+    bipush 10
+    goto return
+    default:
+    bipush 100
+    goto return
+    label_m10:
+    bipush 20
+    goto return
+    label_15:
+    bipush 30
+    return:
+    ireturn
+  .methodend
+
+  .method public static lookupswitch_neg(I)I
+    loop:
+    iload_0
+    ifgt ok
+    iload_0
+    lookupswitch ok 2
+      0 label_0
+      5000 ok
+    label_0:
+    iconst_3
+    istore_0
+    goto loop
+    ok:
+    iload_0
+    ireturn
+  .methodend
+.classend

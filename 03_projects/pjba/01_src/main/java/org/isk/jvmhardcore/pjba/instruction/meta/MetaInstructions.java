@@ -8,7 +8,10 @@ import java.util.Map;
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
 import org.isk.jvmhardcore.pjba.instruction.factory.ByteArgInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.IincInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.IntArgInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.LookupswitchInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.ShortArgInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.TableswitchInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.WideInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
@@ -365,7 +368,39 @@ public class MetaInstructions {
         return Instructions.if_icmple(branch);
       }
     }));
-    // TODO: 0xa5 to 0xab
+    list.add(new ShortArgMetaInstruction("if_acmpeq", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_acmpeq(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("if_acmpne", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.if_acmpne(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("goto", ArgsType.GOTO, new ShortArgInstructionFactory() {
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.goto_(branch);
+      }
+    }));
+    // TODO: 0xa8 to 0xa9
+    list.add(new TableswitchMetaInstruction("tableswitch", ArgsType.TABLE_SWITCH, new TableswitchInstructionFactory() {
+      @Override
+      public Instruction buildInstruction(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets) {
+        return Instructions.tableswitch(padding, defaultOffset, lowValue, highValue, jumpOffsets);
+      }
+    }));
+    list.add(new LookupswitchMetaInstruction("lookupswitch", ArgsType.LOOKUP_SWITCH, new LookupswitchInstructionFactory() {
+      @Override
+      public Instruction buildInstruction(int padding,  int defaultOffset, int nbPairs, int[] keys, int[] offsets) {
+        return Instructions.lookupswitch(padding, defaultOffset, nbPairs, keys, offsets);
+      }
+    }));
     list.add(new NoArgMetaInstruction("ireturn", ArgsType.NONE, Instructions.IRETURN));
     list.add(new NoArgMetaInstruction("lreturn", ArgsType.NONE, Instructions.LRETURN));
     list.add(new NoArgMetaInstruction("freturn", ArgsType.NONE, Instructions.FRETURN));
@@ -385,7 +420,29 @@ public class MetaInstructions {
         return Instructions.wide_load_store(widenedOpcode, indexInLV);
       }
     }));
-    // TODO: 0xc5 to 0xc9
+    // TODO: 0xc5
+    list.add(new ShortArgMetaInstruction("ifnull", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifnull(branch);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("ifnonnull", ArgsType.LABEL, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short branch) {
+        return Instructions.ifnonnull(branch);
+      }
+    }));
+    list.add(new IntArgMetaInstruction("goto_w", "goto", ArgsType.GOTO_W, new IntArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(int branch) {
+        return Instructions.goto_w(branch);
+      }
+    }));
+    // TODO: 0xc8 and 0xc9
 
     return list;
   }

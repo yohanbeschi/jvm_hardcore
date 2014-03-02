@@ -1,13 +1,35 @@
 package org.isk.jvmhardcore.pjba;
 
 import java.io.InputStream;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.isk.jvmhardcore.pjba.parser.core.Tokenizer.ParserException;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.pjb.MultiOne;
+import org.isk.pjb.MultiTwo;
+import org.isk.pjb.TestGoto;
+import org.isk.pjb.TestIadd;
+import org.isk.pjb.TestIfICompCond;
+import org.isk.pjb.TestIfcond;
+import org.isk.pjb.TestIinc;
+import org.isk.pjb.TestIlocal_0;
+import org.isk.pjb.TestIlocal_0_Byte;
+import org.isk.pjb.TestIlocal_0_Char;
+import org.isk.pjb.TestIlocal_0_NoArgs;
+import org.isk.pjb.TestIlocal_0_Short;
+import org.isk.pjb.TestIlocal_1;
+import org.isk.pjb.TestLdc_Double;
+import org.isk.pjb.TestLdc_Float;
+import org.isk.pjb.TestLdc_Integer;
+import org.isk.pjb.TestLdc_Long;
+import org.isk.pjb.TestLdc_String;
+import org.isk.pjb.TestObject;
+import org.isk.pjb.TestSwitch;
+import org.isk.pjb.TestTypeCmp;
+import org.isk.pjb.TestWide;
 import org.junit.Assert;
 import org.junit.Test;
-import org.isk.pjb.*;
 
 public class PjbParserTest {
 
@@ -533,5 +555,152 @@ public class PjbParserTest {
 
     final int i5 = TestTypeCmp.dcmpg(5.5, Double.NaN);
     Assert.assertEquals(1, i5);
+  }
+
+  @Test
+  public void if_acmpeq() {
+    final Object o1 = new Object();
+    final Object o2 = new Object();
+
+    final boolean b1 = TestObject.if_acmpeq(o1, o1);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestObject.if_acmpeq(o2, o1);
+    Assert.assertFalse(b2);
+  }
+
+  @Test
+  public void if_acmpne() {
+    final Object o1 = new Object();
+    final Object o2 = new Object();
+
+    final boolean b1 = TestObject.if_acmpne(o1, o1);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = TestObject.if_acmpne(o1, o2);
+    Assert.assertTrue(b2);
+  }
+
+  @Test
+  public void ifnull() {
+    final boolean b1 = TestObject.ifnull(null);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestObject.ifnull(new Object());
+    Assert.assertFalse(b2);
+
+    final boolean b3 = TestObject.ifnull(new LinkedList<>());
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void ifnonnull() {
+    final boolean b1 = TestObject.ifnonnull(null);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = TestObject.ifnonnull(new Object());
+    Assert.assertTrue(b2);
+
+    final boolean b3 = TestObject.ifnonnull(new LinkedList<>());
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void goto_after() {
+    final boolean b1 = TestGoto.goto_after(10, 100);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = TestGoto.goto_after(100, 10);
+    Assert.assertFalse(b2);
+  }
+
+  @Test
+  public void goto_before() {
+    final int i = TestGoto.goto_before();
+    Assert.assertEquals(-55, i);
+  }
+
+  @Test
+  public void tableswitch() {
+    final int i1 = TestSwitch.tableswitch(5);
+    Assert.assertEquals(10, i1);
+
+    final int i2 = TestSwitch.tableswitch(6);
+    Assert.assertEquals(12, i2);
+
+    final int i3 = TestSwitch.tableswitch(7);
+    Assert.assertEquals(14, i3);
+
+    final int i4 = TestSwitch.tableswitch(1);
+    Assert.assertEquals(100, i4);
+  }
+
+  @Test
+  public void tableswitch_signed() {
+    final int i1 = TestSwitch.tableswitch_signed(-1);
+    Assert.assertEquals(14, i1);
+
+    final int i2 = TestSwitch.tableswitch_signed(0);
+    Assert.assertEquals(10, i2);
+
+    final int i3 = TestSwitch.tableswitch_signed(1);
+    Assert.assertEquals(12, i3);
+
+    final int i4 = TestSwitch.tableswitch_signed(10);
+    Assert.assertEquals(100, i4);
+  }
+
+  @Test
+  public void tableswitch_neg() {
+    final int i1 = TestSwitch.tableswitch_neg(-1);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = TestSwitch.tableswitch_neg(0);
+    Assert.assertEquals(3, i2);
+
+    final int i3 = TestSwitch.tableswitch_neg(1);
+    Assert.assertEquals(1, i3);
+  }
+
+  @Test
+  public void lookupswitch() {
+    final int i1 = TestSwitch.lookupswitch(5);
+    Assert.assertEquals(10, i1);
+
+    final int i2 = TestSwitch.lookupswitch(10);
+    Assert.assertEquals(20, i2);
+
+    final int i3 = TestSwitch.lookupswitch(15);
+    Assert.assertEquals(30, i3);
+
+    final int i4 = TestSwitch.tableswitch(1);
+    Assert.assertEquals(100, i4);
+  }
+
+  @Test
+  public void lookupswitch_signed() {
+    final int i1 = TestSwitch.lookupswitch_signed(-5);
+    Assert.assertEquals(10, i1);
+
+    final int i2 = TestSwitch.lookupswitch_signed(-10);
+    Assert.assertEquals(20, i2);
+
+    final int i3 = TestSwitch.lookupswitch_signed(15);
+    Assert.assertEquals(30, i3);
+
+    final int i4 = TestSwitch.lookupswitch_signed(1);
+    Assert.assertEquals(100, i4);
+  }
+
+  @Test
+  public void lookupswitch_neg() {
+    final int i1 = TestSwitch.lookupswitch_neg(-1);
+    Assert.assertEquals(-1, i1);
+
+    final int i2 = TestSwitch.lookupswitch_neg(0);
+    Assert.assertEquals(3, i2);
+
+    final int i3 = TestSwitch.lookupswitch_neg(1);
+    Assert.assertEquals(1, i3);
   }
 }

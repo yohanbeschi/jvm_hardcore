@@ -178,12 +178,22 @@ public class Classes {
     this.buildIfIcmpge(builder);
     this.buildIfIcmpgt(builder);
     this.buildIfIcmple(builder);
+    this.buildIfAcmpeq(builder);
+    this.buildIfAcmpne(builder);
     this.buildWideIinc(builder);
     this.buildWideIStoreLoad(builder);
     this.buildWideLStoreLoad(builder);
     this.buildWideFStoreLoad(builder);
     this.buildWideDStoreLoad(builder);
     this.buildWideAStoreLoad(builder);
+    this.buildGotoBefore(builder);
+    this.buildGotoAfter(builder);
+    this.buildTableswitch(builder);
+    this.buildLookupswitch(builder);
+    this.buildIfnull(builder);
+    this.buildIfnonnull(builder);
+    this.buildGotoWBefore(builder);
+    this.buildGotoWAfter(builder);
 
     // Used everywhere => No test needed
     // this.buildIReturn(builder);
@@ -1466,6 +1476,108 @@ public class Classes {
       .ireturn();
   }
 
+  private void buildIfAcmpeq(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_acmpeq", "(Ljava/lang/Object;Ljava/lang/Object;)Z")
+      .aload_0()
+      .aload_1()
+      .if_acmpeq("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfAcmpne(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "if_acmpne", "(Ljava/lang/Object;Ljava/lang/Object;)Z")
+      .aload_0()
+      .aload_1()
+      .if_acmpne("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildGotoBefore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "goto_before", "()I")
+      .iconst_0()
+      .istore_0()
+      .iconst_0()
+      .istore_1()
+      .label("loop")
+      .iload_1()
+      .bipush((byte) 10)
+      .if_icmpge("outLoop")
+      .iload_0()
+      .iload_1()
+      .iadd()
+      .istore_0()
+      .iinc((short) 1, (short) 1)
+      .goto_("loop")
+      .label("outLoop")
+      .iload_0()
+      .ireturn();
+  }
+
+  private void buildGotoAfter(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "goto_after", "(II)Z")
+      .iload_0()
+      .iload_1()
+      .if_icmpge("ko")
+      .iconst_1()
+      .goto_("return")
+      .label("ko")
+      .iconst_0()
+      .label("return")
+      .ireturn();
+  }
+
+  private void buildTableswitch(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "tableswitch", "(I)I")
+      .iload_0()
+      .tableswitch("default", 5, 7)
+        .offset("label_5")
+        .offset("label_6")
+        .offset("label_7")
+      .end()
+      .label("label_5")
+      .bipush((byte) 10)
+      .ireturn()
+      .label("label_6")
+      .bipush((byte) 12)
+      .ireturn()
+      .label("label_7")
+      .bipush((byte) 14)
+      .ireturn()
+      .label("default")
+      .bipush((byte) 100)
+      .ireturn();
+  }
+
+  private void buildLookupswitch(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lookupswitch", "(I)I")
+      .iload_0()
+      .lookupswitch("default", 3)
+        .matchOffset(5, "label_5")
+        .matchOffset(10, "label_10")
+        .matchOffset(15, "label_15")
+      .end()
+      .label("label_5")
+      .bipush((byte) 10)
+      .ireturn()
+      .label("label_10")
+      .bipush((byte) 20)
+      .ireturn()
+      .label("label_15")
+      .bipush((byte) 30)
+      .ireturn()
+      .label("default")
+      .bipush((byte) 100)
+      .ireturn();
+  }
+
   private void buildIStoreLoadUnsigned(ClassFileBuilder builder) {
     builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore_load_unsigned", "()I")
       .sipush((short)7_687)
@@ -1560,5 +1672,78 @@ public class Classes {
       .astore((short)-24_365)
       .aload((short)-24_365)
       .areturn();
+  }
+
+  private void buildIfnull(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifnull", "(Ljava/lang/Object;)Z")
+      .aload_0()
+      .ifnull("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+
+  private void buildIfnonnull(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifnonnull", "(Ljava/lang/Object;)Z")
+      .aload_0()
+      .ifnonnull("ok")
+      .iconst_0()
+      .ireturn()
+      .label("ok")
+      .iconst_1()
+      .ireturn();
+  }
+  
+  private void buildGotoWBefore(ClassFileBuilder builder) {
+    final MethodBuilder mb = builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "goto_w_before", "()I", false)
+      .iconst_0()
+      .istore_0()
+      .iconst_0()
+      .istore_1()
+      .label("loop")
+      .iload_1()
+      .bipush((byte) 10)
+      .if_icmplt("ok")
+      .goto_("outLoop")
+      .label("ok");
+
+    // Start at 2 because we don't want to rewrite the counter at index 0
+    // if so we would have an unlimited loop
+    for (int i = 2; i < 10_002; i++) {
+      mb.iconst_0();
+      mb.istore((short) i);
+    }
+
+    mb.iload_0()
+      .iload_1()
+      .iadd()
+      .istore_0()
+      .iinc((short) 1, (short) 1)
+      .goto_("loop")
+      .label("outLoop")
+      .iload_0()
+      .ireturn();
+  }
+
+  private void buildGotoWAfter(ClassFileBuilder builder) {
+    final MethodBuilder mb = builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "goto_w_after", "(II)Z", false)
+      .iload_0()
+      .iload_1()
+      .if_icmpge("ko")
+      .iconst_1()
+      .goto_("return")
+      .label("ko")
+      .iconst_0()
+      .goto_("return");
+
+    for (int i = 0; i < 10_000; i++) {
+      mb.iconst_0();
+      mb.istore((short) i);
+    }
+
+    mb.label("return")
+      .ireturn();
   }
 }

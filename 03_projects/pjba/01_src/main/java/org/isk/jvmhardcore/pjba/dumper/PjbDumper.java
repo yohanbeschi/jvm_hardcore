@@ -3,6 +3,8 @@ package org.isk.jvmhardcore.pjba.dumper;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.isk.jvmhardcore.pjba.instruction.LookupswitchInstruction;
+import org.isk.jvmhardcore.pjba.instruction.TableswitchInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
@@ -281,6 +283,7 @@ public class PjbDumper implements Visitor {
         printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) value), this.classFile);
         break;
       case LABEL:
+      case GOTO:
         printableValue = this.getLabel(value);
         break;
       default:
@@ -290,6 +293,14 @@ public class PjbDumper implements Visitor {
     this.currentInstruction.append(" ").append(printableValue).append("\n");
     this.writeInstruction();
     this.currentMethodLength += 3;
+  }
+
+  @Override
+  public void visitInstructionInt(int value) {
+    final String printableValue = this.getLabel(value);
+    this.currentInstruction.append(" ").append(printableValue).append("\n");
+    this.writeInstruction();
+    this.currentMethodLength += 5;
   }
 
   @Override
@@ -315,6 +326,37 @@ public class PjbDumper implements Visitor {
 
     this.writeInstruction();
     this.currentMethodLength += 4;
+  }
+
+  @Override
+  public void visitInstructionTableSwitch(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets) {
+    final String defaultLabel = this.getLabel(defaultOffset);
+
+    this.currentInstruction.append(" ").append(defaultLabel).append(" ").append(lowValue).append(" ").append(highValue)
+        .append("\n");
+
+    for (int jumpOffset : jumpOffsets) {
+      final String label = this.getLabel(jumpOffset);
+      this.currentInstruction.append("      ").append(label).append("\n");
+    }
+
+    this.writeInstruction();
+    this.currentMethodLength += TableswitchInstruction.getLength(padding, jumpOffsets.length);
+  }
+
+  @Override
+  public void visitInstructionLookupSwitch(int padding, int defaultOffset, int nbPairs, int[] keys, int[] jumpOffsets) {
+    final String defaultLabel = this.getLabel(defaultOffset);
+
+    this.currentInstruction.append(" ").append(defaultLabel).append(" ").append(nbPairs).append("\n");
+
+    for (int i = 0; i < nbPairs; i++) {
+      final String label = this.getLabel(jumpOffsets[i]);
+      this.currentInstruction.append("      ").append(keys[i]).append(" ").append(label).append("\n");
+    }
+
+    this.writeInstruction();
+    this.currentMethodLength += LookupswitchInstruction.getLength(padding, keys.length);
   }
 
   private void writeInstruction() {

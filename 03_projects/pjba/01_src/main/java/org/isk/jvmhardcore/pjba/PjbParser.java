@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
+import org.isk.jvmhardcore.pjba.builder.LookupwitchBuilder;
 import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
+import org.isk.jvmhardcore.pjba.builder.TableswitchBuilder;
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
 import org.isk.jvmhardcore.pjba.instruction.meta.ByteArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
@@ -169,6 +171,51 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
         final String label = this.tokenizer.getLabelAsArg();
         final Instruction ifInstruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction((byte)0);
         this.methodBuilder.instruction(ifInstruction, label);
+        break;
+      case GOTO:
+        this.tokenizer.consumeWhitespaces();
+        final String gLabel = this.tokenizer.getLabelAsArg();
+        this.methodBuilder.goto_(gLabel);
+        break;
+      case TABLE_SWITCH:
+        this.tokenizer.consumeWhitespaces();
+        final String tDefaultLabel = this.tokenizer.getLabelAsArg();
+        this.tokenizer.consumeWhitespaces();
+        final int lowValue = this.tokenizer.getIntValue();
+        this.tokenizer.consumeWhitespaces();
+        final int highValue = this.tokenizer.getIntValue();
+        this.tokenizer.consumeWhitespaces();
+        final TableswitchBuilder tsb = this.methodBuilder.tableswitch(tDefaultLabel, lowValue, highValue);
+
+        final int nbOffsets = highValue - lowValue + 1;
+
+        for (int i = 0; i < nbOffsets; i++) {
+          this.tokenizer.consumeWhitespaces();
+          final String tLabel = this.tokenizer.getLabelAsArg();
+          tsb.offset(tLabel);
+        }
+
+        tsb.end();
+
+        break;
+      case LOOKUP_SWITCH:
+        this.tokenizer.consumeWhitespaces();
+        final String defaultLabel = this.tokenizer.getLabelAsArg();
+        this.tokenizer.consumeWhitespaces();
+        final int nbPairs = this.tokenizer.getIntValue();
+        this.tokenizer.consumeWhitespaces();
+        final LookupwitchBuilder lsb = this.methodBuilder.lookupswitch(defaultLabel, nbPairs);
+
+        for (int i = 0; i < nbPairs; i++) {
+          this.tokenizer.consumeWhitespaces();
+          final int key = this.tokenizer.getIntValue();
+          this.tokenizer.consumeWhitespaces();
+          final String lLabel = this.tokenizer.getLabelAsArg();
+          lsb.matchOffset(key, lLabel);
+        }
+
+        lsb.end();
+
         break;
       case W_IFS_CONSTANT:
       default:

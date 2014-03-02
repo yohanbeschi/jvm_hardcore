@@ -4,12 +4,17 @@ import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 
+import org.isk.jvmhardcore.pjba.instruction.LookupswitchInstruction;
+import org.isk.jvmhardcore.pjba.instruction.TableswitchInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.ByteArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.IincMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.IntArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.LookupswitchMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
 import org.isk.jvmhardcore.pjba.instruction.meta.NoArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.ShortArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.TableswitchMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.WideMetaInstruction;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Constant;
@@ -209,6 +214,10 @@ public class Disassembler {
         bytesProceed += 2;
         final short s = this.readShort();
         instruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction(s);
+      } else if (metaInstruction instanceof IntArgMetaInstruction) {
+        bytesProceed += 4;
+        final int i = this.readInt();
+        instruction = ((IntArgMetaInstruction) metaInstruction).buildInstruction(i);
       } else if (metaInstruction instanceof IincMetaInstruction) {
         bytesProceed += 2;
         final byte indexInLV = this.readByte();
@@ -230,12 +239,56 @@ public class Disassembler {
             final short otherIndexInLV = this.readShort();
             instruction = ((WideMetaInstruction) metaInstruction).buildInstruction((byte)widenedOpcode, otherIndexInLV);
         }
+      } else if (metaInstruction instanceof TableswitchMetaInstruction) {
+        final int padding = this.readSwitchPadding(bytesProceed - 1);
+        final int defaultOffset = this.readInt();
+        final int lowValue = this.readInt();
+        final int highValue = this.readInt();
+        final int[] jumpOffsets = new int[highValue - lowValue + 1];
+
+        for (int i = 0; i < jumpOffsets.length; i++) {
+          jumpOffsets[i] = this.readInt();
+        }
+
+        bytesProceed += TableswitchInstruction.getLength(padding, jumpOffsets.length) - 1;
+
+        instruction = ((TableswitchMetaInstruction) metaInstruction).buildInstruction(padding, defaultOffset, lowValue,
+            highValue, jumpOffsets);
+      } else if (metaInstruction instanceof LookupswitchMetaInstruction) {
+        final int padding = this.readSwitchPadding(bytesProceed - 1);
+        final int defaultOffset = this.readInt();
+        final int nbPairs = this.readInt();
+        final int[] keys = new int[nbPairs];
+        final int[] offsets = new int[nbPairs];
+        
+        for (int i = 0; i < keys.length; i++) {
+          keys[i] = this.readInt();
+          offsets[i] = this.readInt();
+        }
+        
+        bytesProceed += LookupswitchInstruction.getLength(padding, keys.length) - 1;
+
+        instruction = ((LookupswitchMetaInstruction) metaInstruction).buildInstruction(padding, defaultOffset, nbPairs, keys, offsets);
       }
 
       instructions.add(instruction);
     }
 
     return instructions;
+  }
+
+  private int readSwitchPadding(int bytesProceed) {
+    final int padding = 3 - bytesProceed % 4;
+
+    if (padding == 1) {
+      this.readByte();
+    } else if (padding == 2) {
+      this.readShort();
+    } else if (padding == 3) {
+      this.readByte();
+      this.readShort();
+    }
+    return padding;
   }
 
   // -------------------------------------------------------------------------------------------------------------------

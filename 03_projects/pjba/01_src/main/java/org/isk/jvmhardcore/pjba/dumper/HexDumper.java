@@ -1,5 +1,7 @@
 package org.isk.jvmhardcore.pjba.dumper;
 
+import org.isk.jvmhardcore.pjba.instruction.LookupswitchInstruction;
+import org.isk.jvmhardcore.pjba.instruction.TableswitchInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction.ArgsType;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
@@ -262,6 +264,7 @@ public class HexDumper implements Visitor {
         this.pjb.append(" #").append(BytecodeUtils.unsign((short) value)).append("\n");
         break;
       case LABEL:
+      case GOTO:
         this.pjb.append(" <").append(value).append(">\n");
         break;
       default:
@@ -270,6 +273,14 @@ public class HexDumper implements Visitor {
 
     this.currentMethodLength += 2;
     this.getHexAndAdd(2);
+  }
+
+  @Override
+  public void visitInstructionInt(int value) {
+    this.pjb.append(" <").append(value).append(">\n");
+    
+    this.currentMethodLength += 4;
+    this.getHexAndAdd(4);
   }
 
   @Override
@@ -297,6 +308,35 @@ public class HexDumper implements Visitor {
 
     this.currentMethodLength += 3;
     this.getHexAndAdd(3);
+  }
+
+  @Override
+  public void visitInstructionTableSwitch(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets) {
+    this.pjb.append(" ").append(padding).append(" <").append(BytecodeUtils.unsign(defaultOffset)).append("> ")
+            .append(lowValue).append(" ").append(highValue).append("\n");
+
+    for (int jumpOffset : jumpOffsets) {
+      this.pjb.append("                     <").append(BytecodeUtils.unsign(jumpOffset)).append(">\n");
+    }
+
+    final int length = TableswitchInstruction.getLength(padding, jumpOffsets.length) - 1;
+    this.currentMethodLength += length;
+    this.getHexAndAdd(length);
+  }
+
+  @Override
+  public void visitInstructionLookupSwitch(int padding, int defaultOffset, int nbPairs, int[] keys, int[] jumpOffsets) {
+    this.pjb.append(" ").append(padding).append(" <").append(BytecodeUtils.unsign(defaultOffset)).append("> ")
+            .append(nbPairs).append("\n");
+
+    for (int i = 0; i < nbPairs; i++) {
+      this.pjb.append("                     ").append(keys[i])
+              .append(": <").append(BytecodeUtils.unsign(jumpOffsets[i])).append(">\n");
+    }
+
+    final int length = LookupswitchInstruction.getLength(padding, keys.length) - 1;
+    this.currentMethodLength += length;
+    this.getHexAndAdd(length);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

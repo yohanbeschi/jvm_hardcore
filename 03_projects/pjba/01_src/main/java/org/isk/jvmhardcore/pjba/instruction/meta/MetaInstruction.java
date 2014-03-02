@@ -46,6 +46,10 @@ public abstract class MetaInstruction {
     IINC, // byte, byte
     WIDE, // 1 byte + 1 short or 1 byte + 1 short + 1 short 
     LV_INDEX, // => 1 byte or 1 short
-    LABEL;
+    LABEL, // => 1 short (unsigned)
+    GOTO, // => 1 short (signed)
+    GOTO_W, // => 1 int (signed)
+    TABLE_SWITCH,
+    LOOKUP_SWITCH;
   }
 }

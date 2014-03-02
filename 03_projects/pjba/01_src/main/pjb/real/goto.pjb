@@ -1,0 +1,32 @@
+.class public org/isk/pjb/TestGoto
+  .method public static goto_after(II)Z
+    iload_0
+    iload_1
+    if_icmpge ko
+    iconst_1
+    goto return
+    ko:
+    iconst_0
+    return:
+    ireturn
+  .methodend
+
+  .method public static goto_before()I
+    bipush -10
+    istore_0
+    iconst_0
+    istore_1
+    loop:
+    iload_0
+    ifge outLoop
+    iload_0
+    iload_1
+    iadd
+    istore_1
+    iinc 0 1
+    goto loop
+    outLoop:
+    iload_1
+    ireturn
+  .methodend
+.classend

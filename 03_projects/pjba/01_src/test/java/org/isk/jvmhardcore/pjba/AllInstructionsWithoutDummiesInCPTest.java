@@ -1,5 +1,7 @@
 package org.isk.jvmhardcore.pjba;
 
+import java.util.LinkedList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -1079,6 +1081,75 @@ public class AllInstructionsWithoutDummiesInCPTest {
   }
 
   @Test
+  public void if_acmpeq() {
+    final Object o1 = new Object();
+    final Object o2 = new Object();
+
+    final boolean b1 = AllInstructionsWithoutDummiesInCP.if_acmpeq(o1, o1);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithoutDummiesInCP.if_acmpeq(o2, o1);
+    Assert.assertFalse(b2);
+  }
+
+  @Test
+  public void if_acmpne() {
+    final Object o1 = new Object();
+    final Object o2 = new Object();
+
+    final boolean b1 = AllInstructionsWithoutDummiesInCP.if_acmpne(o1, o1);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithoutDummiesInCP.if_acmpne(o1, o2);
+    Assert.assertTrue(b2);
+  }
+
+  @Test
+  public void goto_before() {
+    final int i = AllInstructionsWithoutDummiesInCP.goto_before();
+    Assert.assertEquals(45, i);
+  }
+
+  @Test
+  public void goto_after() {
+    final boolean b1 = AllInstructionsWithoutDummiesInCP.goto_after(10, 100);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithoutDummiesInCP.goto_after(100, 10);
+    Assert.assertFalse(b2);
+  }
+
+  @Test
+  public void tableswitch() {
+    final int i1 = AllInstructionsWithoutDummiesInCP.tableswitch(5);
+    Assert.assertEquals(10, i1);
+
+    final int i2 = AllInstructionsWithoutDummiesInCP.tableswitch(6);
+    Assert.assertEquals(12, i2);
+
+    final int i3 = AllInstructionsWithoutDummiesInCP.tableswitch(7);
+    Assert.assertEquals(14, i3);
+
+    final int i4 = AllInstructionsWithoutDummiesInCP.tableswitch(1);
+    Assert.assertEquals(100, i4);
+  }
+
+  @Test
+  public void lookupswitch() {
+    final int i1 = AllInstructionsWithoutDummiesInCP.lookupswitch(5);
+    Assert.assertEquals(10, i1);
+
+    final int i2 = AllInstructionsWithoutDummiesInCP.lookupswitch(10);
+    Assert.assertEquals(20, i2);
+
+    final int i3 = AllInstructionsWithoutDummiesInCP.lookupswitch(15);
+    Assert.assertEquals(30, i3);
+
+    final int i4 = AllInstructionsWithoutDummiesInCP.tableswitch(1);
+    Assert.assertEquals(100, i4);
+  }
+
+  @Test
   public void wide_iinc() {
     final long l = AllInstructionsWithoutDummiesInCP.wide_iinc(10_000);
     Assert.assertEquals(((long) -20_000 << 32) | 6, l);
@@ -1112,6 +1183,45 @@ public class AllInstructionsWithoutDummiesInCPTest {
   public void wide_astore_aload() {
     final Object o = AllInstructionsWithoutDummiesInCP.wide_astore_aload();
     Assert.assertNull(o);
+  }
+
+  @Test
+  public void ifnull() {
+    final boolean b1 = AllInstructionsWithoutDummiesInCP.ifnull(null);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithoutDummiesInCP.ifnull(new Object());
+    Assert.assertFalse(b2);
+
+    final boolean b3 = AllInstructionsWithoutDummiesInCP.ifnull(new LinkedList<>());
+    Assert.assertFalse(b3);
+  }
+
+  @Test
+  public void ifnonnull() {
+    final boolean b1 = AllInstructionsWithoutDummiesInCP.ifnonnull(null);
+    Assert.assertFalse(b1);
+
+    final boolean b2 = AllInstructionsWithoutDummiesInCP.ifnonnull(new Object());
+    Assert.assertTrue(b2);
+
+    final boolean b3 = AllInstructionsWithoutDummiesInCP.ifnonnull(new LinkedList<>());
+    Assert.assertTrue(b3);
+  }
+
+  @Test
+  public void goto_w_before() {
+    final int i = AllInstructionsWithoutDummiesInCP.goto_w_before();
+    Assert.assertEquals(45, i);
+  }
+
+  @Test
+  public void goto_w_after() {
+    final boolean b1 = AllInstructionsWithoutDummiesInCP.goto_w_after(10, 100);
+    Assert.assertTrue(b1);
+
+    final boolean b2 = AllInstructionsWithoutDummiesInCP.goto_w_after(100, 10);
+    Assert.assertFalse(b2);
   }
 
   @Test

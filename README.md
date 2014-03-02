@@ -277,3 +277,12 @@ Comparisons and control (1/3).
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 16 – Bytecode – Comparaisons et contrôle - 1/3](http://blog.soat.fr/2014/02/17-jvm-hardcore-part-16-bytecode-comparaisons-et-controle-13)
+
+## part17
+### Summary
+Comparisons and control (2/3).
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 17 – Bytecode – Comparaisons et contrôle - 2/3](http://blog.soat.fr/2014/03/18-jvm-hardcore-part-17-bytecode-comparaisons-et-controle-23)

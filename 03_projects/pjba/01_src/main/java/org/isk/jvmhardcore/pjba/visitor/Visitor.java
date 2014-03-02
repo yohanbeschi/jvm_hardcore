@@ -56,7 +56,10 @@ public interface Visitor {
   void visitOpcode(int opcode);
   void visitInstructionByte(int value);
   void visitInstructionShort(int value);
+  void visitInstructionInt(int arg);
   void visitInstructionIinc(int indexInLV, int constant);
   void visitInstructionWideIinc(int widenedOpcode, int indexInLV, int constant);
   void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV);
+  void visitInstructionTableSwitch(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets);
+  void visitInstructionLookupSwitch(int padding, int defaultOffset, int nbPairs, int[] keys, int[] jumpOffsets);
 }

@@ -1,0 +1,40 @@
+<project name="mystery" default="test" xmlns:plume="http://blog.soat.fr/ant-macros">
+  <import file="../../01_conf/targets.xml" />
+  <description>Logical expressions to bytecode</description>
+
+  <!--+=========================================================================================+-->
+  <!--+ Classpath                                                                               +-->
+	<!--+=========================================================================================+-->
+  <!-- To compile tests -->
+  <path id="test.compile.classpath">
+		<fileset dir="${libs.dir}">
+      <include name="junit-4.10.jar" />
+    </fileset>
+		<pathelement location="${build.classes.dir}" />
+  </path>
+  
+  <!-- To run tests -->
+  <path id="test.classpath">
+		<path refid="test.compile.classpath"/>
+		<pathelement location="${build.test-classes.dir}" />
+  </path>
+  
+  <!--+=========================================================================================+-->
+  <!--+ Targets                                                                                 +-->
+	<!--+=========================================================================================+-->	
+  <target name="compile" depends="-init">
+    <plume:compiler srcDir="${src.main.java.dir}" destDir="${build.classes.dir}" />
+    <plume:compiler srcDir="${src.test.java.dir}" 
+                    destDir="${build.test-classes.dir}"
+                    classpath="test.compile.classpath" />
+  </target>
+  
+  <target name="test" depends="compile">
+    <plume:tester classpath="test.classpath"
+                  dataDir="${build.junit-data.dir}"
+                  testClass="${testClass}"
+                  testMethod="${testMethod}"
+                  testDir="${build.test-classes.dir}"
+                  reportsDir="${build.junit-reports.dir}" />  
+  </target>
+</project>

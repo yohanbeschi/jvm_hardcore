@@ -1,0 +1,257 @@
+.class public org/isk/pjb/LExp
+  @ (a | 2) + 567 * b
+  .method public static arithmetic(II)I
+    iload 0
+    ldc 2
+    ior
+    ldc 567
+    iload 1
+    imul
+    iadd
+    ireturn
+  .methodend
+
+  @ a < b
+  .method public static relational0(II)Z
+    iload 0
+    iload 1
+    if_icmpge ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a && b >= 0
+  .method public static relational1(ZI)Z
+    iload 0
+    ifeq ko
+    iload 1
+    iflt ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a && 5 >= 10
+  .method public static relational2(Z)Z
+    iload 0
+    ifeq ko
+    ldc 5
+    ldc 10
+    if_icmplt ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+  
+  @ a (or a == true)
+  .method public static returnTrue(Z)Z
+    iload 0
+    ireturn
+  .methodend
+
+  @ a && b
+  .method public static and(ZZ)Z
+    iload 0
+    ifeq ko
+    iload 1
+    ifeq ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ a || b
+  .method public static or(ZZ)Z
+    iload 0
+    ifne ok
+    iload 1
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ (a && b) || c
+  .method public static or_and(ZZZ)Z
+    iload 0
+    ifeq or1
+    iload 1
+    ifne ok
+    or1:
+    iload 2
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ (a || b) && c
+  .method public static and_or(ZZZ)Z
+    iload 0
+    ifne and1
+    iload 1
+    ifeq ko
+    and1:
+    iload 2
+    ifeq ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ ((a || b) || (c || d)) && e
+  .method public static and_or_or(ZZZZZ)Z
+    iload 0
+    ifne and1
+    iload 1
+    ifne and1
+    iload 2
+    ifne and1
+    iload 3
+    ifeq ko
+    and1:
+    iload 4
+    ifeq ko
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ ((a && b) && (c && d)) || e
+  .method public static or_and_and(ZZZZZ)Z
+    iload 0
+    ifeq or1
+    iload 1
+    ifeq or1
+    iload 2
+    ifeq or1
+    iload 3
+    ifne ok
+    or1:
+    iload 4
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ (a && (b || c)) && (d || e)
+  .method public static mixed1(ZZZZZ)Z
+    iload 0
+    ifeq ko
+    iload 1
+    ifne and1
+    iload 2
+    ifeq ko
+    and1:
+    iload 3
+    ifne ok
+    iload 4
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ (a || (b && c)) || (d && e)
+  .method public static mixed2(ZZZZZ)Z
+    iload 0
+    ifne ok
+    iload 1
+    ifeq or1
+    iload 2
+    ifne ok
+    or1:
+    iload 3
+    ifeq ko
+    iload 4
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ ((a || b) && (c && (d || e))) || (f || (g && h))
+  .method public static mixed3(ZZZZZZZZ)Z
+    iload 0
+    ifne and1
+    iload 1
+    ifeq or1
+    and1:
+    iload 2
+    ifeq or1
+    iload 3
+    ifne ok
+    iload 4
+    ifne ok
+    or1:
+    iload 5
+    ifne ok
+    iload 6
+    ifeq ko
+    iload 7
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+
+  @ ((a && b) || (c || (d && e))) && (f && (g || h))
+  .method public static mixed4(ZZZZZZZZ)Z
+    iload 0
+    ifeq or1
+    iload 1
+    ifne and1
+    or1:
+    iload 2
+    ifne and1
+    iload 3
+    ifeq ko
+    iload 4
+    ifeq ko
+    and1:
+    iload 5
+    ifeq ko
+    iload 6
+    ifne ok
+    iload 7
+    ifeq ko
+    ok:
+    iconst_1
+    ireturn
+    ko:
+    iconst_0
+    ireturn
+  .methodend
+.classend

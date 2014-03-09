@@ -15,6 +15,7 @@
     <ant dir="${projects.dir}/encoding/" target="${target}"  inheritAll="false"/>
     <ant dir="${projects.dir}/visitor/" target="${target}"  inheritAll="false" />
     <ant dir="${projects.dir}/pjba/" target="${target}"  inheritAll="false" />
+    <ant dir="${projects.dir}/logicalexp/" target="${target}"  inheritAll="false" />
   </target>
 
   <target name="nop" description="Checks projects build">

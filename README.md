@@ -287,7 +287,7 @@ The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 17 – Bytecode – Comparaisons et contrôle - 2/3](http://blog.soat.fr/2014/03/18-jvm-hardcore-part-17-bytecode-comparaisons-et-controle-23)
 
-## part17
+## part18
 ### Summary
 Converting a logical expression into bytecode.
 
@@ -295,3 +295,13 @@ Converting a logical expression into bytecode.
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 18 – Bytecode - Convertir une expression logique en bytecode](http://blog.soat.fr/2014/03/19-jvm-hardcore-part-18-convertir-une-expression-logique-en-bytecode)
+
+## part19
+(No change in code)
+### Summary
+Comparisons and control (3/3).
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 19 – Bytecode – Comparaisons et contrôle - 3/3](http://blog.soat.fr/2014/03/20-jvm-hardcore-part-19-bytecode-comparaisons-et-controle-33)

@@ -776,6 +776,18 @@ public class Instructions {
     return RETURN;
   }
 
+  public static Instruction getstatic(short indexInCP, int sizeInStack) {
+    return new ShortArgInstruction(0xb2, sizeInStack, 0, indexInCP);
+  }
+
+  public static Instruction putstatic(short indexInCP, int sizeInStack) {
+    return new ShortArgInstruction(0xb3, -sizeInStack, 0, indexInCP);
+  }
+
+  public static Instruction invokestatic(short indexInCP, int stackDelta) {
+    return new ShortArgInstruction(0xb8, stackDelta, 0, indexInCP);
+  }
+
   public static Instruction wide_iload(short indexInLV) {
     return new WideLoadStoreInstruction(0xc4, 1, BytecodeUtils.unsign(indexInLV) + 1, 0x15, indexInLV);
   }

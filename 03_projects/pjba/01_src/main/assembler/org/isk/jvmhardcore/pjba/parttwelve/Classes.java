@@ -4,6 +4,7 @@ import org.isk.jvmhardcore.pjba.instruction.Instructions;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.isk.jvmhardcore.pjba.structure.attribute.Code;
+import org.isk.jvmhardcore.pjba.util.DescriptorCounter;
 import org.junit.Test;
 
 public class Classes {
@@ -31,8 +32,8 @@ public class Classes {
     // Code
     final int codeAttributeIndex = classFile.addConstantUTF8(Code.ATTRIBUTE_NAME);
     final Code code = new Code(codeAttributeIndex);
-    final int parameterCount = method.countParameters(methodDescriptor);
-    code.setParameterCount(parameterCount);
+    final int locals = DescriptorCounter.methodsDescriptorParamsUnits(methodDescriptor);
+    code.setParameterCount(locals);
 
     // Instructions
     code.addInstruction(Instructions.iload_0());

@@ -50,6 +50,8 @@ public abstract class MetaInstruction {
     GOTO, // => 1 short (signed)
     GOTO_W, // => 1 int (signed)
     TABLE_SWITCH,
-    LOOKUP_SWITCH;
+    LOOKUP_SWITCH,
+    FIELD,
+    METHOD;
   }
 }

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
-import org.isk.jvmhardcore.pjba.builder.LookupwitchBuilder;
+import org.isk.jvmhardcore.pjba.builder.LookupswitchBuilder;
 import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
 import org.isk.jvmhardcore.pjba.builder.TableswitchBuilder;
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
@@ -19,7 +19,9 @@ import org.isk.jvmhardcore.pjba.parser.Productions;
 import org.isk.jvmhardcore.pjba.parser.Symbols;
 import org.isk.jvmhardcore.pjba.parser.core.InputStreamReader;
 import org.isk.jvmhardcore.pjba.parser.core.Parser;
+import org.isk.jvmhardcore.pjba.parser.tokenizer.LiteralTokenizer.InternalConstantValue;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.jvmhardcore.pjba.structure.Field;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
 
 public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> {
@@ -42,6 +44,10 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
   public List<ClassFile> parse() {
     EventType eventType = null;
     int classModifiers = 0;
+    int fieldModifiers = 0;
+    String fieldName = null;
+    String fieldDescriptor = null;
+    InternalConstantValue constantValue = null;
     int methodModifiers = 0;
     String methodName = null;
 
@@ -64,6 +70,48 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
           this.tokenizer.checkClassEnd();
           this.classFiles.add(this.classFileBuilder.build());
           classModifiers = 0;
+          break;
+        case FIELD_START:
+          this.tokenizer.checkFieldStart();
+          break;
+        case FIELD_MODIFIER:
+          fieldModifiers |= this.tokenizer.getFieldModifier();
+          break;
+        case FIELD_NAME:
+          fieldName = this.tokenizer.getFieldName();
+          break;
+        case FIELD_TYPE:
+          fieldDescriptor = this.tokenizer.getFieldType();
+          break;
+        case CONSTANT_VALUE:
+          constantValue = this.tokenizer.getConstantValue();
+          break;
+        case FIELD_END:
+          if (constantValue == null) {
+            this.classFileBuilder.newField(fieldModifiers, fieldName, fieldDescriptor);
+          } else if ((fieldModifiers & Field.MODIFIER_FINAL) == Field.MODIFIER_FINAL) {
+            if (constantValue.isString()) {
+              this.classFileBuilder.newConstantField(fieldModifiers, fieldName, fieldDescriptor, constantValue.getString());
+            } else if (constantValue.isInteger()) {
+              this.classFileBuilder.newConstantField(fieldModifiers, fieldName, fieldDescriptor, constantValue.getInt());
+            } else if (constantValue.isLong()) {
+              this.classFileBuilder.newConstantField(fieldModifiers, fieldName, fieldDescriptor, constantValue.getLong());
+            } else if (constantValue.isFloat()) {
+              this.classFileBuilder.newConstantField(fieldModifiers, fieldName, fieldDescriptor, constantValue.getFloat());
+            } else if (constantValue.isDouble()) {
+              this.classFileBuilder.newConstantField(fieldModifiers, fieldName, fieldDescriptor, constantValue.getDouble());
+            }
+
+            constantValue = null;
+          } else {
+            throw this.tokenizer.new ParserException(
+                  "The field <"
+                + fieldName
+                + "> can't be initialized because it's not <final>. Tip: If the field is not intended to be <final> " +
+                "you need to initialize it in a static block.", false);
+          }
+
+          fieldModifiers = 0;
           break;
         case METHOD_START:
           this.tokenizer.checkMethodStart();
@@ -124,25 +172,29 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
         break;
       case IFS_CONSTANT:
         this.tokenizer.consumeWhitespaces();
-        final Object ifs = this.tokenizer.getIfsConstant();
+        final InternalConstantValue ifs = this.tokenizer.getConstantValue();
 
-        if (ifs instanceof Integer) {
-          this.methodBuilder.ldc((int) ifs);
-        } else if (ifs instanceof Float) {
-          this.methodBuilder.ldc((float) ifs);
-        } else if (ifs instanceof String) {
-          this.methodBuilder.ldc((String) ifs);
+        if (ifs.isLong() || ifs.isInteger()) {
+          this.methodBuilder.ldc(ifs.getInt());
+        } else if (ifs.isDouble() || ifs.isFloat()) {
+          this.methodBuilder.ldc(ifs.getFloat());
+        } else if (ifs.isString()) {
+          this.methodBuilder.ldc(ifs.getString());
+        } else {
+          throw new RuntimeException("Expected: an int, a float or a string");
         }
 
         break;
       case LD_CONSTANT:
         this.tokenizer.consumeWhitespaces();
-        final Object ld = this.tokenizer.getLdConstant();
+        final InternalConstantValue ld = this.tokenizer.getConstantValue();
 
-        if (ld instanceof Long) {
-          this.methodBuilder.ldc((long) ld);
-        } else if (ld instanceof Double) {
-          this.methodBuilder.ldc((double) ld);
+        if (ld.isLong() || ld.isInteger()) {
+          this.methodBuilder.ldc(ld.getLong());
+        } else if (ld.isDouble() || ld.isFloat()) {
+          this.methodBuilder.ldc(ld.getDouble());
+        } else {
+          throw new RuntimeException("Expected: a long or a double");
         }
 
         break;
@@ -156,20 +208,20 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
       case LV_INDEX:
         this.tokenizer.consumeWhitespaces();
         final int lvIndexInLV = this.tokenizer.getIntValue();
-        
+
         if (lvIndexInLV >= Byte.MIN_VALUE && lvIndexInLV <= Byte.MAX_VALUE) {
           instruction = ((ByteArgMetaInstruction) metaInstruction).buildInstruction((byte) lvIndexInLV);
         } else {
           instruction = Instructions.wide_load_store((byte) metaInstruction.getOpcode(), (short) lvIndexInLV);
         }
-        
+
         this.methodBuilder.instruction(instruction);
-        
+
         break;
       case LABEL:
         this.tokenizer.consumeWhitespaces();
         final String label = this.tokenizer.getLabelAsArg();
-        final Instruction ifInstruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction((byte)0);
+        final Instruction ifInstruction = ((ShortArgMetaInstruction) metaInstruction).buildInstruction((byte) 0);
         this.methodBuilder.instruction(ifInstruction, label);
         break;
       case GOTO:
@@ -204,7 +256,7 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
         this.tokenizer.consumeWhitespaces();
         final int nbPairs = this.tokenizer.getIntValue();
         this.tokenizer.consumeWhitespaces();
-        final LookupwitchBuilder lsb = this.methodBuilder.lookupswitch(defaultLabel, nbPairs);
+        final LookupswitchBuilder lsb = this.methodBuilder.lookupswitch(defaultLabel, nbPairs);
 
         for (int i = 0; i < nbPairs; i++) {
           this.tokenizer.consumeWhitespaces();
@@ -216,6 +268,33 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
 
         lsb.end();
 
+        break;
+      case FIELD:
+        this.tokenizer.consumeWhitespaces();
+        final String fieldClasseName = this.tokenizer.getClassName();
+        this.tokenizer.consumeWhitespaces();
+        final String fieldName = this.tokenizer.getFieldName();
+        this.tokenizer.consumeWhitespaces();
+        final String fieldType = this.tokenizer.getFieldType();
+
+        if ("getstatic".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.getstatic(fieldClasseName, fieldName, fieldType);
+        } else if ("putstatic".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.putstatic(fieldClasseName, fieldName, fieldType);
+        }
+
+        break;
+      case METHOD:
+        this.tokenizer.consumeWhitespaces();
+        final String methodClassName = this.tokenizer.getClassName();
+        this.tokenizer.consumeWhitespaces();
+        final String methodName = this.tokenizer.getMethodName();
+        this.tokenizer.consumeWhitespaces();
+        final String methodSignature = this.tokenizer.getMethodSignature();
+
+        if ("invokestatic".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.invokestatic(methodClassName, methodName, methodSignature);
+        }
         break;
       case W_IFS_CONSTANT:
       default:
@@ -234,12 +313,22 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
     this.table[Symbols.CLASSES] = new Productions.Classes();
     this.table[Symbols.EOF] = new Productions.EndOfFile();
     this.table[Symbols.CLASS] = new Productions.Class();
-    this.table[Symbols.O_CLASS] = new Productions.OClass();
     this.table[Symbols.CLASS_START_IDENTIFIER] = new Productions.ClassStart();
     this.table[Symbols.CLASS_END_IDENTIFIER] = new Productions.ClassEnd();
     this.table[Symbols.CLASS_MODIFIERS] = new Productions.ClassModifiers();
     this.table[Symbols.CLASS_MODIFIER] = new Productions.ClassModifier();
     this.table[Symbols.CLASS_NAME] = new Productions.ClassName();
+    this.table[Symbols.CLASS_CONTENT] = new Productions.ClassContent();
+    this.table[Symbols.FIELDS] = new Productions.Fields();
+    this.table[Symbols.FIELD] = new Productions.Field();
+    this.table[Symbols.FIELD_START_IDENTIFIER] = new Productions.FieldStart();
+    this.table[Symbols.FIELD_END] = new Productions.FieldEnd();
+    this.table[Symbols.FIELD_MODIFIERS] = new Productions.FieldModifiers();
+    this.table[Symbols.FIELD_MODIFIER] = new Productions.FieldModifier();
+    this.table[Symbols.FIELD_NAME] = new Productions.FieldName();
+    this.table[Symbols.FIELD_DESCRIPTOR] = new Productions.FieldDescriptor();
+    this.table[Symbols.O_FIELD_ASSIGNEMENT] = new Productions.OFieldAssignement();
+    this.table[Symbols.METHOD_CONTENT] = new Productions.MethodContent();
     this.table[Symbols.METHODS] = new Productions.Methods();
     this.table[Symbols.METHOD] = new Productions.Method();
     this.table[Symbols.METHOD_START_IDENTIFIER] = new Productions.MethodStart();
@@ -251,6 +340,7 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
     this.table[Symbols.METHOD_CONTENT] = new Productions.MethodContent();
     this.table[Symbols.INSTRUCTION] = new Productions.Instruction();
     this.table[Symbols.LABEL] = new Productions.Label();
+    this.table[Symbols.CONSTANT_VALUE] = new Productions.ConstantValue();
     this.table[Symbols.WS] = new Productions.Whitespaces();
   }
 }

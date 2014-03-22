@@ -26,6 +26,18 @@ public interface Visitor {
   void visitConstantDouble(double value);
   void visitConstantClass(int utf8Index);
   void visitConstantString(int utf8Index);
+  void visitConstantFieldRef(int classIndex, int nameAndTypeIndex);
+  void visitConstantMethodRef(int classIndex, int nameAndTypeIndex);
+  void visitConstantInterfaceMethodRef(int classIndex, int nameAndTypeIndex);
+  void visitConstantNameAndType(int nameIndex, int descriptorIndex);
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Field
+  // -------------------------------------------------------------------------------------------------------------------
+  void visitFieldAccessFlags(int accessFlags);
+  void visitFieldNameIndex(int nameIndex);
+  void visitFieldDescriptorIndex(int descriptorIndex);
+  void visitFieldAttributesSize(int size);
 
   // -------------------------------------------------------------------------------------------------------------------
   // Method
@@ -39,7 +51,13 @@ public interface Visitor {
   // Attribute
   // -------------------------------------------------------------------------------------------------------------------
   void visitAttributeNameIndex(int nameIndex);
-  void visitAttributeLength(int length);
+  void visitCodeAttributeLength(int i);
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // ConstantValue
+  // -------------------------------------------------------------------------------------------------------------------
+  void visitConstantValueAttributeLength(int i);
+  void visitConstantValueIndex(int constantValueIndex);
 
   // -------------------------------------------------------------------------------------------------------------------
   // Code

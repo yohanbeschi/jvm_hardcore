@@ -78,11 +78,11 @@ public class ClassFile implements Visitable {
   // --------------------------------------------------------------------------------------------------------------------
 
   public String getClassName() {
-    return className;
+    return this.className;
   }
 
   public String getDirectories() {
-    return directories;
+    return this.directories;
   }
 
   // --------------------------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ public class ClassFile implements Visitable {
     this.version = version;
   }
 
-  public void setConstantPool(PjbaLinkedList<Constant.ConstantPoolEntry> constantPool) {
+  public void setConstantPool(PjbaLinkedList<ConstantPoolEntry> constantPool) {
     this.constantPool = constantPool;
   }
 
@@ -174,6 +174,26 @@ public class ClassFile implements Visitable {
     return this.addConstant(constant);
   }
 
+  public int addConstantFieldRef(final int classIndex, final int nameAndTypeIndex) {
+    final Constant.FieldRef constant = new Constant.FieldRef(classIndex, nameAndTypeIndex);
+    return this.addConstant(constant);
+  }
+
+  public int addConstantMethodRef(final int classIndex, final int nameAndTypeIndex) {
+    final Constant.MethodRef constant = new Constant.MethodRef(classIndex, nameAndTypeIndex);
+    return this.addConstant(constant);
+  }
+
+  public int addConstantInterfaceMethodRef(final int classIndex, final int nameAndTypeIndex) {
+    final Constant.InterfaceMethodRef constant = new Constant.InterfaceMethodRef(classIndex, nameAndTypeIndex);
+    return this.addConstant(constant);
+  }
+
+  public int addConstantNameAndType(final int nameIndex, final int descriptorIndex) {
+    final Constant.NameAndType constant = new Constant.NameAndType(nameIndex, descriptorIndex);
+    return this.addConstant(constant);
+  }
+
   private int addConstant(final ConstantPoolEntry constant) {
     final int index = this.constantPool.indexOf(constant);
 
@@ -194,6 +214,18 @@ public class ClassFile implements Visitable {
   }
 
   // --------------------------------------------------------------------------------------------------------------------
+  // Field methods
+  // --------------------------------------------------------------------------------------------------------------------
+
+  public void addField(final Field field) {
+    this.fields.add(field);
+  }
+
+  public PjbaLinkedList<Field> getFields() {
+    return this.fields;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------
   // Method methods
   // --------------------------------------------------------------------------------------------------------------------
 
@@ -202,7 +234,7 @@ public class ClassFile implements Visitable {
   }
 
   public PjbaLinkedList<Method> getMethods() {
-    return methods;
+    return this.methods;
   }
 
   // --------------------------------------------------------------------------------------------------------------------

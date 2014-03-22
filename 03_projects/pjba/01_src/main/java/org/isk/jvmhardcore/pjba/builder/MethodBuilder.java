@@ -14,6 +14,7 @@ import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.isk.jvmhardcore.pjba.structure.attribute.Code;
+import org.isk.jvmhardcore.pjba.util.DescriptorCounter;
 
 public class MethodBuilder {
   final private static short SHORT_ZERO = 0;
@@ -936,7 +937,7 @@ public class MethodBuilder {
     return new TableswitchBuilder(instruction, instructionWrapper, this);
   }
 
-  public LookupwitchBuilder lookupswitch(String defaultLabel, int nbPairs) {
+  public LookupswitchBuilder lookupswitch(String defaultLabel, int nbPairs) {
     final int positionBeforeInstruction = this.code.getCodeLength();
     final int padding = 3 - positionBeforeInstruction % 4;
 
@@ -947,7 +948,7 @@ public class MethodBuilder {
     final InstructionWrapper instructionWrapper = new InstructionWrapper(instruction, this.currentMethodLength);
     this.instruction(instructionWrapper, defaultLabel);
 
-    return new LookupwitchBuilder(instruction, instructionWrapper, this);
+    return new LookupswitchBuilder(instruction, instructionWrapper, this);
   }
 
   public MethodBuilder ireturn() {
@@ -978,6 +979,58 @@ public class MethodBuilder {
   public MethodBuilder return_() {
     this.instruction(Instructions.RETURN);
     return this;
+  }
+
+  public MethodBuilder getstatic(String fullyQualifiedName, String fieldName, String fieldDescriptor) {
+    final int fieldRefIndex = this.internalField(fullyQualifiedName, fieldName, fieldDescriptor);
+    final int sizeInStack = DescriptorCounter.fieldDescriptorUnits(fieldDescriptor);
+
+    this.instruction(Instructions.getstatic((short) fieldRefIndex, sizeInStack));
+
+    return this;
+  }
+
+  public MethodBuilder putstatic(String fullyQualifiedName, String fieldName, String fieldDescriptor) {
+    final int fieldRefIndex = this.internalField(fullyQualifiedName, fieldName, fieldDescriptor);
+    final int sizeInStack = DescriptorCounter.fieldDescriptorUnits(fieldDescriptor);
+
+    this.instruction(Instructions.putstatic((short) fieldRefIndex, sizeInStack));
+
+    return this;
+  }
+
+  private int internalField(String fullyQualifiedName, String fieldName, String fieldDescriptor) {
+    final int classIndex = this.addConstantClass(fullyQualifiedName);
+    final int nameAndTypeIndex = this.addConstantNameAndType(fieldName, fieldDescriptor);
+    return this.classFileBuilder.getClassFile().addConstantFieldRef(classIndex, nameAndTypeIndex);
+  }
+
+  public MethodBuilder invokestatic(String fullyQualifiedName, String methodName, String methodDescriptor) {
+    final int methodRefIndex = this.internalMethod(fullyQualifiedName, methodName, methodDescriptor);
+    final int stackDelta = DescriptorCounter.methodsDescriptorSignatureUnits(methodDescriptor);
+
+    this.instruction(Instructions.invokestatic((short) methodRefIndex, stackDelta));
+
+    return this;
+  }
+
+  private int internalMethod(String fullyQualifiedName, String methodName, String methodDescriptor) {
+    final int classIndex = this.addConstantClass(fullyQualifiedName);
+    final int nameAndTypeIndex = this.addConstantNameAndType(methodName, methodDescriptor);
+    final int methodRefIndex = this.classFileBuilder.getClassFile().addConstantMethodRef(classIndex, nameAndTypeIndex);
+    return methodRefIndex;
+  }
+
+  private int addConstantClass(String fullyQualifiedName) {
+    final int utf8ClassIndex = this.classFileBuilder.getClassFile().addConstantUTF8(fullyQualifiedName);
+    final int classIndex = this.classFileBuilder.getClassFile().addConstantClass(utf8ClassIndex);
+    return classIndex;
+  }
+
+  private int addConstantNameAndType(String name, String type) {
+    final int utf8NameIndex = this.classFileBuilder.getClassFile().addConstantUTF8(name);
+    final int utf8DescriptorIndex = this.classFileBuilder.getClassFile().addConstantUTF8(type);
+    return this.classFileBuilder.getClassFile().addConstantNameAndType(utf8NameIndex, utf8DescriptorIndex);
   }
 
   public MethodBuilder ifnull(String label) {

@@ -25,6 +25,8 @@ import org.isk.pjb.TestLdc_Integer;
 import org.isk.pjb.TestLdc_Long;
 import org.isk.pjb.TestLdc_String;
 import org.isk.pjb.TestObject;
+import org.isk.pjb.TestStatic;
+import org.isk.pjb.TestStaticUpdater;
 import org.isk.pjb.TestSwitch;
 import org.isk.pjb.TestTypeCmp;
 import org.isk.pjb.TestWide;
@@ -133,6 +135,31 @@ public class PjbParserTest {
   public void parseSuccessful12() {
     List<ClassFile> list = this.test("parser/ok12.pjb");
     Assert.assertEquals(1, list.size());
+    Assert.assertEquals(1, list.get(0).getMethods().size());
+  }
+
+  @Test
+  public void parseSuccessful13() {
+    List<ClassFile> list = this.test("parser/ok13.pjb");
+    Assert.assertEquals(1, list.size());
+    Assert.assertEquals(9, list.get(0).getFields().size());
+
+    // PjbDumper dumper = new PjbDumper(list.get(0));
+    // System.out.println(dumper.dump());
+  }
+
+  @Test
+  public void parseSuccessful14() {
+    List<ClassFile> list = this.test("parser/ok14.pjb");
+    Assert.assertEquals(1, list.size());
+    Assert.assertEquals(1, list.get(0).getMethods().size());
+  }
+
+  @Test
+  public void parseSuccessful15() {
+    List<ClassFile> list = this.test("parser/ok15.pjb");
+    Assert.assertEquals(1, list.size());
+    Assert.assertEquals(1, list.get(0).getFields().size());
     Assert.assertEquals(1, list.get(0).getMethods().size());
   }
 
@@ -263,6 +290,18 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals("parser/ko12.pjb\nLine 7, column 5 - Unknown instruction. Got: label_1", e.getMessage());
+    }
+  }
+
+  @Test
+  public void parseFailure13() {
+    try {
+      this.test("parser/ko13.pjb");
+      Assert.fail();
+    } catch (ParserException e) {
+      Assert.assertEquals("parser/ko13.pjb\nLine 3, column 1 - The field <MY_FIELD_2> can't be initialized because "
+          + "it's not <final>. Tip: If the field is not intended to be <final> you need to initialize it "
+          + "in a static block.", e.getMessage());
     }
   }
 
@@ -702,5 +741,90 @@ public class PjbParserTest {
 
     final int i3 = TestSwitch.lookupswitch_neg(1);
     Assert.assertEquals(1, i3);
+  }
+
+  @Test
+  public void invokestatic() {
+    final int i1 = TestStatic.invokestatic(10, 5, 9);
+    Assert.assertEquals(19, i1);
+
+    final int i2 = TestStatic.invokestatic(5, 10, 9);
+    Assert.assertEquals(19, i2);
+  }
+
+  @Test
+  public void getstatic() {
+    final int i = TestStatic.getstatic();
+    Assert.assertEquals(Integer.MAX_VALUE, i);
+  }
+
+  @Test
+  public void putstatic() {
+    Assert.assertEquals(0, TestStatic.TEST_PUTSTATIC);
+    final int i = TestStatic.putstatic(10);
+    Assert.assertEquals(10, i);
+    Assert.assertEquals(10, TestStatic.TEST_PUTSTATIC);
+  }
+
+  @Test
+  public void notInitialized() {
+    Assert.assertEquals(0, TestStatic.TEST_NOT_INITIALIZED_INT);
+    Assert.assertEquals(0, TestStatic.TEST_NOT_INITIALIZED_LONG);
+    Assert.assertEquals(0.0f, TestStatic.TEST_NOT_INITIALIZED_FLOAT, 0.0001);
+    Assert.assertEquals(0.0, TestStatic.TEST_NOT_INITIALIZED_DOUBLE, 0.0001);
+    Assert.assertNull(TestStatic.TEST_NOT_INITIALIZED_OBJ);
+
+    TestStatic.TEST_NOT_INITIALIZED_INT = 111;
+    TestStatic.TEST_NOT_INITIALIZED_LONG = 222_222;
+    TestStatic.TEST_NOT_INITIALIZED_FLOAT = 333.333f;
+    TestStatic.TEST_NOT_INITIALIZED_DOUBLE = 444_444.444_444;
+    TestStatic.TEST_NOT_INITIALIZED_OBJ = "Hello JVMHardcore";
+
+    Assert.assertEquals(111, TestStatic.TEST_NOT_INITIALIZED_INT);
+    Assert.assertEquals(222_222, TestStatic.TEST_NOT_INITIALIZED_LONG);
+    Assert.assertEquals(333.333f, TestStatic.TEST_NOT_INITIALIZED_FLOAT, 0.0001);
+    Assert.assertEquals(444_444.444_444, TestStatic.TEST_NOT_INITIALIZED_DOUBLE, 0.0001);
+    Assert.assertTrue("Hello JVMHardcore" == TestStatic.TEST_NOT_INITIALIZED_OBJ);
+  }
+
+  @Test
+  public void constantsTester() {
+    Assert.assertEquals(Integer.MAX_VALUE, TestStatic.TEST_INT);
+    Assert.assertEquals(Long.MAX_VALUE, TestStatic.TEST_LONG);
+    Assert.assertEquals(Float.MAX_VALUE, TestStatic.TEST_FLOAT, 0.0001);
+    Assert.assertEquals(Double.MAX_VALUE, TestStatic.TEST_DOUBLE, 0.0001);
+    Assert.assertEquals("Hello world", TestStatic.TEST_STRING);
+  }
+
+  @Test
+  public void resetFinal() {
+    Assert.assertEquals(Integer.MAX_VALUE, TestStatic.TEST_RESET_FINAL);
+    final int i = TestStatic.resetFinal(10);
+
+    Assert.assertEquals(10, i);
+    Assert.assertEquals(Integer.MAX_VALUE, TestStatic.TEST_RESET_FINAL);
+    // TestStatic.TEST_PUTSTATIC = 125; Compile error but not a JVM constraint
+
+    try {
+      TestStaticUpdater.resetFinal(100);
+      Assert.fail();
+    } catch (IllegalAccessError e) {
+      Assert.assertEquals("java.lang.IllegalAccessError", e.toString());
+    }
+  }
+  
+  @Test
+  public void resetFina2() {
+    try {
+      TestStaticUpdater.resetFinal2(100);
+      Assert.fail();
+    } catch (IllegalAccessError e) {
+      Assert.assertEquals("java.lang.IllegalAccessError", e.toString());
+    }
+  }
+
+  @Test
+  public void staticBlock() {
+    Assert.assertEquals(98_765, TestStatic.TEST_STATIC_BLOCK);
   }
 }

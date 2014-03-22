@@ -1,0 +1,71 @@
+.class public org/isk/pjb/TestStatic
+
+  .field public static TEST_PUTSTATIC I
+
+  .field final public static TEST_INT I = 2147483647
+  .field final public static TEST_LONG J = 9223372036854775807l
+  .field final public static TEST_FLOAT F = 3.4028235E38f
+  .field final public static TEST_DOUBLE D = 1.7976931348623157E308d
+  .field final public static TEST_STRING Ljava/lang/String; = "Hello world"
+
+  .field final public static TEST_RESET_FINAL I = 2147483647
+  .field final public static TEST_RESET_FINAL2 I
+
+  .field public static TEST_STATIC_BLOCK I
+
+  .field public static TEST_NOT_INITIALIZED_INT I
+  .field public static TEST_NOT_INITIALIZED_LONG J
+  .field public static TEST_NOT_INITIALIZED_FLOAT F
+  .field public static TEST_NOT_INITIALIZED_DOUBLE D
+  .field public static TEST_NOT_INITIALIZED_OBJ Ljava/lang/Object;
+
+  .method static <clinit>()V
+    ldc 98765
+    putstatic org/isk/pjb/TestStatic TEST_STATIC_BLOCK I
+    return
+  .methodend
+
+  .method public static invokestatic(III)I
+    iload_0
+    iload_1
+    invokestatic java/lang/Math max (II)I
+    iload_2
+    iadd
+    ireturn
+  .methodend
+
+  .method public static getstatic()I
+    getstatic java/lang/Integer MAX_VALUE I
+    ireturn
+  .methodend
+  
+  .method public static putstatic(I)I
+    iload_0
+    putstatic org/isk/pjb/TestStatic TEST_PUTSTATIC I
+    getstatic org/isk/pjb/TestStatic TEST_PUTSTATIC I
+    ireturn
+  .methodend
+
+  .method public static resetFinal(I)I
+    iload_0
+    putstatic org/isk/pjb/TestStatic TEST_RESET_FINAL I
+    getstatic org/isk/pjb/TestStatic TEST_RESET_FINAL I
+    ireturn
+  .methodend
+.classend
+
+.class public org/isk/pjb/TestStaticUpdater
+  .method public static resetFinal(I)I
+    iload_0
+    putstatic org/isk/pjb/TestStatic TEST_RESET_FINAL I
+    getstatic org/isk/pjb/TestStatic TEST_RESET_FINAL I
+    ireturn
+  .methodend
+
+  .method public static resetFinal2(I)I
+    iload_0
+    putstatic org/isk/pjb/TestStatic TEST_RESET_FINAL2 I
+    getstatic org/isk/pjb/TestStatic TEST_RESET_FINAL2 I
+    ireturn
+  .methodend
+.classend

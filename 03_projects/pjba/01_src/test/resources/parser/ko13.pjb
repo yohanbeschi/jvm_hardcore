@@ -1,0 +1,3 @@
+.class public org/isk/pjb/TestField
+  .field static MY_FIELD_2 I = 10
+.classend

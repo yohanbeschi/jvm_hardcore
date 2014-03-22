@@ -1,0 +1,5 @@
+.class public org/isk/pjb/TestIfeq
+  .method static <clinit>()V
+    return
+  .methodend
+.classend

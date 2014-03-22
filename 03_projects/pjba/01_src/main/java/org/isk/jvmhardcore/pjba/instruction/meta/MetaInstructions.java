@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.isk.jvmhardcore.pjba.instruction.Instructions;
 import org.isk.jvmhardcore.pjba.instruction.factory.ByteArgInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.FieldAndMethodFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.IincInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.IntArgInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.LookupswitchInstructionFactory;
@@ -407,7 +408,29 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("dreturn", ArgsType.NONE, Instructions.DRETURN));
     list.add(new NoArgMetaInstruction("areturn", ArgsType.NONE, Instructions.ARETURN));
     list.add(new NoArgMetaInstruction("return", ArgsType.NONE, Instructions.RETURN));
-    // TODO: 0xb2 to 0xc3
+    list.add(new FieldAndMethodMetaInstruction("getstatic", ArgsType.FIELD, new FieldAndMethodFactory() {
+      
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.getstatic(indexInCP, sizeInStack);
+      }
+    }));
+    list.add(new FieldAndMethodMetaInstruction("putstatic", ArgsType.FIELD, new FieldAndMethodFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.putstatic(indexInCP, sizeInStack);
+      }
+    }));
+    // TODO: 0xb4 to 0xb7
+    list.add(new FieldAndMethodMetaInstruction("invokestatic", ArgsType.METHOD, new FieldAndMethodFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.invokestatic(indexInCP, sizeInStack);
+      }
+    }));
+    // TODO: 0xb9 to 0xc3
     list.add(new WideMetaInstruction("wide", ArgsType.WIDE, new WideInstructionFactory() {
 
       @Override

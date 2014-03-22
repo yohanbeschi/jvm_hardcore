@@ -1150,6 +1150,27 @@ public class AllInstructionsWithoutDummiesInCPTest {
   }
 
   @Test
+  public void getstatic() {
+    final int i = AllInstructionsWithoutDummiesInCP.getstatic();
+    Assert.assertEquals(Integer.MAX_VALUE, i);
+  }
+  
+  @Test
+  public void putstatic() {
+    final int i = AllInstructionsWithoutDummiesInCP.putstatic(10);
+    Assert.assertEquals(10, i);
+  }
+  
+  @Test
+  public void invokestatic() {
+    final int i1 = AllInstructionsWithoutDummiesInCP.invokestatic(10, 5, 9);
+    Assert.assertEquals(19, i1);
+
+    final int i2 = AllInstructionsWithoutDummiesInCP.invokestatic(5, 10, 9);
+    Assert.assertEquals(19, i2);
+  }
+
+  @Test
   public void wide_iinc() {
     final long l = AllInstructionsWithoutDummiesInCP.wide_iinc(10_000);
     Assert.assertEquals(((long) -20_000 << 32) | 6, l);
@@ -1252,5 +1273,34 @@ public class AllInstructionsWithoutDummiesInCPTest {
   public void astore_load_unsigned() {
     final Object o = AllInstructionsWithoutDummiesInCP.astore_load_unsigned();
     Assert.assertNull(o);
+  }
+
+  @Test
+  public void constantsTester() {
+    Assert.assertEquals(Integer.MAX_VALUE, AllInstructionsWithoutDummiesInCP.TEST_INT);
+    Assert.assertEquals(Long.MAX_VALUE, AllInstructionsWithoutDummiesInCP.TEST_LONG);
+    Assert.assertEquals(Float.MAX_VALUE, AllInstructionsWithoutDummiesInCP.TEST_FLOAT, 0.0001);
+    Assert.assertEquals(Double.MAX_VALUE, AllInstructionsWithoutDummiesInCP.TEST_DOUBLE, 0.0001);
+    Assert.assertEquals("Hello world", AllInstructionsWithoutDummiesInCP.TEST_STRING);
+    
+    final int i = AllInstructionsWithoutDummiesInCP.getIntConstantValue();
+    Assert.assertEquals(Integer.MAX_VALUE, i);
+    
+    final long l = AllInstructionsWithoutDummiesInCP.getLongConstantValue();
+    Assert.assertEquals(Long.MAX_VALUE, l);
+    
+    final float f = AllInstructionsWithoutDummiesInCP.getFloatConstantValue();
+    Assert.assertEquals(Float.MAX_VALUE, f, 0.0001);
+    
+    final double d = AllInstructionsWithoutDummiesInCP.getDoubleConstantValue();
+    Assert.assertEquals(Double.MAX_VALUE, d, 0.0001);
+    
+    final String s = AllInstructionsWithoutDummiesInCP.getStringConstantValue();
+    Assert.assertEquals("Hello world", s);
+  }
+  
+  @Test
+  public void staticBlock() {
+    Assert.assertEquals(98_765, AllInstructionsWithoutDummiesInCP.STATIC_BLOCK);
   }
 }

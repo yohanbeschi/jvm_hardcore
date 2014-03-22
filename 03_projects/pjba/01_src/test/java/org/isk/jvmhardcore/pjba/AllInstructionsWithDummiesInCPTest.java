@@ -1166,6 +1166,27 @@ public class AllInstructionsWithDummiesInCPTest {
   }
 
   @Test
+  public void getstatic() {
+    final int i = AllInstructionsWithDummiesInCP.getstatic();
+    Assert.assertEquals(Integer.MAX_VALUE, i);
+  }
+
+  @Test
+  public void putstatic() {
+    final int i = AllInstructionsWithDummiesInCP.putstatic(10);
+    Assert.assertEquals(10, i);
+  }
+
+  @Test
+  public void invokestatic() {
+    final int i1 = AllInstructionsWithDummiesInCP.invokestatic(10, 5, 9);
+    Assert.assertEquals(19, i1);
+
+    final int i2 = AllInstructionsWithDummiesInCP.invokestatic(5, 10, 9);
+    Assert.assertEquals(19, i2);
+  }
+
+  @Test
   public void wide_iinc() {
     final long l = AllInstructionsWithDummiesInCP.wide_iinc(10_000);
     Assert.assertEquals(((long) -20_000 << 32) | 6, l);
@@ -1268,5 +1289,34 @@ public class AllInstructionsWithDummiesInCPTest {
   public void astore_load_unsigned() {
     final Object o = AllInstructionsWithDummiesInCP.astore_load_unsigned();
     Assert.assertNull(o);
+  }
+
+  @Test
+  public void constantsTester() {
+    Assert.assertEquals(Integer.MAX_VALUE, AllInstructionsWithDummiesInCP.TEST_INT);
+    Assert.assertEquals(Long.MAX_VALUE, AllInstructionsWithDummiesInCP.TEST_LONG);
+    Assert.assertEquals(Float.MAX_VALUE, AllInstructionsWithDummiesInCP.TEST_FLOAT, 0.0001);
+    Assert.assertEquals(Double.MAX_VALUE, AllInstructionsWithDummiesInCP.TEST_DOUBLE, 0.0001);
+    Assert.assertEquals("Hello world", AllInstructionsWithDummiesInCP.TEST_STRING);
+
+    final int i = AllInstructionsWithDummiesInCP.getIntConstantValue();
+    Assert.assertEquals(Integer.MAX_VALUE, i);
+
+    final long l = AllInstructionsWithDummiesInCP.getLongConstantValue();
+    Assert.assertEquals(Long.MAX_VALUE, l);
+
+    final float f = AllInstructionsWithDummiesInCP.getFloatConstantValue();
+    Assert.assertEquals(Float.MAX_VALUE, f, 0.0001);
+
+    final double d = AllInstructionsWithDummiesInCP.getDoubleConstantValue();
+    Assert.assertEquals(Double.MAX_VALUE, d, 0.0001);
+
+    final String s = AllInstructionsWithDummiesInCP.getStringConstantValue();
+    Assert.assertEquals("Hello world", s);
+  }
+
+  @Test
+  public void staticBlock() {
+    Assert.assertEquals(98_765, AllInstructionsWithDummiesInCP.STATIC_BLOCK);
   }
 }

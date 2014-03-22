@@ -1,0 +1,11 @@
+.class public org/isk/pjb/TestField
+  .field public static final MY_FIELD_1 Ljava/lang/Object;
+  .field final transient volatile protected private MY_FIELD_2 I = 10
+  .field final static TEST_INT I = 2147483647
+  .field final static TEST_LONG J = 9223372036854775807l
+  .field final static TEST_FLOAT F = 3.4028235E38f
+  .field final static TEST_DOUBLE D = 1.7976931348623157E308d
+  .field final static TEST_STRING Ljava/lang/String; = "Hello world"
+  .field final static TEST_CHAR C = 'z'
+  .field final static TEST_BOOLEAN Z = false
+.classend

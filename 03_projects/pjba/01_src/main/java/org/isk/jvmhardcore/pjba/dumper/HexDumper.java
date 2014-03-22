@@ -76,7 +76,6 @@ public class HexDumper implements Visitor {
   public void visitInterfacesSize(int length) {
     this.pjb.append(this.getHexAndAddShort()).append("\t");
     this.pjb.append("Interfaces: ").append(length).append("\n");
-
   }
 
   @Override
@@ -149,6 +148,66 @@ public class HexDumper implements Visitor {
   }
 
   @Override
+  public void visitConstantFieldRef(int classIndex, int nameAndTypeIndex) {
+    this.getHexAndAddShort();
+    this.pjb.append("  #").append(classIndex).append(" #").append(nameAndTypeIndex).append("\n");
+  }
+
+  @Override
+  public void visitConstantMethodRef(int classIndex, int nameAndTypeIndex) {
+    this.getHexAndAddShort();
+    this.pjb.append("  #").append(classIndex).append(" #").append(nameAndTypeIndex).append("\n");
+  }
+
+  @Override
+  public void visitConstantInterfaceMethodRef(int classIndex, int nameAndTypeIndex) {
+    this.getHexAndAddShort();
+    this.pjb.append("  #").append(classIndex).append(" #").append(nameAndTypeIndex).append("\n");
+  }
+
+  @Override
+  public void visitConstantNameAndType(int nameIndex, int descriptorIndex) {
+    this.getHexAndAddShort();
+    this.pjb.append("  #").append(nameIndex).append(" #").append(descriptorIndex).append("\n");
+  }
+
+  @Override
+  public void visitFieldAccessFlags(int accessFlags) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("+ Access Flags: ").append(StringValues.getFieldModifiers(accessFlags)).append("\n");
+  }
+
+  @Override
+  public void visitFieldNameIndex(int nameIndex) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("  Name index: #").append(nameIndex).append("\n");
+  }
+
+  @Override
+  public void visitFieldDescriptorIndex(int descriptorIndex) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("  Descriptor index: #").append(descriptorIndex).append("\n");
+  }
+
+  @Override
+  public void visitFieldAttributesSize(int size) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("  Field Attributes: ").append(size).append("\n");
+  }
+
+  @Override
+  public void visitConstantValueAttributeLength(int length) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("    Length: ").append(length).append("\n");
+  }
+
+  @Override
+  public void visitConstantValueIndex(int constantValueIndex) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("    Value index: #").append(constantValueIndex).append("\n");
+  }
+
+  @Override
   public void visitMethodAccessFlags(int accessFlags) {
     this.currentMethodLength = 0;
     this.pjb.append(this.getHexAndAddShort()).append("\t");
@@ -180,7 +239,7 @@ public class HexDumper implements Visitor {
   }
 
   @Override
-  public void visitAttributeLength(int length) {
+  public void visitCodeAttributeLength(int length) {
     this.pjb.append(this.getHexAndAddShort()).append("\t");
     this.pjb.append("    Length: ").append(length).append("\n");
   }
@@ -199,7 +258,7 @@ public class HexDumper implements Visitor {
 
   @Override
   public void visitCodeLength(int codeLength) {
-    methodCounterMax = String.valueOf(codeLength).length();
+    this.methodCounterMax = String.valueOf(codeLength).length();
     this.getHexAndAddInt();
   }
 
@@ -261,6 +320,8 @@ public class HexDumper implements Visitor {
         break;
       case W_IFS_CONSTANT:
       case LD_CONSTANT:
+      case FIELD:
+      case METHOD:
         this.pjb.append(" #").append(BytecodeUtils.unsign((short) value)).append("\n");
         break;
       case LABEL:
@@ -278,14 +339,14 @@ public class HexDumper implements Visitor {
   @Override
   public void visitInstructionInt(int value) {
     this.pjb.append(" <").append(value).append(">\n");
-    
+
     this.currentMethodLength += 4;
     this.getHexAndAdd(4);
   }
 
   @Override
   public void visitInstructionIinc(int indexInLV, int constant) {
-    this.pjb.append(" ").append(BytecodeUtils.unsign((byte)indexInLV)).append(" ").append(constant).append("\n");
+    this.pjb.append(" ").append(BytecodeUtils.unsign((byte) indexInLV)).append(" ").append(constant).append("\n");
 
     this.currentMethodLength += 2;
     this.getHexAndAdd(2);

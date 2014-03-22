@@ -1,10 +1,16 @@
 classes = class {class}
 class = ws classStartIdentifier ws classModifiers
-        className methods classEndIdentifier ws
+        className classContent classEndIdentifier ws (* modifié *)
+classContent = fields methods (* nouveau *)
+fields = {field} (* nouveau *)
+field = ws fieldStartIdentifier ws fieldModifiers ws fieldName ws fieldDescriptor ws oFieldAssignement (* nouveau *)
+oFieldAssignement = [assignementOperator ws constantValue] ws (* nouveau *)
 methods = {method}
-method = ws methodStartIdentifier ws methodsModifiers methodName ws 
+method = ws methodStartIdentifier ws methodModifiers methodName ws 
          methodSignature methodContent methodEndIdentifier ws
 className = identifier {identifierSeparator identifier}
+fieldName = identifier (* nouveau *)
+fieldDescriptor = descriptor (* nouveau *)
 methodName = identifier
 methodSignature = parametersStart parametersDescriptor parametersEnd returnDescriptor
 parametersDescriptor = descriptor {descriptor}
@@ -17,16 +23,22 @@ mnemonic = ? known mnemonic ?
 arg = ? authorized argument for mnemonic ?
 labelAsArg = {labelCharacter}
 classModifiers = {classModifier ws}
-methodsModifiers = {methodsModifier ws}
+fieldModifiers = {fieldModifier ws} (* nouveau *)
+methodModifiers = {methodsModifier ws}
 classStartIdentifier = '.class'
 classEndIdentifier = '.endclass'
+fieldStartIdentifier = '.field' (* nouveau *)
 methodStartIdentifier = '.method'
 methodEndIdentifier = '.endMethod'
 classModifier = 'public' | 'final' | 'abstract' | 'interface' | 'super' 
+fieldModifier = 'public' | 'protected' | 'private' | 'static' | 'final' |
+                'transient' | 'volatile' (* nouveau *)
 methodsModifier = 'public' | 'protected' | 'private' | 'static' | 'final' | 
                   'strictfp' | 'synchronized' | 'abstract'  | 'native'
 descriptor = 'B' | 'C' | 'D' | 'F' | 'I' | 'J' | 'S' | 'Z' | 
              '[' ['descriptor | 'L' className ';'
+constantValue = character | string | boolean | integer | float (* nouveau *)
+assignementOperator = '=' (* nouveau *)
 parametersStart = '('
 parametersEnd = ')'
 labelEnd = ':'
@@ -35,8 +47,13 @@ singlelineComment = ('@' | ';' | '#') ? All characters but LF and EOF ? (LF | EO
 multilineComment = '/*' ? All characters but '*/' ? '*/'
 asciiJavaLetter = asciiLetter | '_' | '$'
 labelCharacter = asciiLetter | digit | '_'
+asciiLetter = ? a-z | A-Z ?
+character = "'" ? One character between all characters excepted NULL ? "'" (* nouveau *)
+string = '"' ? All characters but NULL ? '"'
+boolean = 'true' | 'false' (* nouveau *)
+integer = ? integer ? (* nouveau *)
+float = ? float ? (* nouveau *)
 digit = ? 0-9 ?
 identifierSeparator = '/'
-asciiLetter = ? a-z | A-Z ?
 mws = TAB | SPACE | NEW_LINE
 ws = ? {mws | comment | BLANK} ?

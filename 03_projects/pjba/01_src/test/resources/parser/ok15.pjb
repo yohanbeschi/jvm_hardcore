@@ -1,0 +1,9 @@
+.class public org/isk/pjb/TestStaticFieldAndMethod
+  .field public static final MY_FIELD_1 I;
+
+  .method static <clinit>()V
+    putstatic org/isk/pjb/TestStaticFieldAndMethod MY_FIELD_1 I
+    getstatic org/isk/pjb/TestStaticFieldAndMethod MY_FIELD_1 I
+    invokestatic org/isk/pjb/TestStaticFieldAndMethod doSomething ()V
+  .methodend
+.classend

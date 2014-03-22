@@ -5,9 +5,9 @@ import org.isk.jvmhardcore.pjba.visitor.Visitor;
 
 public class Constant {
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantPoolEntry
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   public static abstract class ConstantPoolEntry implements Visitable {
     final public int tag;
 
@@ -50,9 +50,9 @@ public class Constant {
     public abstract void constantAccept(final Visitor visitor);
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantUTF8
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class UTF8 extends ConstantPoolEntry {
     final public java.lang.String value;
@@ -102,9 +102,9 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantInteger
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class Integer extends ConstantPoolEntry {
     final public int integer;
@@ -150,9 +150,9 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantFloat
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class Float extends ConstantPoolEntry {
     final public float floatValue;
@@ -198,9 +198,9 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantLong
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class Long extends ConstantPoolEntry {
     final public long longValue;
@@ -246,9 +246,9 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantDouble
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class Double extends ConstantPoolEntry {
     final public double doubleValue;
@@ -296,9 +296,9 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantClass
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class Class extends ConstantPoolEntry {
     final public int nameIndex;
@@ -344,9 +344,9 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
   // ConstantString
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static class String extends ConstantPoolEntry {
     final public int utf8Index;
@@ -392,13 +392,163 @@ public class Constant {
     }
   }
 
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
+  // Ref
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static abstract class Ref extends ConstantPoolEntry {
+    final public int classIndex;
+    final public int nameAndTypeIndex;
+
+    public Ref(ConstantPoolTag tag, int classIndex, int nameAndTypeIndex) {
+      super(tag);
+      this.classIndex = classIndex;
+      this.nameAndTypeIndex = nameAndTypeIndex;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = super.hashCode();
+      result = prime * result + this.classIndex;
+      result = prime * result + this.nameAndTypeIndex;
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+
+      if (!super.equals(obj)) {
+        return false;
+      }
+
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+
+      final Ref other = (Ref) obj;
+      if (this.classIndex != other.classIndex) {
+        return false;
+      }
+
+      if (this.nameAndTypeIndex != other.nameAndTypeIndex) {
+        return false;
+      }
+
+      return true;
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // ConstantFieldRef
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static class FieldRef extends Ref {
+    public FieldRef(int classIndex, int nameAndTypeIndex) {
+      super(ConstantPoolTag.FIELDREF, classIndex, nameAndTypeIndex);
+    }
+
+    @Override
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantFieldRef(super.classIndex, super.nameAndTypeIndex);
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // ConstantMethodRef
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static class MethodRef extends Ref {
+    public MethodRef(int classIndex, int nameAndTypeIndex) {
+      super(ConstantPoolTag.METHODREF, classIndex, nameAndTypeIndex);
+    }
+
+    @Override
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantMethodRef(super.classIndex, super.nameAndTypeIndex);
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // InterfaceMethoddRef
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static class InterfaceMethodRef extends Ref {
+    public InterfaceMethodRef(int classIndex, int nameAndTypeIndex) {
+      super(ConstantPoolTag.INTERFACE_METHODREF, classIndex, nameAndTypeIndex);
+    }
+
+    @Override
+    public void constantAccept(final Visitor visitor) {
+      visitor.visitConstantInterfaceMethodRef(super.classIndex, super.nameAndTypeIndex);
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Ref
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static class NameAndType extends ConstantPoolEntry {
+    final public int nameIndex;
+    final public int descriptorIndex;
+
+    public NameAndType(int nameIndex, int descriptorIndex) {
+      super(ConstantPoolTag.NAME_AND_TYPE);
+      this.nameIndex = nameIndex;
+      this.descriptorIndex = descriptorIndex;
+    }
+
+    @Override
+    public void constantAccept(Visitor visitor) {
+      visitor.visitConstantNameAndType(this.nameIndex, this.descriptorIndex);
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = super.hashCode();
+      result = prime * result + descriptorIndex;
+      result = prime * result + nameIndex;
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+
+      if (!super.equals(obj)) {
+        return false;
+      }
+
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+
+      final NameAndType other = (NameAndType) obj;
+      if (this.descriptorIndex != other.descriptorIndex) {
+        return false;
+      }
+
+      if (this.nameIndex != other.nameIndex) {
+        return false;
+      }
+
+      return true;
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
   // Tags
-  // --------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public static enum ConstantPoolTag {
     UNDEFINED(0),
-    UTF8(1), 
+    UTF8(1),
     INTEGER(3),
     FLOAT(4),
     LONG(5),

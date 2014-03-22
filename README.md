@@ -305,3 +305,12 @@ Comparisons and control (3/3).
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 19 – Bytecode – Comparaisons et contrôle - 3/3](http://blog.soat.fr/2014/03/20-jvm-hardcore-part-19-bytecode-comparaisons-et-controle-33)
+
+## part20
+### Summary
+Class Members: Fields and Methods
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore - Part 20 – Bytecode – Champs et Méthodes de classes](http://blog.soat.fr/2014/03/21-jvm-hardcore-part-20-bytecode-champs-et-methodes-de-classes)

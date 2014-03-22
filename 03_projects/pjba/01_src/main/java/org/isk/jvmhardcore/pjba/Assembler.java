@@ -111,6 +111,60 @@ public class Assembler implements Visitor {
   }
 
   @Override
+  public void visitConstantFieldRef(int classIndex, int nameAndTypeIndex) {
+    this.writeShort(classIndex);
+    this.writeShort(nameAndTypeIndex);
+  }
+
+  @Override
+  public void visitConstantMethodRef(int classIndex, int nameAndTypeIndex) {
+    this.writeShort(classIndex);
+    this.writeShort(nameAndTypeIndex);
+  }
+
+  @Override
+  public void visitConstantInterfaceMethodRef(int classIndex, int nameAndTypeIndex) {
+    this.writeShort(classIndex);
+    this.writeShort(nameAndTypeIndex);
+  }
+
+  @Override
+  public void visitConstantNameAndType(int nameIndex, int descriptorIndex) {
+    this.writeShort(nameIndex);
+    this.writeShort(descriptorIndex);
+  }
+
+  @Override
+  public void visitFieldAccessFlags(int accessFlags) {
+    this.writeShort(accessFlags);
+  }
+
+  @Override
+  public void visitFieldNameIndex(int nameIndex) {
+    this.writeShort(nameIndex);
+  }
+
+  @Override
+  public void visitFieldDescriptorIndex(int descriptorIndex) {
+    this.writeShort(descriptorIndex);
+  }
+
+  @Override
+  public void visitFieldAttributesSize(int size) {
+    this.writeShort(size);
+  }
+
+  @Override
+  public void visitConstantValueAttributeLength(int length) {
+    this.writeInt(length);
+  }
+
+  @Override
+  public void visitConstantValueIndex(int constantValueIndex) {
+    this.writeShort(constantValueIndex);
+  }
+
+  @Override
   public void visitMethodAccessFlags(int accessFlags) {
     this.writeShort(accessFlags);
   }
@@ -136,7 +190,7 @@ public class Assembler implements Visitor {
   }
 
   @Override
-  public void visitAttributeLength(int length) {
+  public void visitCodeAttributeLength(int length) {
     this.writeInt(length);
   }
 
@@ -224,7 +278,7 @@ public class Assembler implements Visitor {
     for (int i = padding; i > 0; i--) {
       this.writeByte(0);
     }
-    
+
     this.writeInt(defaultOffset);
     this.writeInt(nbPairs);
 

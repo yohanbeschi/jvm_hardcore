@@ -24,19 +24,6 @@ public class StringGenerator {
   }
 
   /**
-   * Appends the string representation of the char argument to this sequence.<br>
-   * The argument is appended to the contents of this sequence. The length of this sequence increases by 1.<br>
-   * The overall effect is exactly as if the argument were converted to a string by the method String.valueOf(char), and
-   * the character in that string were then appended to this character sequence.
-   * 
-   * @param character
-   *          is the character to append
-   */
-  public void append(final char character) {
-    this.builder.append(character);
-  }
-
-  /**
    * Appends the string representation of the integer argument to this sequence.<br>
    * The argument is appended to the contents of this sequence. The length of this sequence increases by 1.<br>
    * The overall effect is exactly as if the argument were converted to a string by the method
@@ -70,5 +57,4 @@ public class StringGenerator {
     this.builder.setLength(0);
     return string;
   }
-
 }

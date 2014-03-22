@@ -35,8 +35,11 @@ public class PjbDumper implements Visitor {
   public String dump() {
     this.classFile.accept(this);
 
-    this.finalizeMethod();
-    this.pjb.append("  .methodend\n");
+    if (this.methodCount > 0) {
+      this.finalizeMethod();
+      this.pjb.append("  .methodend\n");
+    }
+
     this.pjb.append(".classend");
     return this.pjb.toString();
   }
@@ -134,6 +137,61 @@ public class PjbDumper implements Visitor {
   }
 
   @Override
+  public void visitConstantFieldRef(int classIndex, int nameAndTypeIndex) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitConstantMethodRef(int classIndex, int nameAndTypeIndex) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitConstantInterfaceMethodRef(int classIndex, int nameAndTypeIndex) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitConstantNameAndType(int nameIndex, int descriptorIndex) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitFieldAccessFlags(int accessFlags) {
+    this.pjb.append("  .field ").append(StringValues.getFieldModifiers(accessFlags));
+  }
+
+  @Override
+  public void visitFieldNameIndex(int nameIndex) {
+    final Constant.UTF8 constantUtf8 = (Constant.UTF8) this.classFile.getConstant(nameIndex);
+    this.pjb.append(constantUtf8.value).append(" ");
+  }
+
+  @Override
+  public void visitFieldDescriptorIndex(int descriptorIndex) {
+    final Constant.UTF8 constantUtf8 = (Constant.UTF8) this.classFile.getConstant(descriptorIndex);
+    this.pjb.append(constantUtf8.value).append("\n");
+  }
+
+  @Override
+  public void visitFieldAttributesSize(int size) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitConstantValueAttributeLength(int i) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitConstantValueIndex(int constantValueIndex) {
+    this.pjb.setLength(this.pjb.length() - 1);
+    
+    final String value = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) constantValueIndex), this.classFile);
+    this.pjb.append(" = ").append(value).append("\n");
+  }
+
+  @Override
   public void visitMethodAccessFlags(int accessFlags) {
     if (this.methodCount > 0) {
       this.finalizeMethod();
@@ -194,7 +252,7 @@ public class PjbDumper implements Visitor {
   }
 
   @Override
-  public void visitAttributeLength(int length) {
+  public void visitCodeAttributeLength(int length) {
     // Do nothing
   }
 
@@ -280,6 +338,8 @@ public class PjbDumper implements Visitor {
         break;
       case W_IFS_CONSTANT:
       case LD_CONSTANT:
+      case FIELD:
+      case METHOD:
         printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) value), this.classFile);
         break;
       case LABEL:

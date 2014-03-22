@@ -3,6 +3,7 @@ package org.isk.jvmhardcore.pjba;
 import org.isk.jvmhardcore.pjba.builder.ClassFileBuilder;
 import org.isk.jvmhardcore.pjba.builder.MethodBuilder;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.jvmhardcore.pjba.structure.Field;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.junit.Test;
 
@@ -190,6 +191,9 @@ public class Classes {
     this.buildGotoAfter(builder);
     this.buildTableswitch(builder);
     this.buildLookupswitch(builder);
+    this.buildGetstatic(builder);
+    this.buildPutstatic(builder, fullyQualifiedName);
+    this.buildInvokestatic(builder);
     this.buildIfnull(builder);
     this.buildIfnonnull(builder);
     this.buildGotoWBefore(builder);
@@ -208,6 +212,8 @@ public class Classes {
     this.buildFStoreLoadUnsigned(builder);
     this.buildDStoreLoadUnsigned(builder);
     this.buildAStoreLoadUnsigned(builder);
+    this.buildConstantsTester(builder, fullyQualifiedName);
+    this.buildStaticBlockTester(builder, fullyQualifiedName);
 
     return builder.build();
   }
@@ -1674,6 +1680,31 @@ public class Classes {
       .areturn();
   }
 
+  private void buildGetstatic(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getstatic", "()I")
+      .getstatic("java/lang/Integer", "MAX_VALUE", "I")
+      .ireturn();
+  }
+
+  private void buildPutstatic(ClassFileBuilder builder, String fullyQualifiedName) {
+    builder.newField(Field.MODIFIER_STATIC, "PUTSTATIC_FIELD", "I");
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "putstatic", "(I)I")
+      .iload_0()
+      .putstatic(fullyQualifiedName, "PUTSTATIC_FIELD", "I")
+      .getstatic(fullyQualifiedName, "PUTSTATIC_FIELD", "I")
+      .ireturn();
+  }
+
+  private void buildInvokestatic(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "invokestatic", "(III)I")
+      .iload_0()
+      .iload_1()
+      .invokestatic("java/lang/Math", "max", "(II)I")
+      .iload_2()
+      .iadd()
+      .ireturn();
+  }
+
   private void buildIfnull(ClassFileBuilder builder) {
     builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "ifnull", "(Ljava/lang/Object;)Z")
       .aload_0()
@@ -1745,5 +1776,41 @@ public class Classes {
 
     mb.label("return")
       .ireturn();
+  }
+
+  private void buildConstantsTester(ClassFileBuilder builder, String fullyQualifiedName) {
+    builder.newConstantField(Field.MODIFIER_STATIC, "TEST_INT", "I", Integer.MAX_VALUE);
+    builder.newConstantField(Field.MODIFIER_STATIC, "TEST_LONG", "J", Long.MAX_VALUE);
+    builder.newConstantField(Field.MODIFIER_STATIC, "TEST_FLOAT", "F", Float.MAX_VALUE);
+    builder.newConstantField(Field.MODIFIER_STATIC, "TEST_DOUBLE", "D", Double.MAX_VALUE);
+    builder.newConstantField(Field.MODIFIER_STATIC, "TEST_STRING", "Ljava/lang/String;", "Hello world");
+
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getIntConstantValue", "()I")
+      .getstatic(fullyQualifiedName, "TEST_INT", "I")
+      .ireturn();
+
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getLongConstantValue", "()J")
+      .getstatic(fullyQualifiedName, "TEST_LONG", "J")
+      .lreturn();
+
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getFloatConstantValue", "()F")
+      .getstatic(fullyQualifiedName, "TEST_FLOAT", "F")
+      .freturn();
+
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getDoubleConstantValue", "()D")
+      .getstatic(fullyQualifiedName, "TEST_DOUBLE", "D")
+      .dreturn();
+
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getStringConstantValue", "()Ljava/lang/String;")
+      .getstatic(fullyQualifiedName, "TEST_STRING", "Ljava/lang/String;")
+      .areturn();
+  }
+
+  private void buildStaticBlockTester(ClassFileBuilder builder, String fullyQualifiedName) {
+    builder.newField(Field.MODIFIER_STATIC, "STATIC_BLOCK", "I");
+    builder.staticBlock()
+      .ldc(98_765)
+      .putstatic(fullyQualifiedName, "STATIC_BLOCK", "I")
+      .return_();
   }
 }

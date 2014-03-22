@@ -11,6 +11,7 @@ public class Productions {
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       productionStack.push(table[Symbols.EOF]);
       productionStack.push(table[Symbols.CLASSES]);
+      productionStack.push(table[Symbols.CLASS]);
 
       return null;
     }
@@ -20,8 +21,12 @@ public class Productions {
     public EventType produce(PjbTokenizer tokenizer,
                              Production<EventType, PjbTokenizer>[] table,
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
-      productionStack.push(table[Symbols.O_CLASS]);
-      productionStack.push(table[Symbols.CLASS]);
+      tokenizer.consumeWhitespaces();
+
+      if (tokenizer.isClassStart()) {
+        productionStack.push(table[Symbols.CLASSES]);
+        productionStack.push(table[Symbols.CLASS]);
+      }
       return null;
     }
   }
@@ -32,7 +37,7 @@ public class Productions {
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       productionStack.push(table[Symbols.WS]);
       productionStack.push(table[Symbols.CLASS_END_IDENTIFIER]);
-      productionStack.push(table[Symbols.METHODS]);
+      productionStack.push(table[Symbols.CLASS_CONTENT]);
       productionStack.push(table[Symbols.CLASS_NAME]);
       productionStack.push(table[Symbols.CLASS_MODIFIERS]);
       productionStack.push(table[Symbols.WS]);
@@ -43,13 +48,63 @@ public class Productions {
     }
   }
 
-  public static class OClass implements Production<EventType, PjbTokenizer> {
+  public static class ClassContent implements Production<EventType, PjbTokenizer> {
     public EventType produce(PjbTokenizer tokenizer,
                              Production<EventType, PjbTokenizer>[] table,
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
-      if (tokenizer.isClassStart()) {
-        productionStack.push(table[Symbols.O_CLASS]);
-        productionStack.push(table[Symbols.CLASS]);
+      productionStack.push(table[Symbols.METHODS]);
+      productionStack.push(table[Symbols.FIELDS]);
+
+      return null;
+    }
+  }
+
+  public static class Fields implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      tokenizer.consumeWhitespaces();
+
+      if (tokenizer.isFieldStart()) {
+        productionStack.push(table[Symbols.FIELDS]);
+        productionStack.push(table[Symbols.FIELD]);
+      }
+      return null;
+    }
+  }
+
+  public static class Field implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      productionStack.push(table[Symbols.FIELD_END]);
+      productionStack.push(table[Symbols.O_FIELD_ASSIGNEMENT]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.FIELD_DESCRIPTOR]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.FIELD_NAME]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.FIELD_MODIFIERS]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.FIELD_START_IDENTIFIER]);
+      productionStack.push(table[Symbols.WS]);
+
+      return null;
+    }
+  }
+
+  public static class OFieldAssignement implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      tokenizer.consumeWhitespaces();
+
+      if (tokenizer.isAssignementOperator()) {
+        tokenizer.discardAssignementOperator();
+        tokenizer.consumeWhitespaces();
+
+        productionStack.push(table[Symbols.WS]);
+        productionStack.push(table[Symbols.CONSTANT_VALUE]);
       }
 
       return null;
@@ -110,6 +165,19 @@ public class Productions {
     }
   }
 
+  public static class FieldModifiers implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      if (tokenizer.isFieldModifier()) {
+        productionStack.push(table[Symbols.FIELD_MODIFIERS]);
+        productionStack.push(table[Symbols.WS]);
+        productionStack.push(table[Symbols.FIELD_MODIFIER]);
+      }
+      return null;
+    }
+  }
+
   public static class MethodModifiers implements Production<EventType, PjbTokenizer> {
     public EventType produce(PjbTokenizer tokenizer,
                              Production<EventType, PjbTokenizer>[] table,
@@ -136,6 +204,38 @@ public class Productions {
                              Production<EventType, PjbTokenizer>[] table,
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       return EventType.CLASS_NAME;
+    }
+  }
+
+  public static class FieldStart implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.FIELD_START;
+    }
+  }
+
+  public static class FieldModifier implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.FIELD_MODIFIER;
+    }
+  }
+  
+  public static class FieldName implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.FIELD_NAME;
+    }
+  }
+  
+  public static class FieldDescriptor implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.FIELD_TYPE;
     }
   }
 
@@ -205,6 +305,22 @@ public class Productions {
                              Production<EventType, PjbTokenizer>[] table,
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       return EventType.LABEL;
+    }
+  }
+
+  public static class ConstantValue implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.CONSTANT_VALUE;
+    }
+  }
+
+  public static class FieldEnd implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.FIELD_END;
     }
   }
 

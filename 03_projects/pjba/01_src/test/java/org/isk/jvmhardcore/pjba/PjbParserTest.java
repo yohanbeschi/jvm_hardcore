@@ -6,8 +6,16 @@ import java.util.List;
 
 import org.isk.jvmhardcore.pjba.parser.core.Tokenizer.ParserException;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
+import org.isk.pjb.APoint;
+import org.isk.pjb.CPoint;
+import org.isk.pjb.CPoint3D;
+import org.isk.pjb.IMove;
+import org.isk.pjb.IPoint;
+import org.isk.pjb.Mover;
 import org.isk.pjb.MultiOne;
 import org.isk.pjb.MultiTwo;
+import org.isk.pjb.Point;
+import org.isk.pjb.Point3D;
 import org.isk.pjb.TestGoto;
 import org.isk.pjb.TestIadd;
 import org.isk.pjb.TestIfICompCond;
@@ -25,6 +33,7 @@ import org.isk.pjb.TestLdc_Integer;
 import org.isk.pjb.TestLdc_Long;
 import org.isk.pjb.TestLdc_String;
 import org.isk.pjb.TestObject;
+import org.isk.pjb.TestObjects;
 import org.isk.pjb.TestStatic;
 import org.isk.pjb.TestStaticUpdater;
 import org.isk.pjb.TestSwitch;
@@ -152,7 +161,7 @@ public class PjbParserTest {
   public void parseSuccessful14() {
     List<ClassFile> list = this.test("parser/ok14.pjb");
     Assert.assertEquals(1, list.size());
-    Assert.assertEquals(1, list.get(0).getMethods().size());
+    Assert.assertEquals(2, list.get(0).getMethods().size());
   }
 
   @Test
@@ -161,6 +170,11 @@ public class PjbParserTest {
     Assert.assertEquals(1, list.size());
     Assert.assertEquals(1, list.get(0).getFields().size());
     Assert.assertEquals(1, list.get(0).getMethods().size());
+  }
+
+  @Test
+  public void parseSuccessful16() {
+    this.test("parser/ok16.pjb");
   }
 
   @Test
@@ -179,7 +193,7 @@ public class PjbParserTest {
       this.test("parser/ko02.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko02.pjb\nLine 4, column 1 - Expected directive: '.classend' Got: c", e.getMessage());
+      Assert.assertEquals("parser/ko02.pjb\nLine 6, column 1 - Expected directive: '.classend' Got: c", e.getMessage());
     }
   }
 
@@ -190,7 +204,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko03.pjb\nLine 2, column 2 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
+          "parser/ko03.pjb\nLine 2, column 3 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
           e.getMessage());
     }
   }
@@ -202,7 +216,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko04.pjb\nLine 3, column 2 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
+          "parser/ko04.pjb\nLine 5, column 3 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
           e.getMessage());
     }
   }
@@ -214,7 +228,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko05.pjb\nLine 2, column 10 - An identifier must start with an ASCII letter or '_' or '$'. Got: (",
+          "parser/ko05.pjb\nLine 4, column 11 - An identifier must start with an ASCII letter or '_' or '$'. Got: (",
           e.getMessage());
     }
   }
@@ -226,7 +240,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko06.pjb\nLine 3, column 2 - An identifier must start with a left parenthesis '('. Got: .",
+          "parser/ko06.pjb\nLine 5, column 3 - An identifier must start with a left parenthesis '('. Got: .",
           e.getMessage());
     }
   }
@@ -237,7 +251,7 @@ public class PjbParserTest {
       this.test("parser/ko07.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko07.pjb\nLine 3, column 0 - Missing return descriptor. Got: \n", e.getMessage());
+      Assert.assertEquals("parser/ko07.pjb\nLine 5, column 0 - Missing return descriptor. Got: \n", e.getMessage());
     }
   }
 
@@ -247,7 +261,7 @@ public class PjbParserTest {
       this.test("parser/ko08.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko08.pjb\nLine 2, column 2 - Expected directive: '.classend' Got: m", e.getMessage());
+      Assert.assertEquals("parser/ko08.pjb\nLine 4, column 3 - Expected directive: '.classend' Got: m", e.getMessage());
     }
   }
 
@@ -257,7 +271,7 @@ public class PjbParserTest {
       this.test("parser/ko09.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko09.pjb\nLine 3, column 2 - Unknown instruction. Got: methodend", e.getMessage());
+      Assert.assertEquals("parser/ko09.pjb\nLine 5, column 3 - Unknown instruction. Got: methodend", e.getMessage());
     }
   }
 
@@ -267,7 +281,7 @@ public class PjbParserTest {
       this.test("parser/ko10.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko10.pjb\nLine 3, column 3 - Unknown instruction. Got: instruction", e.getMessage());
+      Assert.assertEquals("parser/ko10.pjb\nLine 5, column 5 - Unknown instruction. Got: instruction", e.getMessage());
     }
   }
 
@@ -278,7 +292,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko11.pjb\nLine 4, column 17 - A label following an instruction should not end with a colon. Got: :",
+          "parser/ko11.pjb\nLine 6, column 17 - A label following an instruction should not end with a colon. Got: :",
           e.getMessage());
     }
   }
@@ -289,7 +303,7 @@ public class PjbParserTest {
       this.test("parser/ko12.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko12.pjb\nLine 7, column 5 - Unknown instruction. Got: label_1", e.getMessage());
+      Assert.assertEquals("parser/ko12.pjb\nLine 9, column 5 - Unknown instruction. Got: label_1", e.getMessage());
     }
   }
 
@@ -299,7 +313,7 @@ public class PjbParserTest {
       this.test("parser/ko13.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko13.pjb\nLine 3, column 1 - The field <MY_FIELD_2> can't be initialized because "
+      Assert.assertEquals("parser/ko13.pjb\nLine 5, column 1 - The field <MY_FIELD_2> can't be initialized because "
           + "it's not <final>. Tip: If the field is not intended to be <final> you need to initialize it "
           + "in a static block.", e.getMessage());
     }
@@ -812,7 +826,7 @@ public class PjbParserTest {
       Assert.assertEquals("java.lang.IllegalAccessError", e.toString());
     }
   }
-  
+
   @Test
   public void resetFina2() {
     try {
@@ -826,5 +840,175 @@ public class PjbParserTest {
   @Test
   public void staticBlock() {
     Assert.assertEquals(98_765, TestStatic.TEST_STATIC_BLOCK);
+  }
+
+  @Test
+  public void getStringBuilder() {
+    final StringBuilder sb = TestObjects.getStringBuilder();
+    Assert.assertEquals("Hello", sb.toString());
+  }
+
+  @Test
+  public void sayHello() {
+    final TestObjects testObjects = new TestObjects();
+    Assert.assertEquals("Hello John", testObjects.sayHello("John"));
+  }
+
+  @Test
+  public void delegatePrivate() {
+    final TestObjects testObjects = new TestObjects();
+    Assert.assertEquals(6, testObjects.delegatePrivate(2, 4));
+  }
+
+  @Test
+  public void getAndSetFields() {
+    final Point point = new Point(4, 5);
+
+    Assert.assertEquals(2, point.originX);
+    Assert.assertEquals(3, point.originY);
+
+    Assert.assertEquals(4, point.getX());
+    Assert.assertEquals(5, point.getY());
+
+    point.setX(6);
+    point.setY(7);
+
+    Assert.assertEquals(6, point.getX());
+    Assert.assertEquals(7, point.getY());
+  }
+
+  @Test
+  public void inheritance() {
+    final Point3D point = new Point3D(4, 5, 6);
+
+    Assert.assertEquals(4, point.getX());
+    Assert.assertEquals(5, point.getY());
+    Assert.assertEquals(6, point.z);
+  }
+
+  @Test
+  public void abstractClass() {
+    final APoint point = new CPoint(4, 5);
+
+    Assert.assertEquals(4, point.getX());
+    Assert.assertEquals(5, point.getY());
+
+    point.move(10, 20);
+
+    Assert.assertEquals(10, point.getX());
+    Assert.assertEquals(20, point.getY());
+  }
+
+  @Test
+  public void interfaces() {
+    final IPoint point = new CPoint(4, 5);
+
+    Assert.assertEquals(4, point.getX());
+    Assert.assertEquals(5, point.getY());
+
+    point.move(10, 20);
+
+    Assert.assertEquals(10, point.getX());
+    Assert.assertEquals(20, point.getY());
+
+    Assert.assertTrue(point instanceof IMove);
+  }
+
+  @Test
+  public void overriding() {
+    final CPoint3D point = new CPoint3D(1, 2, 3);
+
+    Assert.assertEquals(1, point.getX());
+    Assert.assertEquals(2, point.getY());
+    Assert.assertEquals(3, point.z);
+
+    point.move(20, 30);
+
+    Assert.assertEquals(20, point.getX());
+    Assert.assertEquals(30, point.getY());
+    Assert.assertEquals(0, point.z);
+  }
+
+  @Test
+  public void callingInterfaceMethod() {
+    final CPoint point = new CPoint(1, 2);
+    final Mover mover = new Mover(point);
+
+    Assert.assertEquals(1, point.getX());
+    Assert.assertEquals(2, point.getY());
+
+    mover.move(22, 33);
+
+    Assert.assertEquals(22, point.getX());
+    Assert.assertEquals(33, point.getY());
+  }
+
+  @Test
+  public void compareTo0() {
+    final CPoint point = new CPoint(1, 2);
+    final int result = point.compareTo(null);
+
+    Assert.assertEquals(-1, result);
+  }
+
+  @Test
+  public void compareTo1() {
+    final CPoint point = new CPoint(1, 2);
+    final int result = point.compareTo(new Integer(2));
+
+    Assert.assertEquals(-1, result);
+  }
+
+  @Test
+  public void compareTo2() {
+    final CPoint point1 = new CPoint(1, 2);
+    final CPoint point2 = new CPoint(1, 2);
+    final int result = point1.compareTo(point2);
+
+    Assert.assertEquals(0, result);
+  }
+
+  @Test
+  public void compareTo3() {
+    final CPoint point = new CPoint(1, 2);
+    final int result = point.compareTo(point);
+
+    Assert.assertEquals(0, result);
+  }
+
+  @Test
+  public void compareTo4() {
+    final CPoint point1 = new CPoint(1, 2);
+    final CPoint point2 = new CPoint(2, 2);
+    final int result = point1.compareTo(point2);
+
+    Assert.assertEquals(-1, result);
+  }
+
+  @Test
+  public void compareTo5() {
+    final CPoint point1 = new CPoint(1, 2);
+    final CPoint point2 = new CPoint(1, 3);
+    final int result = point1.compareTo(point2);
+
+    Assert.assertEquals(-1, result);
+  }
+
+  @Test
+  public void compareTo6() {
+    final CPoint point1 = new CPoint(1, 2);
+    final CPoint point2 = new CPoint(0, 2);
+    final int result = point1.compareTo(point2);
+
+    Assert.assertEquals(1, result);
+  }
+
+  @Test
+  public void compareTo7() {
+    final CPoint point1 = new CPoint(1, 2);
+    final CPoint point2 = new CPoint(1, 1);
+    final int result = point1.compareTo(point2);
+
+    Assert.assertEquals(1, result);
   }
 }

@@ -3,6 +3,7 @@
 ;comments=*éàç
 #comments=*éàç
 .class public org/isk/pjb/Test;comments=*éàç
+  .super java/lang/Object
 	@comments=*éàç
   @comments=*éàç
 	.method public static methodName(I[[Lorg/isk/pjb/Test;Z)V@comments=*éàç
@@ -11,9 +12,9 @@
 		iload_0#comments=*éàç
 		;comments7
 			@comments=*éàç
-		iload_1
-		iadd
-		ireturn
+    iload_1
+    iadd
+    ireturn
 			;comments=*éàç
 		@comments=*éàç
 	.methodend@comments=*éàç

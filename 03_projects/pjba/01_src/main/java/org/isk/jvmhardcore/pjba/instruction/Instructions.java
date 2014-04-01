@@ -784,8 +784,40 @@ public class Instructions {
     return new ShortArgInstruction(0xb3, -sizeInStack, 0, indexInCP);
   }
 
+  public static Instruction getfield(short indexInCP, int sizeInStack) {
+    return new ShortArgInstruction(0xb4, sizeInStack, 0, indexInCP);
+  }
+
+  public static Instruction putfield(short indexInCP, int sizeInStack) {
+    return new ShortArgInstruction(0xb5, -sizeInStack, 0, indexInCP);
+  }
+
+  public static Instruction invokevirtual(short indexInCP, int stackDelta) {
+    return new ShortArgInstruction(0xb6, stackDelta, 0, indexInCP);
+  }
+
+  public static Instruction invokespecial(short indexInCP, int stackDelta) {
+    return new ShortArgInstruction(0xb7, stackDelta, 0, indexInCP);
+  }
+
   public static Instruction invokestatic(short indexInCP, int stackDelta) {
     return new ShortArgInstruction(0xb8, stackDelta, 0, indexInCP);
+  }
+
+  public static Instruction invokeinterface(short indexInCP, int stackDelta, int paramsCount) {
+    return new InvokeinterfaceInstruction(0xb9, stackDelta, 0, indexInCP, paramsCount);
+  }
+
+  public static Instruction new_(short indexInCP) {
+    return new ShortArgInstruction(0xbb, 1, 0, indexInCP);
+  }
+
+  public static Instruction checkcast(short indexInCP) {
+    return new ShortArgInstruction(0xc0, 0, 0, indexInCP);
+  }
+
+  public static Instruction instanceof_(short indexInCP) {
+    return new ShortArgInstruction(0xc1, 0, 0, indexInCP);
   }
 
   public static Instruction wide_iload(short indexInLV) {

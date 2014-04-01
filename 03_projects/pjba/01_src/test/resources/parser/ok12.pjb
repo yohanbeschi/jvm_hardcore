@@ -1,5 +1,13 @@
 .class public org/isk/pjb/TestIfeq
+  .super java/lang/Object
+
   .method public static ifeq(B)B
+    bipush -100
+    bipush 20
+    sipush 30
+    sipush -32222
+    ldc +1.e-5
+    ldc -15.56e-12
     iload_0
     ifeq label_1
     iconst_1

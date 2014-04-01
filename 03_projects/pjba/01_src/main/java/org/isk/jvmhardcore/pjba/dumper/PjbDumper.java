@@ -19,7 +19,6 @@ public class PjbDumper implements Visitor {
   final private StringBuilder pjb;
 
   private int methodCount;
-
   private int currentMethodLength;
   private StringBuilder currentInstruction;
   private List<InstructionWrapper> instructions;
@@ -72,8 +71,9 @@ public class PjbDumper implements Visitor {
   }
 
   @Override
-  public void visitSuperClass(int superClass) {
-    // Do nothing
+  public void visitSuperClass(int superClassIndex) {
+    final String fullyQualifiedSuperClassName = StringValues.getPrintableConstant(superClassIndex, this.classFile);
+    this.pjb.append("  .super ").append(fullyQualifiedSuperClassName).append("\n\n");
   }
 
   @Override
@@ -157,6 +157,12 @@ public class PjbDumper implements Visitor {
   }
 
   @Override
+  public void visitInterfaceConstantClassIndex(int constantClassIndex) {
+    final String fullyQualifiedInterfaceName = StringValues.getPrintableConstant(constantClassIndex, this.classFile);
+    this.pjb.append("  .interface ").append(fullyQualifiedInterfaceName);
+  }
+
+  @Override
   public void visitFieldAccessFlags(int accessFlags) {
     this.pjb.append("  .field ").append(StringValues.getFieldModifiers(accessFlags));
   }
@@ -179,7 +185,7 @@ public class PjbDumper implements Visitor {
   }
 
   @Override
-  public void visitConstantValueAttributeLength(int i) {
+  public void visitConstantValueAttributeLength(int length) {
     // Do nothing
   }
 
@@ -340,6 +346,7 @@ public class PjbDumper implements Visitor {
       case LD_CONSTANT:
       case FIELD:
       case METHOD:
+      case CLASS:
         printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) value), this.classFile);
         break;
       case LABEL:
@@ -417,6 +424,15 @@ public class PjbDumper implements Visitor {
 
     this.writeInstruction();
     this.currentMethodLength += LookupswitchInstruction.getLength(padding, keys.length);
+  }
+
+  @Override
+  public void visitInvokeinterface(int indexInCP, int paramsCount, int zero) {
+    final String printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) indexInCP), this.classFile);
+    
+    this.currentInstruction.append(" ").append(printableValue).append("\n");
+    this.writeInstruction();
+    this.currentMethodLength += 4;
   }
 
   private void writeInstruction() {

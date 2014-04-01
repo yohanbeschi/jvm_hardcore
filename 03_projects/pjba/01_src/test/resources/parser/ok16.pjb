@@ -1,0 +1,22 @@
+.class public org/isk/pjb/Mover
+  .super java/lang/Object
+
+  .field public point Lorg/isk/pjb/IMove;
+
+  .method public <init>(III)V
+    aload_0
+    invokespecial java/lang/Object <init> ()V
+    aload_0
+    iload_1
+    putfield org/isk/pjb/Mover point Lorg/isk/pjb/IMove;
+    return
+  .methodend
+
+  .method public move(II)V
+    aload_0
+    iload_1
+    iload_2
+    invokeinterface org/isk/pjb/IMove move (II)V
+    return
+  .methodend
+.classend

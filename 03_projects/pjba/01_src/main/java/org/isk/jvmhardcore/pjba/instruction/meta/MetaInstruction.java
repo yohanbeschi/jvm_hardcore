@@ -52,6 +52,7 @@ public abstract class MetaInstruction {
     TABLE_SWITCH,
     LOOKUP_SWITCH,
     FIELD,
-    METHOD;
+    METHOD,
+    CLASS;
   }
 }

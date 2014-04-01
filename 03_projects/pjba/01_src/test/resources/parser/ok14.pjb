@@ -1,4 +1,10 @@
 .class public org/isk/pjb/TestIfeq
+  .super java/lang/Object
+
+  .method public <init>()V
+    return
+  .methodend
+
   .method static <clinit>()V
     return
   .methodend

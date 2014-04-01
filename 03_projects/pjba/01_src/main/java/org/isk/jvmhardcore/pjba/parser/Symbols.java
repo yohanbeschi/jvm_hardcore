@@ -15,6 +15,15 @@ public class Symbols {
   final public static int CLASS_NAME = number++;
   final public static int CLASS_CONTENT = number++;
 
+  final public static int SUPER = number++;
+  final public static int SUPER_IDENTIFIER_START = number++;
+  final public static int SUPER_END = number++;
+
+  final public static int INTERFACES = number++;
+  final public static int INTERFACE = number++;
+  final public static int INTERFACE_END = number++;
+  final public static int INTERFACE_START_IDENTIFIER = number++;
+
   final public static int FIELDS = number++;
   final public static int FIELD = number++;
   final public static int FIELD_START_IDENTIFIER = number++;

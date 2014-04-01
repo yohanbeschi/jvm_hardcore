@@ -1,4 +1,5 @@
 .class public org/isk/pjb/TestIfeq
+  .super java/lang/Object
 
   @ a && (b || c) && (d || e)
   .method public static and(ZZZZZ)Z

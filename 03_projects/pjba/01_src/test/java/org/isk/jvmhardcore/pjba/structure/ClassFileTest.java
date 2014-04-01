@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class ClassFileTest {
 
-  final private static int OFFSET = 4; // Constructor sets thisClass & superClass
+  final private static int OFFSET = 2; // Constructor sets thisClass (ConstantClass + ConstantUTF8)
 
   private ClassFile classFile;
 

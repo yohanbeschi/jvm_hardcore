@@ -159,7 +159,7 @@ public class AssemblingInstructionsAndLabels {
       .bipush((byte) 100)
       .ireturn();
   }
-  
+
   private void buildTableswitch2(ClassFileBuilder builder) {
     builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "tableswitch2", "(I)I")
       .iload_0()

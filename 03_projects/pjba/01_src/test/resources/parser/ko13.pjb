@@ -1,3 +1,5 @@
 .class public org/isk/pjb/TestField
+  .super java/lang/Object
+
   .field static MY_FIELD_2 I = 10
 .classend

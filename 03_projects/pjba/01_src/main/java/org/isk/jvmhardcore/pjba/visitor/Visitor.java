@@ -31,6 +31,11 @@ public interface Visitor {
   void visitConstantInterfaceMethodRef(int classIndex, int nameAndTypeIndex);
   void visitConstantNameAndType(int nameIndex, int descriptorIndex);
 
+  //-------------------------------------------------------------------------------------------------------------------
+  // Interface
+  // -------------------------------------------------------------------------------------------------------------------
+  void visitInterfaceConstantClassIndex(int constantClassIndex);
+
   // -------------------------------------------------------------------------------------------------------------------
   // Field
   // -------------------------------------------------------------------------------------------------------------------
@@ -80,4 +85,5 @@ public interface Visitor {
   void visitInstructionWideLoadStore(int widenedOpcode, int indexInLV);
   void visitInstructionTableSwitch(int padding, int defaultOffset, int lowValue, int highValue, int[] jumpOffsets);
   void visitInstructionLookupSwitch(int padding, int defaultOffset, int nbPairs, int[] keys, int[] jumpOffsets);
+  void visitInvokeinterface(int indexInCP, int paramsCount, int zero);
 }

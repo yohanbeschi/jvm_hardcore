@@ -24,6 +24,7 @@ public class PjbDumperTest {
   }
 
   final private static String EXPECTED = ".class public super org/isk/jvmhardcore/pjba/MyFirstClass\n"
+                                       + "  .super java/lang/Object\n\n"
                                        + "  .method public static add(II)I\n"
                                          // actual string: Привет \" \n мир по-русски
                                        + "    ldc \"Привет \\\\\\\" \\\\n мир по-русски\"\n"

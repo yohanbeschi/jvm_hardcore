@@ -13,17 +13,17 @@ public class AdderTest {
   @Test
   public void add0() {
     final int sum = Adder.add(2, 3);
-    
+
     Assert.assertEquals(5, sum);
   }
-  
+
   /**
    * Test the method <code>add()</code> of the class AdderJava generated from Java code.
    */
   @Test
   public void add1() {
     final int sum = AdderJava.add(5, 4);
-    
+
     Assert.assertEquals(9, sum);
   }
 }

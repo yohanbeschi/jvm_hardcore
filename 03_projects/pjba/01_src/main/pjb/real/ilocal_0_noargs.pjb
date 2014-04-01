@@ -3,8 +3,10 @@
 @ and nothing having be storing at this index
 @ an exception is thrown
 .class public org/isk/pjb/TestIlocal_0_NoArgs
-	.method public static getFirst()I
-		iload_0
-		ireturn
-	.methodend
+  .super java/lang/Object
+
+  .method public static getFirst()I
+    iload_0
+    ireturn
+  .methodend
 .classend

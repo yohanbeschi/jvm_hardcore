@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestIfeq
+  .super java/lang/Object
+
   .method public static ifeq(B)B
     iload_0
     ifeq label_1:

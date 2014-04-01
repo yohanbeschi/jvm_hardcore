@@ -123,8 +123,8 @@ public class MathTokenizer extends Tokenizer {
   }
 
   public boolean isOperator(int character) {
-    return character == Ascii.PLUS_SIGN 
-        || character == Ascii.HYPHEN 
+    return character == Ascii.PLUS_SIGN
+        || character == Ascii.HYPHEN
         || character == Ascii.ASTERISK
         || character == Ascii.SLASH;
   }

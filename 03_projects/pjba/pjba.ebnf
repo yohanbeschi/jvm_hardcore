@@ -1,16 +1,19 @@
 classes = class {class}
 class = ws classStartIdentifier ws classModifiers
-        className classContent classEndIdentifier ws (* modifié *)
-classContent = fields methods (* nouveau *)
-fields = {field} (* nouveau *)
-field = ws fieldStartIdentifier ws fieldModifiers ws fieldName ws fieldDescriptor ws oFieldAssignement (* nouveau *)
-oFieldAssignement = [assignementOperator ws constantValue] ws (* nouveau *)
+        className classContent classEndIdentifier ws
+classContent = super interfaces fields methods (* modifié *)
+super = ws superStartIdentifer ws className ws (* nouveau *)
+interfaces = {interface} (* nouveau *)
+interface = ws interfaceStartIdentifer ws className ws (* nouveau *)
+fields = {field}
+field = ws fieldStartIdentifier ws fieldModifiers ws fieldName ws fieldDescriptor ws oFieldAssignement
+oFieldAssignement = [assignementOperator ws constantValue] ws
 methods = {method}
 method = ws methodStartIdentifier ws methodModifiers methodName ws 
          methodSignature methodContent methodEndIdentifier ws
 className = identifier {identifierSeparator identifier}
-fieldName = identifier (* nouveau *)
-fieldDescriptor = descriptor (* nouveau *)
+fieldName = identifier
+fieldDescriptor = descriptor
 methodName = identifier
 methodSignature = parametersStart parametersDescriptor parametersEnd returnDescriptor
 parametersDescriptor = descriptor {descriptor}
@@ -23,22 +26,24 @@ mnemonic = ? known mnemonic ?
 arg = ? authorized argument for mnemonic ?
 labelAsArg = {labelCharacter}
 classModifiers = {classModifier ws}
-fieldModifiers = {fieldModifier ws} (* nouveau *)
+fieldModifiers = {fieldModifier ws}
 methodModifiers = {methodsModifier ws}
 classStartIdentifier = '.class'
 classEndIdentifier = '.endclass'
-fieldStartIdentifier = '.field' (* nouveau *)
+superStartIdentifer = '.super' (* nouveau *)
+interfaceStartIdentifer = '.interface' (* nouveau *)
+fieldStartIdentifier = '.field'
 methodStartIdentifier = '.method'
 methodEndIdentifier = '.endMethod'
 classModifier = 'public' | 'final' | 'abstract' | 'interface' | 'super' 
 fieldModifier = 'public' | 'protected' | 'private' | 'static' | 'final' |
-                'transient' | 'volatile' (* nouveau *)
+                'transient' | 'volatile'
 methodsModifier = 'public' | 'protected' | 'private' | 'static' | 'final' | 
                   'strictfp' | 'synchronized' | 'abstract'  | 'native'
 descriptor = 'B' | 'C' | 'D' | 'F' | 'I' | 'J' | 'S' | 'Z' | 
              '[' ['descriptor | 'L' className ';'
-constantValue = character | string | boolean | integer | float (* nouveau *)
-assignementOperator = '=' (* nouveau *)
+constantValue = character | string | boolean | integer | float
+assignementOperator = '='
 parametersStart = '('
 parametersEnd = ')'
 labelEnd = ':'
@@ -48,11 +53,11 @@ multilineComment = '/*' ? All characters but '*/' ? '*/'
 asciiJavaLetter = asciiLetter | '_' | '$'
 labelCharacter = asciiLetter | digit | '_'
 asciiLetter = ? a-z | A-Z ?
-character = "'" ? One character between all characters excepted NULL ? "'" (* nouveau *)
+character = "'" ? One character between all characters excepted NULL ? "'"
 string = '"' ? All characters but NULL ? '"'
-boolean = 'true' | 'false' (* nouveau *)
-integer = ? integer ? (* nouveau *)
-float = ? float ? (* nouveau *)
+boolean = 'true' | 'false'
+integer = ? integer ?
+float = ? float ?
 digit = ? 0-9 ?
 identifierSeparator = '/'
 mws = TAB | SPACE | NEW_LINE

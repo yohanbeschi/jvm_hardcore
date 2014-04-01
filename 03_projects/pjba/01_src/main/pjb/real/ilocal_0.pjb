@@ -1,6 +1,8 @@
 .class public org/isk/pjb/TestIlocal_0
-	.method public static getFirst(III)I
-		iload_0
-		ireturn
-	.methodend
+  .super java/lang/Object
+
+  .method public static getFirst(III)I
+    iload_0
+    ireturn
+  .methodend
 .classend

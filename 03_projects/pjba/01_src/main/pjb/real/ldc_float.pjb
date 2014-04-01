@@ -1,6 +1,8 @@
 .class public org/isk/pjb/TestLdc_Float
-	.method public static getFloat()F
-		ldc -15.56e-12
-		freturn
-	.methodend
+  .super java/lang/Object
+
+  .method public static getFloat()F
+    ldc -15.56e-12
+    freturn
+  .methodend
 .classend

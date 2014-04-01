@@ -109,6 +109,14 @@ public class PjbTokenizer extends Tokenizer {
     this.directiveTokenizer.checkClassEnd();
   }
 
+  public void checkSuperStart() {
+    this.directiveTokenizer.checkSuperStart();
+  }
+
+  public void checkInterfaceStart() {
+    this.directiveTokenizer.checkInterfaceStart();
+  }
+
   public void checkFieldStart() {
     this.directiveTokenizer.checkField();
   }
@@ -127,6 +135,10 @@ public class PjbTokenizer extends Tokenizer {
 
   public boolean isClassStart() {
     return this.directiveTokenizer.isClassStart();
+  }
+
+  public boolean isInterfaceStart() {
+    return this.directiveTokenizer.isInterface();
   }
 
   public boolean isFieldStart() {

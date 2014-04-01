@@ -1,11 +1,13 @@
 .class public org/isk/pjb/TestWide
+  .super java/lang/Object
+
   .method public static wide_istore_iload(I)I
     iload_0
     istore 65231
     iload 65231
     ireturn
   .methodend
-  
+
   .method public static iinc(I)I
      iload_0
      istore 350

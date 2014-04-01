@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestGoto
+  .super java/lang/Object
+
   .method public static goto_after(II)Z
     iload_0
     iload_1

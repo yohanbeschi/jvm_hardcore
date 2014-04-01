@@ -1,4 +1,6 @@
 .class public Test
-	.method public static methodName()V
-	.methodend
+  .super java/lang/Object
+
+  .method public static methodName()V
+  .methodend
 .classend

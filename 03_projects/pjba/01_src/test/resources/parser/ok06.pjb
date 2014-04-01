@@ -1,10 +1,11 @@
 .class
 public
-org/isk/pjb/Test 
+org/isk/pjb/Test
+.super
+java/lang/Object
 .method
-public static 
-methodName 
-()V 
-.methodend	
+public static
+methodName
+()V
+.methodend
 .classend
-	

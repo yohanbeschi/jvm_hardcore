@@ -43,6 +43,8 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
   @Override
   public List<ClassFile> parse() {
     EventType eventType = null;
+    String className = null;
+    String parentClassName = null;
     int classModifiers = 0;
     int fieldModifiers = 0;
     String fieldName = null;
@@ -63,13 +65,32 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
           classModifiers |= this.tokenizer.getClassModifier();
           break;
         case CLASS_NAME:
-          final String className = this.tokenizer.getClassName();
-          this.classFileBuilder = new ClassFileBuilder(classModifiers, className);
+          if (className != null) {
+            parentClassName = this.tokenizer.getClassName(); 
+          } else {
+            className = this.tokenizer.getClassName(); 
+          }
           break;
         case CLASS_END:
           this.tokenizer.checkClassEnd();
           this.classFiles.add(this.classFileBuilder.build());
+          this.classFileBuilder = null;
+          break;
+        case SUPER_START:
+          this.tokenizer.checkSuperStart();
+          break;
+        case SUPER_END:
+          this.classFileBuilder = new ClassFileBuilder(classModifiers, className, parentClassName);
+          className = null;
+          parentClassName = null;
           classModifiers = 0;
+          break;
+        case INTERFACE_START:
+          this.tokenizer.checkInterfaceStart();
+          break;
+        case INTERFACE_END:
+          this.classFileBuilder.newInterface(className);
+          className = null;
           break;
         case FIELD_START:
           this.tokenizer.checkFieldStart();
@@ -277,7 +298,11 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
         this.tokenizer.consumeWhitespaces();
         final String fieldType = this.tokenizer.getFieldType();
 
-        if ("getstatic".equals(metaInstruction.getMnemonic())) {
+        if ("getfield".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.getfield(fieldClasseName, fieldName, fieldType);
+        } else if ("putfield".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.putfield(fieldClasseName, fieldName, fieldType);
+        } else if ("getstatic".equals(metaInstruction.getMnemonic())) {
           this.methodBuilder.getstatic(fieldClasseName, fieldName, fieldType);
         } else if ("putstatic".equals(metaInstruction.getMnemonic())) {
           this.methodBuilder.putstatic(fieldClasseName, fieldName, fieldType);
@@ -292,8 +317,26 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
         this.tokenizer.consumeWhitespaces();
         final String methodSignature = this.tokenizer.getMethodSignature();
 
-        if ("invokestatic".equals(metaInstruction.getMnemonic())) {
+        if ("invokevirtual".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.invokevirtual(methodClassName, methodName, methodSignature);
+        } else if ("invokespecial".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.invokespecial(methodClassName, methodName, methodSignature);
+        } else if ("invokestatic".equals(metaInstruction.getMnemonic())) {
           this.methodBuilder.invokestatic(methodClassName, methodName, methodSignature);
+        } else if ("invokeinterface".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.invokeinterface(methodClassName, methodName, methodSignature);
+        }
+        break;
+      case CLASS:
+        this.tokenizer.consumeWhitespaces();
+        final String fullyQualifiedConcreteType = this.tokenizer.getClassName();
+        
+        if ("new".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.new_(fullyQualifiedConcreteType);
+        } else if ("checkcast".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.checkcast(fullyQualifiedConcreteType);
+        } else if ("instanceof".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.instanceof_(fullyQualifiedConcreteType);
         }
         break;
       case W_IFS_CONSTANT:
@@ -319,6 +362,13 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
     this.table[Symbols.CLASS_MODIFIER] = new Productions.ClassModifier();
     this.table[Symbols.CLASS_NAME] = new Productions.ClassName();
     this.table[Symbols.CLASS_CONTENT] = new Productions.ClassContent();
+    this.table[Symbols.SUPER] = new Productions.Super();
+    this.table[Symbols.SUPER_IDENTIFIER_START] = new Productions.SuperStart();
+    this.table[Symbols.SUPER_END] = new Productions.SuperEnd();
+    this.table[Symbols.INTERFACES] = new Productions.Interfaces();
+    this.table[Symbols.INTERFACE] = new Productions.Interface();
+    this.table[Symbols.INTERFACE_START_IDENTIFIER] = new Productions.InterfaceStart();
+    this.table[Symbols.INTERFACE_END] = new Productions.InterfaceEnd();
     this.table[Symbols.FIELDS] = new Productions.Fields();
     this.table[Symbols.FIELD] = new Productions.Field();
     this.table[Symbols.FIELD_START_IDENTIFIER] = new Productions.FieldStart();

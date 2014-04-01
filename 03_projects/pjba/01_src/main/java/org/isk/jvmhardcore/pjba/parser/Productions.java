@@ -54,6 +54,53 @@ public class Productions {
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       productionStack.push(table[Symbols.METHODS]);
       productionStack.push(table[Symbols.FIELDS]);
+      productionStack.push(table[Symbols.INTERFACES]);
+      productionStack.push(table[Symbols.SUPER]);
+
+      return null;
+    }
+  }
+
+  public static class Super implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      tokenizer.consumeWhitespaces();
+
+      productionStack.push(table[Symbols.SUPER_END]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.CLASS_NAME]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.SUPER_IDENTIFIER_START]);
+
+      return null;
+    }
+  }
+
+  public static class Interfaces implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      tokenizer.consumeWhitespaces();
+
+      if (tokenizer.isInterfaceStart()) {
+        productionStack.push(table[Symbols.INTERFACES]);
+        productionStack.push(table[Symbols.INTERFACE]);
+      }
+      return null;
+    }
+  }
+
+  public static class Interface implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      productionStack.push(table[Symbols.INTERFACE_END]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.CLASS_NAME]);
+      productionStack.push(table[Symbols.WS]);
+      productionStack.push(table[Symbols.INTERFACE_START_IDENTIFIER]);
+      productionStack.push(table[Symbols.WS]);
 
       return null;
     }
@@ -207,6 +254,22 @@ public class Productions {
     }
   }
 
+  public static class SuperStart implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.SUPER_START;
+    }
+  }
+
+  public static class InterfaceStart implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.INTERFACE_START;
+    }
+  }
+
   public static class FieldStart implements Production<EventType, PjbTokenizer> {
     public EventType produce(PjbTokenizer tokenizer,
                              Production<EventType, PjbTokenizer>[] table,
@@ -222,7 +285,7 @@ public class Productions {
       return EventType.FIELD_MODIFIER;
     }
   }
-  
+
   public static class FieldName implements Production<EventType, PjbTokenizer> {
     public EventType produce(PjbTokenizer tokenizer,
                              Production<EventType, PjbTokenizer>[] table,
@@ -230,7 +293,7 @@ public class Productions {
       return EventType.FIELD_NAME;
     }
   }
-  
+
   public static class FieldDescriptor implements Production<EventType, PjbTokenizer> {
     public EventType produce(PjbTokenizer tokenizer,
                              Production<EventType, PjbTokenizer>[] table,
@@ -313,6 +376,22 @@ public class Productions {
                              Production<EventType, PjbTokenizer>[] table,
                              Stack<Production<EventType, PjbTokenizer>> productionStack) {
       return EventType.CONSTANT_VALUE;
+    }
+  }
+
+  public static class SuperEnd implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.SUPER_END;
+    }
+  }
+
+  public static class InterfaceEnd implements Production<EventType, PjbTokenizer> {
+    public EventType produce(PjbTokenizer tokenizer,
+                             Production<EventType, PjbTokenizer>[] table,
+                             Stack<Production<EventType, PjbTokenizer>> productionStack) {
+      return EventType.INTERFACE_END;
     }
   }
 

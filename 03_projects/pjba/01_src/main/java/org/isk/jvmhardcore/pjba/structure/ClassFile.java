@@ -19,12 +19,12 @@ public class ClassFile implements Visitable {
 
   private PjbaLinkedList<Constant.ConstantPoolEntry> constantPool;
 
-  private int accessFlags = 0x0020; // super
+  private int accessFlags;
 
   private int thisClass;
   private int superClass;
 
-  private int[] interfaces;
+  private PjbaLinkedList<Interface> interfaces;
 
   private PjbaLinkedList<Field> fields;
   private PjbaLinkedList<Method> methods;
@@ -35,7 +35,7 @@ public class ClassFile implements Visitable {
 
   public ClassFile() {
     this.constantPool = new PjbaLinkedList<>();
-    this.interfaces = new int[0];
+    this.interfaces = new PjbaLinkedList<>();
     this.fields = new PjbaLinkedList<>();
     this.methods = new PjbaLinkedList<>();
     this.attributes = new PjbaLinkedList<>();
@@ -51,11 +51,6 @@ public class ClassFile implements Visitable {
     // This
     final int classNameIndex = this.addConstantUTF8(fullyQualifiedName);
     this.thisClass = this.addConstantClass(classNameIndex);
-
-    // Parent - Hard coded for now
-    final String superName = "java/lang/Object";
-    final int superNameIndex = this.addConstantUTF8(superName);
-    this.superClass = this.addConstantClass(superNameIndex);
   }
 
   // --------------------------------------------------------------------------------------------------------------------
@@ -104,6 +99,10 @@ public class ClassFile implements Visitable {
     this.accessFlags |= accessFlags;
   }
 
+  public boolean accessFlagSet(int accessFlags) {
+    return (this.accessFlags & accessFlags) == accessFlags;
+  }
+
   public void setThisClass(int thisClass) {
     this.thisClass = thisClass;
   }
@@ -112,7 +111,7 @@ public class ClassFile implements Visitable {
     this.superClass = superClass;
   }
 
-  public void setInterfaces(int[] interfaces) {
+  public void setInterfaces(PjbaLinkedList<Interface> interfaces) {
     this.interfaces = interfaces;
   }
 
@@ -214,6 +213,18 @@ public class ClassFile implements Visitable {
   }
 
   // --------------------------------------------------------------------------------------------------------------------
+  // Interface methods
+  // --------------------------------------------------------------------------------------------------------------------
+
+  public void addInterface(final Interface interface_) {
+    this.interfaces.add(interface_);
+  }
+
+  public PjbaLinkedList<Interface> getInterfaces() {
+    return this.interfaces;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------
   // Field methods
   // --------------------------------------------------------------------------------------------------------------------
 
@@ -250,7 +261,8 @@ public class ClassFile implements Visitable {
     visitor.visitClassAccessFlags(this.accessFlags);
     visitor.visitThisClass(this.thisClass);
     visitor.visitSuperClass(this.superClass);
-    visitor.visitInterfacesSize(this.interfaces.length);
+    visitor.visitInterfacesSize(this.interfaces.size());
+    this.interfaces.accept(visitor);
     visitor.visitFieldsSize(this.fields.size());
     this.fields.accept(visitor);
     visitor.visitMethodsSize(this.methods.size());

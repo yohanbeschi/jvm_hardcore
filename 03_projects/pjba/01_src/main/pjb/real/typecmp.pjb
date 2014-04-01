@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestTypeCmp
+  .super java/lang/Object
+
   @ a compareTo b
   .method public static lcmp(JJ)I
     lload_0

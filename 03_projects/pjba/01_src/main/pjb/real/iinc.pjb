@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestIinc
+  .super java/lang/Object
+
   .method public static iinc(I)I
      iinc 0 -1
      iload_0

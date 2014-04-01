@@ -1,4 +1,6 @@
 .class org/isk/pjb/Test
-	.method
-	.methodend
+  .super java/lang/Object
+
+  .method
+  .methodend
 .classend

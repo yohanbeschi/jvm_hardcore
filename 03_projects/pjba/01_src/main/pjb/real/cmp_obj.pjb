@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestObject
+  .super java/lang/Object
+
   .method public static if_acmpeq(Ljava/lang/Object;Ljava/lang/Object;)Z
     aload_0
     aload_1

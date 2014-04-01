@@ -34,6 +34,7 @@ public class MethodBuilder {
   public MethodBuilder(ClassFileBuilder classFileBuilder, Method method, int parametersCount, boolean eagerConstruction) {
     this.labelAsArgs = new HashMap<>();
     this.classFileBuilder = classFileBuilder;
+    this.eagerConstruction = eagerConstruction;
 
     if (eagerConstruction) {
       this.instructions = null;
@@ -46,12 +47,15 @@ public class MethodBuilder {
       this.labels = new LinkedList<>();
       this.labelsAsMap = null;
     }
-    
-    final int codeAttributeIndex = this.classFileBuilder.getClassFile().addConstantUTF8(Code.ATTRIBUTE_NAME);
-    this.code = new Code(codeAttributeIndex);
-    this.code.setParameterCount(parametersCount);
-    method.addAttibute(this.code);
-    this.eagerConstruction = eagerConstruction;
+
+    if (!method.accessFlagSet(Method.MODIFIER_ABSTRACT)) {
+      final int codeAttributeIndex = this.classFileBuilder.getClassFile().addConstantUTF8(Code.ATTRIBUTE_NAME);
+      this.code = new Code(codeAttributeIndex);
+      this.code.setParameterCount(parametersCount);
+      method.addAttibute(this.code);
+    } else {
+      this.code = null;
+    }
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -981,6 +985,31 @@ public class MethodBuilder {
     return this;
   }
 
+  public MethodBuilder getfield(String fullyQualifiedName, String fieldName, String fieldDescriptor) {
+    final int fieldRefIndex = this.internalField(fullyQualifiedName, fieldName, fieldDescriptor);
+    // ... - 1 : getfield removes objectref from the stack when it is called
+    // Therefore, (before -> after) objectref -> 1 unit => sizeInStack = 0
+    //                          and objectref -> 2 units => sizeInStack = +1
+    final int sizeInStack = DescriptorCounter.fieldDescriptorUnits(fieldDescriptor) - 1;
+
+    this.instruction(Instructions.getfield((short) fieldRefIndex, sizeInStack));
+
+    return this;
+  }
+
+  public MethodBuilder putfield(String fullyQualifiedName, String fieldName, String fieldDescriptor) {
+    final int fieldRefIndex = this.internalField(fullyQualifiedName, fieldName, fieldDescriptor);
+    // 1 + ... : putfield removes objectref from the stack when it is called
+    // Therefore, (before -> after) objectref, 1 unit -> ... => sizeInStack = -2
+    //                          and objectref, 2 units -> ... => sizeInStack = -3
+    // Note the negative sign is added by Instructions.putfield()
+    final int sizeInStack = 1 + DescriptorCounter.fieldDescriptorUnits(fieldDescriptor);
+
+    this.instruction(Instructions.putfield((short) fieldRefIndex, sizeInStack));
+
+    return this;
+  }
+
   public MethodBuilder getstatic(String fullyQualifiedName, String fieldName, String fieldDescriptor) {
     final int fieldRefIndex = this.internalField(fullyQualifiedName, fieldName, fieldDescriptor);
     final int sizeInStack = DescriptorCounter.fieldDescriptorUnits(fieldDescriptor);
@@ -1005,11 +1034,50 @@ public class MethodBuilder {
     return this.classFileBuilder.getClassFile().addConstantFieldRef(classIndex, nameAndTypeIndex);
   }
 
+  public MethodBuilder invokevirtual(String fullyQualifiedName, String methodName, String methodDescriptor) {
+    final int methodRefIndex = this.internalMethod(fullyQualifiedName, methodName, methodDescriptor);
+    // ... - 1 : invokevirtual removes objectref from the stack when it is called
+    // Therefore, (before -> after) objectref, [arg1, [arg2 ...]] -> returnValue
+    //                              => sizeInStack = returnValue - paramsUnits - objectref
+    final int stackDelta = DescriptorCounter.methodsDescriptorSignatureUnits(methodDescriptor) - 1;
+
+    this.instruction(Instructions.invokevirtual((short) methodRefIndex, stackDelta));
+
+    return this;
+  }
+
+  public MethodBuilder invokespecial(String fullyQualifiedName, String methodName, String methodDescriptor) {
+    final int methodRefIndex = this.internalMethod(fullyQualifiedName, methodName, methodDescriptor);
+    // ... - 1 : invokespecial removes objectref from the stack when it is called
+    // Therefore, (before -> after) objectref, [arg1, [arg2 ...]] -> returnValue
+    //                              => sizeInStack = returnValue - paramsUnits - objectref
+    final int stackDelta = DescriptorCounter.methodsDescriptorSignatureUnits(methodDescriptor) - 1;
+
+    this.instruction(Instructions.invokespecial((short) methodRefIndex, stackDelta));
+
+    return this;
+  }
+
   public MethodBuilder invokestatic(String fullyQualifiedName, String methodName, String methodDescriptor) {
     final int methodRefIndex = this.internalMethod(fullyQualifiedName, methodName, methodDescriptor);
     final int stackDelta = DescriptorCounter.methodsDescriptorSignatureUnits(methodDescriptor);
 
     this.instruction(Instructions.invokestatic((short) methodRefIndex, stackDelta));
+
+    return this;
+  }
+
+  public MethodBuilder invokeinterface(String fullyQualifiedName, String methodName, String methodDescriptor) {
+    final int classIndex = this.addConstantClass(fullyQualifiedName);
+    final int nameAndTypeIndex = this.addConstantNameAndType(methodName, methodDescriptor);
+    final int methodRefIndex = this.classFileBuilder.getClassFile().addConstantInterfaceMethodRef(classIndex, nameAndTypeIndex);
+    // ... - 1 : invokespecial removes objectref from the stack when it is called
+    // Therefore, (before -> after) objectref, [arg1, [arg2 ...]] -> returnValue
+    //                              => sizeInStack = returnValue - paramsUnits - objectref
+    final int stackDelta = DescriptorCounter.methodsDescriptorSignatureUnits(methodDescriptor) - 1;
+    final int paramsCount = DescriptorCounter.methodsDescriptorParamsUnits(methodDescriptor) + 1;
+
+    this.instruction(Instructions.invokeinterface((short) methodRefIndex, stackDelta, paramsCount));
 
     return this;
   }
@@ -1031,6 +1099,30 @@ public class MethodBuilder {
     final int utf8NameIndex = this.classFileBuilder.getClassFile().addConstantUTF8(name);
     final int utf8DescriptorIndex = this.classFileBuilder.getClassFile().addConstantUTF8(type);
     return this.classFileBuilder.getClassFile().addConstantNameAndType(utf8NameIndex, utf8DescriptorIndex);
+  }
+
+  public MethodBuilder new_(String fullyQualifiedConcreteType) {
+    final int classIndex = this.addConstantClass(fullyQualifiedConcreteType);
+    final Instruction instruction = Instructions.new_((short) classIndex);
+    this.instruction(instruction);
+
+    return this;
+  }
+
+  public MethodBuilder checkcast(String fullyQualifiedConcreteType) {
+    final int classIndex = this.addConstantClass(fullyQualifiedConcreteType);
+    final Instruction instruction = Instructions.checkcast((short) classIndex);
+    this.instruction(instruction);
+
+    return this;
+  }
+
+  public MethodBuilder instanceof_(String fullyQualifiedConcreteType) {
+    final int classIndex = this.addConstantClass(fullyQualifiedConcreteType);
+    final Instruction instruction = Instructions.instanceof_((short) classIndex);
+    this.instruction(instruction);
+
+    return this;
   }
 
   public MethodBuilder ifnull(String label) {

@@ -46,6 +46,44 @@ public class DirectiveTokenizer extends Tokenizer {
       throw new ParserException("Expected directive: '.classend'");
   }
 
+  public void checkSuperStart() {
+    if (this.next() != Ascii.PERIOD)
+      throw new ParserException("Expected directive: '.super'");
+    if (this.next() != Ascii.LOWERCASE_S)
+      throw new ParserException("Expected directive: '.super'");
+    if (this.next() != Ascii.LOWERCASE_U)
+      throw new ParserException("Expected directive: '.super'");
+    if (this.next() != Ascii.LOWERCASE_P)
+      throw new ParserException("Expected directive: '.super'");
+    if (this.next() != Ascii.LOWERCASE_E)
+      throw new ParserException("Expected directive: '.super'");
+    if (this.next() != Ascii.LOWERCASE_R)
+      throw new ParserException("Expected directive: '.super'");
+  }
+
+  public void checkInterfaceStart() {
+    if (this.next() != Ascii.PERIOD)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_I)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_N)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_T)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_E)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_R)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_F)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_A)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_C)
+      throw new ParserException("Expected directive: '.interface'");
+    if (this.next() != Ascii.LOWERCASE_E)
+      throw new ParserException("Expected directive: '.interface'");
+  }
+
   public void checkField() {
     if (this.next() != Ascii.PERIOD)
       throw new ParserException("Expected directive: '.field'");
@@ -114,6 +152,26 @@ public class DirectiveTokenizer extends Tokenizer {
     this.mark();
 
     return isClassStart;
+  }
+
+  public boolean isInterface() {
+    this.mark();
+
+    boolean isInterface = this.next() == Ascii.PERIOD 
+                       && this.next() == Ascii.LOWERCASE_I
+                       && this.next() == Ascii.LOWERCASE_N
+                       && this.next() == Ascii.LOWERCASE_T
+                       && this.next() == Ascii.LOWERCASE_E
+                       && this.next() == Ascii.LOWERCASE_R
+                       && this.next() == Ascii.LOWERCASE_F
+                       && this.next() == Ascii.LOWERCASE_A
+                       && this.next() == Ascii.LOWERCASE_C
+                       && this.next() == Ascii.LOWERCASE_E;
+
+    this.reset();
+    this.mark();
+
+    return isInterface;
   }
 
   public boolean isField() {

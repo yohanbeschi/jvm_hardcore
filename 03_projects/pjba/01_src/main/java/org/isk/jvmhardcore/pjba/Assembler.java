@@ -56,6 +56,11 @@ public class Assembler implements Visitor {
   }
 
   @Override
+  public void visitInterfaceConstantClassIndex(int constantClassIndex) {
+    this.writeShort(constantClassIndex);
+  }
+
+  @Override
   public void visitFieldsSize(int size) {
     this.writeShort(size);
   }
@@ -286,6 +291,13 @@ public class Assembler implements Visitor {
       this.writeInt(keys[i]);
       this.writeInt(jumpOffsets[i]);
     }
+  }
+
+  @Override
+  public void visitInvokeinterface(int indexInCP, int paramsCount, int zero) {
+    this.writeShort(indexInCP);
+    this.writeByte(paramsCount);
+    this.writeByte(zero);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

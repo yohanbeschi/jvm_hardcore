@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestIadd
+  .super java/lang/Object
+
   .method public static add(II)I
     iload_0
     iload_1

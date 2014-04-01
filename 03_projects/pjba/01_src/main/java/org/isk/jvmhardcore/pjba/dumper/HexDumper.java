@@ -172,6 +172,12 @@ public class HexDumper implements Visitor {
   }
 
   @Override
+  public void visitInterfaceConstantClassIndex(int constantClassIndex) {
+    this.pjb.append(this.getHexAndAddShort()).append("\t");
+    this.pjb.append("+ #").append(constantClassIndex).append("\n");
+  }
+
+  @Override
   public void visitFieldAccessFlags(int accessFlags) {
     this.pjb.append(this.getHexAndAddShort()).append("\t");
     this.pjb.append("+ Access Flags: ").append(StringValues.getFieldModifiers(accessFlags)).append("\n");
@@ -322,6 +328,7 @@ public class HexDumper implements Visitor {
       case LD_CONSTANT:
       case FIELD:
       case METHOD:
+      case CLASS:
         this.pjb.append(" #").append(BytecodeUtils.unsign((short) value)).append("\n");
         break;
       case LABEL:
@@ -398,6 +405,17 @@ public class HexDumper implements Visitor {
     final int length = LookupswitchInstruction.getLength(padding, keys.length) - 1;
     this.currentMethodLength += length;
     this.getHexAndAdd(length);
+  }
+
+  @Override
+  public void visitInvokeinterface(int indexInCP, int paramsCount, int zero) {
+    this.pjb.append(" #").append(BytecodeUtils.unsign((short) indexInCP))
+            .append(" ").append(paramsCount)
+            .append(" ").append(zero)
+            .append("\n");
+    
+    this.currentMethodLength += 4;
+    this.getHexAndAdd(4);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestIfcond
+  .super java/lang/Object
+
   .method public static ifeq(Z)Z
     iload_0
     ifeq ko

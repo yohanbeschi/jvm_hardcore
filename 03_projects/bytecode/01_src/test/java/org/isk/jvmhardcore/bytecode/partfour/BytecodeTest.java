@@ -6,14 +6,14 @@ import org.junit.Test;
 public class BytecodeTest {
   @Test
   public void aload() {
-    final String result = Aload.getThird((byte)1, 2, "Hello", 4l);
+    final String result = Aload.getThird((byte) 1, 2, "Hello", 4l);
 
     Assert.assertEquals("Hello", result);
   }
 
   @Test
   public void lload() {
-    final long result = Lload.getFourth((byte)1, 2, "Hello", 4l);
+    final long result = Lload.getFourth((byte) 1, 2, "Hello", 4l);
 
     Assert.assertEquals(4l, result);
   }
@@ -52,9 +52,8 @@ public class BytecodeTest {
       Iload_0_NoArgs.getFirst();
       Assert.fail();
     } catch (VerifyError e) {
-      Assert.assertEquals("(class: org/isk/jvmhardcore/bytecode/partfour/Iload_0_NoArgs, " +
-            "method: getFirst signature: ()I) Accessing value from uninitialized register 0",
-            e.getMessage());
+      Assert.assertEquals("(class: org/isk/jvmhardcore/bytecode/partfour/Iload_0_NoArgs, "
+          + "method: getFirst signature: ()I) Accessing value from uninitialized register 0", e.getMessage());
     }
   }
 

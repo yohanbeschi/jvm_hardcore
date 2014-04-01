@@ -1,4 +1,4 @@
 .class
-	.method methodName()V
-	.methodend
+  .method methodName()V
+  .methodend
 .classend

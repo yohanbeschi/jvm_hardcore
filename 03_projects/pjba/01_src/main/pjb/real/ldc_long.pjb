@@ -1,6 +1,8 @@
 .class public org/isk/pjb/TestLdc_Long
-	.method public static getLong()J
-		ldc2_w 1324
-		lreturn
-	.methodend
+  .super java/lang/Object
+
+  .method public static getLong()J
+    ldc2_w 1324
+    lreturn
+  .methodend
 .classend

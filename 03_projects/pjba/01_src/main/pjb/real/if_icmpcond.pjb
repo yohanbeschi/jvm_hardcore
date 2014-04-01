@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestIfICompCond
+  .super java/lang/Object
+
   @ a >= b
   .method public static if_icmpge(II)Z
     iload_0

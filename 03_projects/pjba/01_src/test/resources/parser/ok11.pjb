@@ -8,6 +8,8 @@ comment
 *//*Multiline
 comment
 */
+    .super java/lang/Object
+
 	.method/*Multiline
 comment
 */ public static methodName(I[[Lorg/isk/pjb/Test;Z)V

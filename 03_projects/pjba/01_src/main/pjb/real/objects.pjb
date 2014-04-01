@@ -1,0 +1,258 @@
+.class public org/isk/pjb/TestObjects
+  .super java/lang/Object
+
+  .method public <init>()V
+    aload_0
+    invokespecial java/lang/Object <init> ()V
+    return
+  .methodend
+
+  .method public static getStringBuilder()Ljava/lang/StringBuilder;
+    new java/lang/StringBuilder
+    dup
+    ldc "Hello"
+    invokespecial java/lang/StringBuilder <init> (Ljava/lang/String;)V
+    areturn
+  .methodend
+
+  .method public sayHello(Ljava/lang/String;)Ljava/lang/String;
+    new java/lang/StringBuilder
+    dup
+    ldc "Hello "
+    invokespecial java/lang/StringBuilder <init> (Ljava/lang/String;)V  
+    aload_1
+    invokevirtual java/lang/StringBuilder append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invokevirtual java/lang/StringBuilder toString ()Ljava/lang/String;
+    areturn
+  .methodend
+
+  .method public delegatePrivate(II)I
+    aload_0
+    iload_1
+    iload_2
+    invokespecial org/isk/pjb/TestObjects delegatedPrivate (II)I
+    ireturn
+  .methodend
+  
+  .method private delegatedPrivate(II)I
+    iload_1
+    iload_2
+    iadd
+    ireturn
+  .methodend
+.classend
+
+.class public org/isk/pjb/Point
+  .super java/lang/Object
+
+  .field public final originX I = 2
+  .field public final originY I = 3
+
+  .field private x I
+  .field private y I
+
+  .method public <init>(II)V
+    aload_0
+    invokespecial java/lang/Object <init> ()V
+    aload_0
+    iload_1
+    putfield org/isk/pjb/Point x I
+    aload_0
+    iload_2
+    putfield org/isk/pjb/Point y I
+    return
+  .methodend
+
+  .method public getX()I
+    aload_0
+    getfield org/isk/pjb/Point x I
+    ireturn
+  .methodend
+
+  .method public setX(I)V
+    aload_0
+    iload_1
+    putfield org/isk/pjb/Point x I
+    return
+  .methodend
+
+  .method public getY()I
+    aload_0
+    getfield org/isk/pjb/Point y I
+    ireturn
+  .methodend
+
+  .method public setY(I)V
+    aload_0
+    iload_1
+    putfield org/isk/pjb/Point y I
+    return
+  .methodend
+.classend
+
+.class public org/isk/pjb/Point3D
+  .super org/isk/pjb/Point
+
+  .field public z I
+
+  .method public <init>(III)V
+    aload_0
+    iload_1
+    iload_2
+    invokespecial org/isk/pjb/Point <init> (II)V
+    aload_0
+    iload_3
+    putfield org/isk/pjb/Point3D z I
+    return
+  .methodend
+.classend
+
+.class public abstract org/isk/pjb/APoint
+  .super org/isk/pjb/Point
+
+  .method public <init>(II)V
+    aload_0
+    iload_1
+    iload_2
+    invokespecial org/isk/pjb/Point <init> (II)V
+    return
+  .methodend
+
+  .method public abstract move(II)V
+  .methodend
+.classend
+
+.class public org/isk/pjb/CPoint
+  .super org/isk/pjb/APoint
+
+  .interface org/isk/pjb/IPoint
+  .interface java/lang/Comparable
+
+  .method public <init>(II)V
+    aload_0
+    iload_1
+    iload_2
+    invokespecial org/isk/pjb/APoint <init> (II)V
+    return
+  .methodend
+
+  .method public move(II)V
+    aload_0
+    iload_1
+    invokevirtual org/isk/pjb/Point setX (I)V
+    aload_0
+    iload_2
+    invokevirtual org/isk/pjb/Point setY (I)V
+    return
+  .methodend
+
+  .method public compareTo(Ljava/lang/Object;)I
+    aload_1
+    aload_0
+    if_acmpne notSameRef   @ if (o == this)
+    iconst_0
+    ireturn                @ Same referencce 
+
+    notSameRef:
+    aload_1
+    instanceof org/isk/pjb/Point
+    ifeq notPoint         @ if (o instanceof Point)
+    aload_1
+    checkcast org/isk/pjb/Point
+    astore_2
+    aload_0
+    invokevirtual org/isk/pjb/Point getX ()I
+    aload_2
+    invokevirtual org/isk/pjb/Point getX ()I
+    invokestatic java/lang/Integer compare (II)I
+    istore_3
+    iload_3
+
+    ifne notSameX         @ if (compareX == 0)
+    aload_0
+    invokevirtual org/isk/pjb/Point getY ()I
+    aload_2
+    invokevirtual org/isk/pjb/Point getY ()I
+    invokestatic java/lang/Integer compare (II)I
+    ireturn                @ Return the cesult of the comparison between Ys
+
+    notSameX:
+    iload_3
+    ireturn                @ Return the cesult of the comparison between Xs
+
+    notPoint:
+    iconst_m1              @ Not the same object or other is null
+    ireturn
+  .methodend
+.classend
+
+.class public interface org/isk/pjb/IPoint
+  .super java/lang/Object
+
+  .interface org/isk/pjb/IMove
+
+  .method public abstract getX()I
+  .methodend
+  
+  .method public abstract getY()I
+  .methodend
+.classend
+
+.class public interface org/isk/pjb/IMove
+  .super java/lang/Object
+  
+  .method public abstract move(II)V
+  .methodend
+.classend
+
+.class public org/isk/pjb/CPoint3D
+  .super org/isk/pjb/CPoint
+
+  .field public z I
+
+  .method public <init>(III)V
+    aload_0
+    iload_1
+    iload_2
+    invokespecial org/isk/pjb/CPoint <init> (II)V
+    aload_0
+    iload_3
+    putfield org/isk/pjb/CPoint3D z I
+    return
+  .methodend
+
+  .method public move(II)V
+    aload_0
+    iload_1
+    iload_2
+    invokespecial org/isk/pjb/CPoint move (II)V
+    aload_0
+    iconst_0
+    putfield org/isk/pjb/CPoint3D z I
+    return
+  .methodend
+.classend
+
+.class public org/isk/pjb/Mover
+  .super java/lang/Object
+
+  .field public point Lorg/isk/pjb/IMove;
+
+  .method public <init>(Lorg/isk/pjb/IMove;)V
+    aload_0
+    invokespecial java/lang/Object <init> ()V
+    aload_0
+    aload_1
+    putfield org/isk/pjb/Mover point Lorg/isk/pjb/IMove;
+    return
+  .methodend
+
+  .method public move(II)V
+    aload_0
+    getfield org/isk/pjb/Mover point Lorg/isk/pjb/IMove;
+    iload_1
+    iload_2
+    invokeinterface org/isk/pjb/IMove move (II)V
+    return
+  .methodend
+.classend

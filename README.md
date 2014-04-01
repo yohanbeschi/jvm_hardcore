@@ -314,3 +314,12 @@ Class Members: Fields and Methods
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore - Part 20 – Bytecode – Champs et Méthodes de classes](http://blog.soat.fr/2014/03/21-jvm-hardcore-part-20-bytecode-champs-et-methodes-de-classes)
+
+## part21
+### Summary
+Objects
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore – Part 21 – Bytecode – Manipuler des Objets](http://blog.soat.fr/2014/04/22-jvm-hardcore-part-21-bytecode-manipuler-des-objets)

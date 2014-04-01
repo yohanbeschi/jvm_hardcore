@@ -1,3 +1,3 @@
-.class public org/isk/pjb/Test.method 
+.class public org/isk/pjb/Test .super java/lang/Object .method 
 public static methodName(I[[Lorg/isk/pjb/Test;Z)Viload_0 iload_1 iadd ireturn
 .methodend.classend

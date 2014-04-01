@@ -82,7 +82,7 @@ public class Code extends Attribute implements MethodAttribute {
     super.accept(visitor);
 
     // 2 + 2 + 4 + code.length + 2 + 8 * exceptionTable.length + 2
-    visitor.visitCodeAttributeLength(12 + this.codeLength + 8 * this.exceptions.size()); 
+    visitor.visitCodeAttributeLength(12 + this.codeLength + 8 * this.exceptions.size());
     visitor.visitCodeMaxStack(this.maxStack);
     visitor.visitCodeMaxLocals(this.maxLocals);
     visitor.visitCodeLength(this.codeLength);

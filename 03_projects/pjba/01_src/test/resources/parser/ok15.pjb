@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestStaticFieldAndMethod
+  .super java/lang/Object
+
   .field public static final MY_FIELD_1 I;
 
   .method static <clinit>()V

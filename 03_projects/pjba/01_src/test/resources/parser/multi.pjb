@@ -1,4 +1,6 @@
 .class public org/isk/pjb/MultiOne
+  .super java/lang/Object
+
   .method public static add(II)I
     iload_0
     iload_1
@@ -15,6 +17,8 @@
 .classend
 
 .class public org/isk/pjb/MultiTwo
+  .super java/lang/Object
+
   .method public static ishl(II)I
     iload_0
     iload_1

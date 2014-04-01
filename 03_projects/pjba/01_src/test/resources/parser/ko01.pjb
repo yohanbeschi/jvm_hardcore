@@ -1,4 +1,6 @@
 class org/isk/pjba/Test
-	.method methodName()V
-	.methodend
+  .super java/lang/Object
+
+  .method methodName()V
+  .methodend
 .classend

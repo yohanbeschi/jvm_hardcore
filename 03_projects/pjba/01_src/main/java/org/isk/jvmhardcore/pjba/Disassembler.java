@@ -11,6 +11,7 @@ import org.isk.jvmhardcore.pjba.instruction.meta.ByteArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.FieldAndMethodMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.IincMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.IntArgMetaInstruction;
+import org.isk.jvmhardcore.pjba.instruction.meta.InvokeinterfaceMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.LookupswitchMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
@@ -24,6 +25,7 @@ import org.isk.jvmhardcore.pjba.structure.Constant.ConstantPoolEntry;
 import org.isk.jvmhardcore.pjba.structure.Field;
 import org.isk.jvmhardcore.pjba.structure.FieldAndMethod;
 import org.isk.jvmhardcore.pjba.structure.Instruction;
+import org.isk.jvmhardcore.pjba.structure.Interface;
 import org.isk.jvmhardcore.pjba.structure.Method;
 import org.isk.jvmhardcore.pjba.structure.attribute.Code;
 import org.isk.jvmhardcore.pjba.structure.attribute.ConstantValue;
@@ -95,9 +97,8 @@ public class Disassembler {
     this.classFile.setSuperClass(superClass);
 
     final int interfacesCount = this.readUnsignedShort();
-    if (interfacesCount != 0) {
-      throw new RuntimeException("Unable to read interfaces yet in class " + this.classFile.getClassName());
-    }
+    final PjbaLinkedList<Interface> interfaces = this.readInterfaces(interfacesCount);
+    this.classFile.setInterfaces(interfaces);
 
     final int fieldsCount = this.readUnsignedShort();
     final PjbaLinkedList<Field> fields = this.readFields(fieldsCount);
@@ -111,6 +112,21 @@ public class Disassembler {
     if (attributesCount != 0) {
       throw new RuntimeException("Unable to read class attributes yet in class " + this.classFile.getClassName());
     }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Read Interfaces
+  // -------------------------------------------------------------------------------------------------------------------
+
+  private PjbaLinkedList<Interface> readInterfaces(int interfacesCount) {
+    final PjbaLinkedList<Interface> list = new PjbaLinkedList<>();
+
+    for (int i = 0; i < interfacesCount; i++) {
+      final short constantClassIndex = this.readShort();
+      list.add(new Interface(constantClassIndex));
+    }
+
+    return list;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -305,6 +321,17 @@ public class Disassembler {
         }
 
         instruction = ((FieldAndMethodMetaInstruction) metaInstruction).buildInstruction(indexInCP, sizeInStack);
+      } else if (metaInstruction instanceof InvokeinterfaceMetaInstruction) {
+        bytesProceed += 4;
+        final short indexInCP = this.readShort();
+
+        final String descriptor = StringValues.getRefDescriptor(indexInCP, this.classFile);
+        final int sizeInStack = DescriptorCounter.methodsDescriptorSignatureUnits(descriptor);
+
+        final int paramsCount = this.readByte();
+        this.readByte(); // 0
+
+        instruction = ((InvokeinterfaceMetaInstruction) metaInstruction).buildInstruction(indexInCP, sizeInStack, paramsCount);
       } else if (metaInstruction instanceof WideMetaInstruction) {
         final int widenedOpcode = this.readUnsignedByte();
         final MetaInstruction widenedMetaInstruction = MetaInstructions.getMetaInstruction(widenedOpcode);
@@ -319,7 +346,7 @@ public class Disassembler {
           default: // load and store
             bytesProceed += 3;
             final short otherIndexInLV = this.readShort();
-            instruction = ((WideMetaInstruction) metaInstruction).buildInstruction((byte)widenedOpcode, otherIndexInLV);
+            instruction = ((WideMetaInstruction) metaInstruction).buildInstruction((byte) widenedOpcode, otherIndexInLV);
         }
       } else if (metaInstruction instanceof TableswitchMetaInstruction) {
         final int padding = this.readSwitchPadding(bytesProceed - 1);

@@ -13,12 +13,18 @@ public class Classes {
   public void assemble0() throws Exception {
     // ConstantPoolEntries
     final String className = "org/isk/jvmhardcore/pjba/MyFirstClass";
+    final String parentClassName = "java/lang/Object";
     final String methodName = "add";
     final String methodDescriptor = "(II)I";
 
     // ClassFile
     final ClassFile classFile = new ClassFile(className);
     classFile.addAccessFlags(ClassFile.MODIFIER_PUBLIC);
+
+    // Super
+    final int parentUtf8Index = classFile.addConstantUTF8(parentClassName);
+    final int parentClassIndex = classFile.addConstantClass(parentUtf8Index);
+    classFile.setSuperClass(parentClassIndex);
 
     // Method
     final int methodIndex = classFile.addConstantUTF8(methodName);

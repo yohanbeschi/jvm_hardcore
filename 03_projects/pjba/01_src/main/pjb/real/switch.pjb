@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestSwitch
+  .super java/lang/Object
+
   .method public static tableswitch(I)I
     iload_0
     tableswitch default 5 7
@@ -20,7 +22,7 @@
     ireturn
   .methodend
 
-.method public static tableswitch_signed(I)I
+  .method public static tableswitch_signed(I)I
     iload_0
     tableswitch default -1 1
       label_m1

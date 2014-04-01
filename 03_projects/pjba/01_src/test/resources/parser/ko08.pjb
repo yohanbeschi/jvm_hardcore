@@ -1,4 +1,6 @@
 .class org/isk/pjb/Test
-	method methodName(I[[Lorg/isk/pjb/Test;Z)V
-	.methodend
+  .super java/lang/Object
+
+  method methodName(I[[Lorg/isk/pjb/Test;Z)V
+  .methodend
 .classend

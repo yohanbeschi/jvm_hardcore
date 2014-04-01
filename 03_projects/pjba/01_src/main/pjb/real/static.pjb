@@ -1,4 +1,5 @@
 .class public org/isk/pjb/TestStatic
+  .super java/lang/Object
 
   .field public static TEST_PUTSTATIC I
 
@@ -55,6 +56,8 @@
 .classend
 
 .class public org/isk/pjb/TestStaticUpdater
+  .super java/lang/Object
+
   .method public static resetFinal(I)I
     iload_0
     putstatic org/isk/pjb/TestStatic TEST_RESET_FINAL I

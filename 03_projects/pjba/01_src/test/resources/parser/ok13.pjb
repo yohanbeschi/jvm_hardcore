@@ -1,4 +1,6 @@
 .class public org/isk/pjb/TestField
+  .super java/lang/Object
+
   .field public static final MY_FIELD_1 Ljava/lang/Object;
   .field final transient volatile protected private MY_FIELD_2 I = 10
   .field final static TEST_INT I = 2147483647

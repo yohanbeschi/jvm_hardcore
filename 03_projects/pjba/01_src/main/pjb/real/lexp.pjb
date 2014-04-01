@@ -1,4 +1,6 @@
 .class public org/isk/pjb/LExp
+  .super java/lang/Object
+
   @ (a | 2) + 567 * b
   .method public static arithmetic(II)I
     iload 0

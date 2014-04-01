@@ -10,6 +10,7 @@ import org.isk.jvmhardcore.pjba.instruction.factory.ByteArgInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.FieldAndMethodFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.IincInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.IntArgInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.InvokeinterfaceFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.LookupswitchInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.ShortArgInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.TableswitchInstructionFactory;
@@ -422,7 +423,34 @@ public class MetaInstructions {
         return Instructions.putstatic(indexInCP, sizeInStack);
       }
     }));
-    // TODO: 0xb4 to 0xb7
+    list.add(new FieldAndMethodMetaInstruction("getfield", ArgsType.FIELD, new FieldAndMethodFactory() {
+      
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.getfield(indexInCP, sizeInStack);
+      }
+    }));
+    list.add(new FieldAndMethodMetaInstruction("putfield", ArgsType.FIELD, new FieldAndMethodFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.putfield(indexInCP, sizeInStack);
+      }
+    }));
+    list.add(new FieldAndMethodMetaInstruction("invokevirtual", ArgsType.METHOD, new FieldAndMethodFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.invokevirtual(indexInCP, sizeInStack);
+      }
+    }));
+    list.add(new FieldAndMethodMetaInstruction("invokespecial", ArgsType.METHOD, new FieldAndMethodFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack) {
+        return Instructions.invokespecial(indexInCP, sizeInStack);
+      }
+    }));
     list.add(new FieldAndMethodMetaInstruction("invokestatic", ArgsType.METHOD, new FieldAndMethodFactory() {
 
       @Override
@@ -430,7 +458,37 @@ public class MetaInstructions {
         return Instructions.invokestatic(indexInCP, sizeInStack);
       }
     }));
-    // TODO: 0xb9 to 0xc3
+    list.add(new InvokeinterfaceMetaInstruction("invokeinterface", ArgsType.METHOD, new InvokeinterfaceFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, int sizeInStack, int paramsCount) {
+        return Instructions.invokeinterface(indexInCP, sizeInStack, paramsCount);
+      }
+    }));
+    // TODO: 0xba
+    list.add(new ShortArgMetaInstruction("new", ArgsType.CLASS, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP) {
+        return Instructions.new_(indexInCP);
+      }
+    }));
+    // TODO: 0xbc to 0xbf
+    list.add(new ShortArgMetaInstruction("checkcast", ArgsType.CLASS, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP) {
+        return Instructions.checkcast(indexInCP);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("instanceof", ArgsType.CLASS, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP) {
+        return Instructions.instanceof_(indexInCP);
+      }
+    }));
+    // TODO: 0xc3
     list.add(new WideMetaInstruction("wide", ArgsType.WIDE, new WideInstructionFactory() {
 
       @Override

@@ -76,6 +76,14 @@ public class Classes {
     this.buildALoad1(builder);
     this.buildALoad2(builder);
     this.buildALoad3(builder);
+    this.buildIaload(builder);
+    this.buildLaload(builder);
+    this.buildFaload(builder);
+    this.buildDaload(builder);
+    this.buildAaload(builder);
+    this.buildBaload(builder);
+    this.buildCaload(builder);
+    this.buildSaload(builder);
     this.buildIStore(builder);
     this.buildLStore(builder);
     this.buildFStore(builder);
@@ -101,6 +109,14 @@ public class Classes {
     this.buildAStore1(builder);
     this.buildAStore2(builder);
     this.buildAStore3(builder);
+    this.buildIaStore(builder);
+    this.buildLaStore(builder);
+    this.buildFaStore(builder);
+    this.buildDaStore(builder);
+    this.buildAaStore(builder);
+    this.buildBaStore(builder);
+    this.buildCaStore(builder);
+    this.buildSaStore(builder);
     this.buildPop(builder);
     this.buildPop2(builder);
     this.buildDup(builder);
@@ -181,23 +197,34 @@ public class Classes {
     this.buildIfIcmple(builder);
     this.buildIfAcmpeq(builder);
     this.buildIfAcmpne(builder);
+    this.buildGotoBefore(builder);
+    this.buildGotoAfter(builder);
+    this.buildTableswitch(builder);
+    this.buildLookupswitch(builder);
+    this.buildGotoWBefore(builder);
+    this.buildGotoWAfter(builder);
+    this.buildGetstatic(builder);
+    this.buildPutstatic(builder, fullyQualifiedName);
+    this.buildInvokestatic(builder);
+    this.buildNewarrayOfBooleans(builder);
+    this.buildNewarrayOfChars(builder);
+    this.buildNewarrayOfFloats(builder);
+    this.buildNewarrayOfDoubles(builder);
+    this.buildNewarrayOfBytes(builder);
+    this.buildNewarrayOfShorts(builder);
+    this.buildNewarrayOfInts(builder);
+    this.buildNewarrayOfLongs(builder);
+    this.buildAnewarray(builder);
+    this.buildArraylength(builder);
     this.buildWideIinc(builder);
     this.buildWideIStoreLoad(builder);
     this.buildWideLStoreLoad(builder);
     this.buildWideFStoreLoad(builder);
     this.buildWideDStoreLoad(builder);
     this.buildWideAStoreLoad(builder);
-    this.buildGotoBefore(builder);
-    this.buildGotoAfter(builder);
-    this.buildTableswitch(builder);
-    this.buildLookupswitch(builder);
-    this.buildGetstatic(builder);
-    this.buildPutstatic(builder, fullyQualifiedName);
-    this.buildInvokestatic(builder);
+    this.buildMultianewarray(builder);
     this.buildIfnull(builder);
     this.buildIfnonnull(builder);
-    this.buildGotoWBefore(builder);
-    this.buildGotoWAfter(builder);
 
     // Used everywhere => No test needed
     // this.buildIReturn(builder);
@@ -531,12 +558,76 @@ public class Classes {
       .areturn();
   }
 
+  private void buildIaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iaload", "([II)I")
+      .aload_0()
+      .iload_1()
+      .iaload()
+      .ireturn();
+  }
+
+  private void buildLaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "laload", "([JI)J")
+      .aload_0()
+      .iload_1()
+      .laload()
+      .lreturn();
+  }
+
+  private void buildFaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "faload", "([FI)F")
+      .aload_0()
+      .iload_1()
+      .faload()
+      .freturn();
+  }
+
+  private void buildDaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "daload", "([DI)D")
+      .aload_0()
+      .iload_1()
+      .daload()
+      .dreturn();
+  }
+
+  private void buildAaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aaload", "([Ljava/lang/Object;I)Ljava/lang/Object;")
+      .aload_0()
+      .iload_1()
+      .aaload()
+      .areturn();
+  }
+
+  private void buildBaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "baload", "([BI)B")
+      .aload_0()
+      .iload_1()
+      .baload()
+      .ireturn();
+  }
+
+  private void buildCaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "caload", "([CI)C")
+      .aload_0()
+      .iload_1()
+      .caload()
+      .ireturn();
+  }
+
+  private void buildSaload(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "saload", "([SI)S")
+      .aload_0()
+      .iload_1()
+      .saload()
+      .ireturn();
+  }
+
   private void buildIStore(ClassFileBuilder builder) {
     builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "istore", "(IZZZZZZZZZI)I")
-    .iload_0()
-    .istore((byte) 10)
-    .iload((byte) 10)
-    .ireturn();
+      .iload_0()
+      .istore((byte) 10)
+      .iload((byte) 10)
+      .ireturn();
   }
 
   private void buildLStore(ClassFileBuilder builder) {
@@ -806,6 +897,78 @@ public class Classes {
       .astore_3()
       .aload_3()
       .areturn();
+  }
+
+  private void buildIaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "iastore", "([III)V")
+      .aload_0()
+      .iload_1()
+      .iload_2()
+      .iastore()
+      .return_();
+  }
+
+  private void buildLaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "lastore", "([JIJ)V")
+      .aload_0()
+      .iload_1()
+      .lload_2()
+      .lastore()
+      .return_();
+  }
+
+  private void buildFaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "fastore", "([FIF)V")
+      .aload_0()
+      .iload_1()
+      .fload_2()
+      .fastore()
+      .return_();
+  }
+
+  private void buildDaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "dastore", "([DID)V")
+      .aload_0()
+      .iload_1()
+      .dload_2()
+      .dastore()
+      .return_();
+  }
+
+  private void buildAaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "aastore", "([Ljava/lang/String;ILjava/lang/String;)V")
+      .aload_0()
+      .iload_1()
+      .aload_2()
+      .aastore()
+      .return_();
+  }
+
+  private void buildBaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "bastore", "([BIB)V")
+      .aload_0()
+      .iload_1()
+      .iload_2()
+      .bastore()
+      .return_();
+  }
+
+  private void buildCaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "castore", "([CIC)V")
+      .aload_0()
+      .iload_1()
+      .iload_2()
+      .castore()
+      .return_();
+  }
+
+  private void buildSaStore(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "sastore", "([SIS)V")
+      .aload_0()
+      .iload_1()
+      .iload_2()
+      .sastore()
+      .return_();
   }
 
   private void buildPop(ClassFileBuilder builder) {
@@ -1703,6 +1866,84 @@ public class Classes {
       .iload_2()
       .iadd()
       .ireturn();
+  }
+
+  private void buildNewarrayOfBooleans(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfBooleans", "(I)[Z")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.BOOLEAN)
+      .areturn();
+  }
+
+  private void buildNewarrayOfChars(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfChars", "(I)[C")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.CHAR)
+      .areturn();
+  }
+
+  private void buildNewarrayOfFloats(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfFloats", "(I)[F")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.FLOAT)
+      .areturn();
+  }
+
+  private void buildNewarrayOfDoubles(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfDoubles", "(I)[D")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.DOUBLE)
+      .areturn();
+  }
+
+  private void buildNewarrayOfBytes(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfBytes", "(I)[B")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.BYTE)
+      .areturn();
+  }
+
+  private void buildNewarrayOfShorts(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfShorts", "(I)[S")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.SHORT)
+      .areturn();
+  }
+
+  private void buildNewarrayOfInts(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfInts", "(I)[I")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.INT)
+      .areturn();
+  }
+
+  private void buildNewarrayOfLongs(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfLongs", "(I)[J")
+      .iload_0()
+      .newarray(MethodBuilder.ArrayType.LONG)
+      .areturn();
+  }
+  
+  private void buildAnewarray(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "getNewarrayOfStrings", "(I)[Ljava/lang/String;")
+      .iload_0()
+      .anewarray("java/lang/String")
+      .areturn();
+  }
+
+  private void buildArraylength(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "arraylength", "([I)I")
+      .aload_0()
+      .arraylength()
+      .ireturn();
+  }
+
+  private void buildMultianewarray(ClassFileBuilder builder) {
+    builder.newMethod(Method.MODIFIER_PUBLIC | Method.MODIFIER_STATIC, "multianewarray", "(II)[[Ljava/lang/Object;")
+      .iload_0()
+      .iload_1()
+      .multianewarray("[[Ljava/lang/Object;", (byte) 2)
+      .areturn();
   }
 
   private void buildIfnull(ClassFileBuilder builder) {

@@ -342,6 +342,46 @@ public class MethodBuilder {
     return this;
   }
 
+  public MethodBuilder iaload() {
+    this.instruction(Instructions.IALOAD);
+    return this;
+  }
+
+  public MethodBuilder laload() {
+    this.instruction(Instructions.LALOAD);
+    return this;
+  }
+
+  public MethodBuilder faload() {
+    this.instruction(Instructions.FALOAD);
+    return this;
+  }
+
+  public MethodBuilder daload() {
+    this.instruction(Instructions.DALOAD);
+    return this;
+  }
+
+  public MethodBuilder aaload() {
+    this.instruction(Instructions.AALOAD);
+    return this;
+  }
+
+  public MethodBuilder baload() {
+    this.instruction(Instructions.BALOAD);
+    return this;
+  }
+
+  public MethodBuilder caload() {
+    this.instruction(Instructions.CALOAD);
+    return this;
+  }
+
+  public MethodBuilder saload() {
+    this.instruction(Instructions.SALOAD);
+    return this;
+  }
+
   public MethodBuilder istore(short indexInLV) {
     if (indexInLV >= Byte.MIN_VALUE && indexInLV <= Byte.MAX_VALUE) {
       this.instruction(Instructions.istore((byte) indexInLV));
@@ -484,6 +524,46 @@ public class MethodBuilder {
 
   public MethodBuilder astore_3() {
     this.instruction(Instructions.ASTORE_3);
+    return this;
+  }
+
+  public MethodBuilder iastore() {
+    this.instruction(Instructions.IASTORE);
+    return this;
+  }
+
+  public MethodBuilder lastore() {
+    this.instruction(Instructions.LASTORE);
+    return this;
+  }
+
+  public MethodBuilder fastore() {
+    this.instruction(Instructions.FASTORE);
+    return this;
+  }
+
+  public MethodBuilder dastore() {
+    this.instruction(Instructions.DASTORE);
+    return this;
+  }
+
+  public MethodBuilder aastore() {
+    this.instruction(Instructions.AASTORE);
+    return this;
+  }
+
+  public MethodBuilder bastore() {
+    this.instruction(Instructions.BASTORE);
+    return this;
+  }
+
+  public MethodBuilder castore() {
+    this.instruction(Instructions.CASTORE);
+    return this;
+  }
+
+  public MethodBuilder sastore() {
+    this.instruction(Instructions.SASTORE);
     return this;
   }
 
@@ -1109,6 +1189,27 @@ public class MethodBuilder {
     return this;
   }
 
+  public MethodBuilder newarray(byte arrayType) {
+    this.instruction(Instructions.newarray(arrayType));
+    return this;
+  }
+
+  public MethodBuilder newarray(ArrayType arrayType) {
+    this.instruction(Instructions.newarray(arrayType.getValue()));
+    return this;
+  }
+
+  public MethodBuilder anewarray(String fullyQualifiedType) {
+    final int classIndex = this.addConstantClass(fullyQualifiedType);
+    this.instruction(Instructions.anewarray((short) classIndex));
+    return this;
+  }
+
+  public MethodBuilder arraylength() {
+    this.instruction(Instructions.arraylength());
+    return this;
+  }
+
   public MethodBuilder checkcast(String fullyQualifiedConcreteType) {
     final int classIndex = this.addConstantClass(fullyQualifiedConcreteType);
     final Instruction instruction = Instructions.checkcast((short) classIndex);
@@ -1122,6 +1223,12 @@ public class MethodBuilder {
     final Instruction instruction = Instructions.instanceof_((short) classIndex);
     this.instruction(instruction);
 
+    return this;
+  }
+
+  public MethodBuilder multianewarray(String fullyQualifiedType, byte dimensions) {
+    final int classIndex = this.addConstantClass(fullyQualifiedType);
+    this.instruction(Instructions.multianewarray((short) classIndex, dimensions));
     return this;
   }
 
@@ -1401,6 +1508,27 @@ public class MethodBuilder {
     public LabelInstruction(String label) {
       super(0, 0, 0, 0);
       this.label = label;
+    }
+  }
+
+  public static enum ArrayType {
+    BOOLEAN(4),
+    CHAR(5),
+    FLOAT(6),
+    DOUBLE(7),
+    BYTE(8),
+    SHORT(9),
+    INT(10),
+    LONG(11);
+
+    private final byte value;
+
+    private ArrayType(int value) {
+      this.value = (byte) value;
+    }
+
+    public byte getValue() {
+      return this.value;
     }
   }
 }

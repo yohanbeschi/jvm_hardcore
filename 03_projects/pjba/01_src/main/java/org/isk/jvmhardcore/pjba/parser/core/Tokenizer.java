@@ -63,13 +63,18 @@ public abstract class Tokenizer {
 
     public ParserException(String message) {
       super((filename != null ? filename + "\n" : "") + "Line " + reader.getLine() + ", column " + reader.getColumn()
-          + " - " + message + " Got: " + String.valueOf(Character.toChars(reader.unread())));
+          + " - " + message + " Got: <" + String.valueOf(Character.toChars(reader.unread())) + ">");
     }
 
     public ParserException(String message, boolean printCurrentCharacter) {
       super((filename != null ? filename + "\n" : "") + "Line " + reader.getLine() + ", column " + reader.getColumn()
           + " - " + message
-          + (printCurrentCharacter ? " Got: " + String.valueOf(Character.toChars(reader.unread())) : ""));
+          + (printCurrentCharacter ? " Got: <" + String.valueOf(Character.toChars(reader.unread())) + ">" : ""));
+    }
+    
+    public ParserException(String message, String got) {
+      super((filename != null ? filename + "\n" : "") + "Line " + reader.getLine() + ", column " + reader.getColumn()
+          + " - " + message + " Got: <" + got + ">");
     }
   }
 }

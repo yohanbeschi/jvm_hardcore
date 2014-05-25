@@ -36,7 +36,7 @@ public class InstructionTokenizer extends Tokenizer {
     }
 
     this.reset();
-    throw new ParserException("Unknown instruction. Got: " + instructionStr, false);
+    throw new ParserException("Unknown instruction.", instructionStr);
   }
 
   public String getLabelAsArg() {
@@ -63,7 +63,7 @@ public class InstructionTokenizer extends Tokenizer {
     }
 
     if (character != Ascii.COLON) {
-      throw new ParserException("Excepted colon and got: " + character);
+      throw new ParserException("Excepted colon <:>.");
     }
 
     final String label = this.generator.toString();

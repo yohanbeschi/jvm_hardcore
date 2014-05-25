@@ -15,6 +15,7 @@ import org.isk.jvmhardcore.pjba.instruction.meta.InvokeinterfaceMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.LookupswitchMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.MetaInstructions;
+import org.isk.jvmhardcore.pjba.instruction.meta.MultianewarrayMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.NoArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.ShortArgMetaInstruction;
 import org.isk.jvmhardcore.pjba.instruction.meta.TableswitchMetaInstruction;
@@ -378,6 +379,13 @@ public class Disassembler {
         bytesProceed += LookupswitchInstruction.getLength(padding, keys.length) - 1;
 
         instruction = ((LookupswitchMetaInstruction) metaInstruction).buildInstruction(padding, defaultOffset, nbPairs, keys, offsets);
+      } else if (metaInstruction instanceof MultianewarrayMetaInstruction) {
+        final short indexInCP = this.readShort();
+        final byte dimensions = this.readByte();
+
+        bytesProceed += 3;
+
+        instruction = ((MultianewarrayMetaInstruction) metaInstruction).buildInstruction(indexInCP, dimensions);
       }
 
       instructions.add(instruction);

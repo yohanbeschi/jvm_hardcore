@@ -12,6 +12,7 @@ import org.isk.jvmhardcore.pjba.instruction.factory.IincInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.IntArgInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.InvokeinterfaceFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.LookupswitchInstructionFactory;
+import org.isk.jvmhardcore.pjba.instruction.factory.MultianewarrayInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.ShortArgInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.TableswitchInstructionFactory;
 import org.isk.jvmhardcore.pjba.instruction.factory.WideInstructionFactory;
@@ -157,7 +158,14 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("aload_1", ArgsType.NONE, Instructions.ALOAD_1));
     list.add(new NoArgMetaInstruction("aload_2", ArgsType.NONE, Instructions.ALOAD_2));
     list.add(new NoArgMetaInstruction("aload_3", ArgsType.NONE, Instructions.ALOAD_3));
-    // TODO: 0x2e to 0x35
+    list.add(new NoArgMetaInstruction("iaload", ArgsType.NONE, Instructions.IALOAD));
+    list.add(new NoArgMetaInstruction("laload", ArgsType.NONE, Instructions.LALOAD));
+    list.add(new NoArgMetaInstruction("faload", ArgsType.NONE, Instructions.FALOAD));
+    list.add(new NoArgMetaInstruction("daload", ArgsType.NONE, Instructions.DALOAD));
+    list.add(new NoArgMetaInstruction("aaload", ArgsType.NONE, Instructions.AALOAD));
+    list.add(new NoArgMetaInstruction("baload", ArgsType.NONE, Instructions.BALOAD));
+    list.add(new NoArgMetaInstruction("caload", ArgsType.NONE, Instructions.CALOAD));
+    list.add(new NoArgMetaInstruction("saload", ArgsType.NONE, Instructions.SALOAD));
     list.add(new ByteArgMetaInstruction("istore", ArgsType.LV_INDEX, new ByteArgInstructionFactory() {
 
       @Override
@@ -213,7 +221,14 @@ public class MetaInstructions {
     list.add(new NoArgMetaInstruction("astore_1", ArgsType.NONE, Instructions.ASTORE_1));
     list.add(new NoArgMetaInstruction("astore_2", ArgsType.NONE, Instructions.ASTORE_2));
     list.add(new NoArgMetaInstruction("astore_3", ArgsType.NONE, Instructions.ASTORE_3));
-    // TODO: 0x4f to 0x56
+    list.add(new NoArgMetaInstruction("iastore", ArgsType.NONE, Instructions.IASTORE));
+    list.add(new NoArgMetaInstruction("lastore", ArgsType.NONE, Instructions.LASTORE));
+    list.add(new NoArgMetaInstruction("fastore", ArgsType.NONE, Instructions.FASTORE));
+    list.add(new NoArgMetaInstruction("dastore", ArgsType.NONE, Instructions.DASTORE));
+    list.add(new NoArgMetaInstruction("aastore", ArgsType.NONE, Instructions.AASTORE));
+    list.add(new NoArgMetaInstruction("bastore", ArgsType.NONE, Instructions.BASTORE));
+    list.add(new NoArgMetaInstruction("castore", ArgsType.NONE, Instructions.CASTORE));
+    list.add(new NoArgMetaInstruction("sastore", ArgsType.NONE, Instructions.SASTORE));
     list.add(new NoArgMetaInstruction("pop", ArgsType.NONE, Instructions.POP));
     list.add(new NoArgMetaInstruction("pop2", ArgsType.NONE, Instructions.POP2));
     list.add(new NoArgMetaInstruction("dup", ArgsType.NONE, Instructions.DUP));
@@ -473,7 +488,22 @@ public class MetaInstructions {
         return Instructions.new_(indexInCP);
       }
     }));
-    // TODO: 0xbc to 0xbf
+    list.add(new ByteArgMetaInstruction("newarray", ArgsType.ARRAY_TYPE, new ByteArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(byte arrayType) {
+        return Instructions.newarray(arrayType);
+      }
+    }));
+    list.add(new ShortArgMetaInstruction("anewarray", ArgsType.CLASS, new ShortArgInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP) {
+        return Instructions.anewarray(indexInCP);
+      }
+    }));
+    list.add(new NoArgMetaInstruction("arraylength", ArgsType.NONE, Instructions.ARRAYLENGTH));
+    // TODO: 0xbf
     list.add(new ShortArgMetaInstruction("checkcast", ArgsType.CLASS, new ShortArgInstructionFactory() {
 
       @Override
@@ -488,7 +518,7 @@ public class MetaInstructions {
         return Instructions.instanceof_(indexInCP);
       }
     }));
-    // TODO: 0xc3
+    // TODO: 0xc2 and 0xc3
     list.add(new WideMetaInstruction("wide", ArgsType.WIDE, new WideInstructionFactory() {
 
       @Override
@@ -501,7 +531,13 @@ public class MetaInstructions {
         return Instructions.wide_load_store(widenedOpcode, indexInLV);
       }
     }));
-    // TODO: 0xc5
+    list.add(new MultianewarrayMetaInstruction("multianewarray", ArgsType.ARRAY_MULTIDIM, new MultianewarrayInstructionFactory() {
+
+      @Override
+      public Instruction buildInstruction(short indexInCP, byte dimensions) {
+        return Instructions.multianewarray(indexInCP, dimensions);
+      }
+    }));
     list.add(new ShortArgMetaInstruction("ifnull", ArgsType.LABEL, new ShortArgInstructionFactory() {
 
       @Override

@@ -1,0 +1,159 @@
+.class public org/isk/pjb/Array
+  .super java/lang/Object
+
+  .method public static getNewarrayOfInts(I)[I
+    iload_0
+    newarray int
+    areturn
+  .methodend
+
+  .method public static getNewarrayOfBooleans(I)[Z
+    iload_0
+    newarray boolean
+    areturn
+  .methodend
+
+  .method public static getNewarrayOfStrings(I)[Ljava/lang/String;
+    iload_0
+    anewarray java/lang/String
+    areturn
+  .methodend
+
+  .method public static daload([DI)D
+    aload_0
+    iload_1
+    daload
+    dreturn
+  .methodend
+
+  @ array, index, value
+  .method public static aastore([Ljava/lang/String;ILjava/lang/String;)V
+    aload_0
+    iload_1
+    aload_2
+    aastore
+    return
+  .methodend
+
+  .method public static initArraySameValue([II)V
+    aload_0
+    arraylength
+    istore_2
+    iconst_0
+    istore_3
+    loop:
+    iload_3
+    iload_2
+    if_icmpge stop
+    aload_0
+    iload_3
+    iload_1
+    iastore
+    iinc 3 1
+    goto loop
+    stop:
+    return
+  .methodend
+
+  .method public static initArrayDiffValue()[I
+    iconst_5
+    newarray int
+    dup
+    iconst_0
+    iconst_1
+    iastore
+    dup
+    iconst_1
+    iconst_2
+    iastore
+    dup
+    iconst_2
+    iconst_3
+    iastore
+    dup
+    iconst_3
+    iconst_4
+    iastore
+    dup
+    iconst_4
+    iconst_5
+    iastore
+    areturn
+  .methodend
+
+  .method public static getMultianewarray(II)[[Ljava/lang/Object;
+    iload_0
+    iload_1
+    multianewarray [[Ljava/lang/Object; 2
+    areturn
+  .methodend
+
+  @ array, index
+  .method public static getSubArray([[II)[I
+    aload_0
+    iload_1
+    aaload  @ get sub array
+    areturn
+  .methodend
+
+  @ array, index1, index2, value
+  .method public static setValue([[IIII)V
+    aload_0
+    iload_1
+    aaload  @ get sub array
+    iload_2
+    iload_3
+    iastore @ store value
+    return
+  .methodend
+
+  @ array, index1, index2
+  .method public static getValue([[III)I
+    aload_0
+    iload_1
+    aaload  @ get sub array
+    iload_2
+    iaload @ store value
+    ireturn
+  .methodend
+
+  .method public static init2DArray([[II)V
+    aload_0
+    arraylength
+    istore_2    @ Size dim 1
+    iconst_0
+    istore_3    @ index_1 = 0
+
+    loop_1:
+    iload_3
+    iload_2
+    if_icmpge end_loop_1
+      aload_0
+      iload_3
+      aaload
+      arraylength
+      istore 4  @ Size dim 2
+      iconst_0
+      istore 5  @ index_2 = 0
+
+      loop_2:
+      iload 5
+      iload 4
+      if_icmpge end_loop_2
+        aload_0
+        iload_3
+        aaload
+        iload 5
+        iload_1
+        iastore @ store value
+        iinc 5 1
+      goto loop_2
+
+    end_loop_2:
+    iinc 3 1  @ inc index_1
+    goto loop_1
+
+    end_loop_1:
+    return
+  .methodend
+.classend

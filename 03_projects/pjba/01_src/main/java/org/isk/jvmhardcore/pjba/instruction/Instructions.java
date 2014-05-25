@@ -41,6 +41,14 @@ public class Instructions {
   final public static Instruction ALOAD_1 = new NoArgInstruction(0x2b, 1, 2);
   final public static Instruction ALOAD_2 = new NoArgInstruction(0x2c, 1, 3);
   final public static Instruction ALOAD_3 = new NoArgInstruction(0x2d, 1, 4);
+  final public static Instruction IALOAD = new NoArgInstruction(0x2e, -1, 0);
+  final public static Instruction LALOAD = new NoArgInstruction(0x2f, -2, 0);
+  final public static Instruction FALOAD = new NoArgInstruction(0x30, -1, 0);
+  final public static Instruction DALOAD = new NoArgInstruction(0x31, -2, 0);
+  final public static Instruction AALOAD = new NoArgInstruction(0x32, -1, 0);
+  final public static Instruction BALOAD = new NoArgInstruction(0x33, -1, 0);
+  final public static Instruction CALOAD = new NoArgInstruction(0x34, -1, 0);
+  final public static Instruction SALOAD = new NoArgInstruction(0x35, -1, 0);
   final public static Instruction ISTORE_0 = new NoArgInstruction(0x3b, -1, 1);
   final public static Instruction ISTORE_1 = new NoArgInstruction(0x3c, -1, 2);
   final public static Instruction ISTORE_2 = new NoArgInstruction(0x3d, -1, 3);
@@ -61,6 +69,14 @@ public class Instructions {
   final public static Instruction ASTORE_1 = new NoArgInstruction(0x4c, -1, 2);
   final public static Instruction ASTORE_2 = new NoArgInstruction(0x4d, -1, 3);
   final public static Instruction ASTORE_3 = new NoArgInstruction(0x4e, -1, 4);
+  final public static Instruction IASTORE = new NoArgInstruction(0x4f, -3, 0);
+  final public static Instruction LASTORE = new NoArgInstruction(0x50, -4, 0);
+  final public static Instruction FASTORE = new NoArgInstruction(0x51, -3, 0);
+  final public static Instruction DASTORE = new NoArgInstruction(0x52, -4, 0);
+  final public static Instruction AASTORE = new NoArgInstruction(0x53, -3, 0);
+  final public static Instruction BASTORE = new NoArgInstruction(0x54, -3, 0);
+  final public static Instruction CASTORE = new NoArgInstruction(0x55, -3, 0);
+  final public static Instruction SASTORE = new NoArgInstruction(0x56, -3, 0);
   final public static Instruction POP = new NoArgInstruction(0x57, -1, 0);
   final public static Instruction POP2 = new NoArgInstruction(0x58, -2, 0);
   final public static Instruction DUP = new NoArgInstruction(0x59, 1, 0);
@@ -132,6 +148,7 @@ public class Instructions {
   final public static Instruction DRETURN = new NoArgInstruction(0xaf, -2, 0);
   final public static Instruction ARETURN = new NoArgInstruction(0xb0, -1, 0);
   final public static Instruction RETURN = new NoArgInstruction(0xb1, 0, 0);
+  final public static Instruction ARRAYLENGTH = new NoArgInstruction(0xbe, 0, 0);
 
   private Instructions() {
   }
@@ -320,6 +337,38 @@ public class Instructions {
     return ALOAD_3;
   }
 
+  public static Instruction iaload() {
+    return IALOAD;
+  }
+
+  public static Instruction laload() {
+    return LALOAD;
+  }
+
+  public static Instruction faload() {
+    return FALOAD;
+  }
+
+  public static Instruction daload() {
+    return DALOAD;
+  }
+
+  public static Instruction aaload() {
+    return AALOAD;
+  }
+
+  public static Instruction baload() {
+    return BALOAD;
+  }
+
+  public static Instruction caload() {
+    return CALOAD;
+  }
+
+  public static Instruction saload() {
+    return SALOAD;
+  }
+
   public static Instruction istore(byte indexInLV) {
     return new ByteArgInstruction(0x36, -1, BytecodeUtils.unsign(indexInLV) + 1, indexInLV);
   }
@@ -418,6 +467,38 @@ public class Instructions {
 
   public static Instruction astore_3() {
     return ASTORE_3;
+  }
+
+  public static Instruction iastore() {
+    return IASTORE;
+  }
+
+  public static Instruction lastore() {
+    return LASTORE;
+  }
+
+  public static Instruction fastore() {
+    return FASTORE;
+  }
+
+  public static Instruction dastore() {
+    return DASTORE;
+  }
+
+  public static Instruction aastore() {
+    return AASTORE;
+  }
+
+  public static Instruction bastore() {
+    return BASTORE;
+  }
+
+  public static Instruction castore() {
+    return CASTORE;
+  }
+
+  public static Instruction sastore() {
+    return SASTORE;
   }
 
   public static Instruction pop() {
@@ -812,6 +893,18 @@ public class Instructions {
     return new ShortArgInstruction(0xbb, 1, 0, indexInCP);
   }
 
+  public static Instruction newarray(byte arrayType) {
+    return new ByteArgInstruction(0xbc, 0, 0, arrayType);
+  }
+
+  public static Instruction anewarray(short indexInCP) {
+    return new ShortArgInstruction(0xbd, 0, 0, indexInCP);
+  }
+
+  public static Instruction arraylength() {
+    return ARRAYLENGTH;
+  }
+
   public static Instruction checkcast(short indexInCP) {
     return new ShortArgInstruction(0xc0, 0, 0, indexInCP);
   }
@@ -889,6 +982,10 @@ public class Instructions {
       default:
         return null;
     }
+  }
+
+  public static Instruction multianewarray(short indexInCP, byte dimensions) {
+    return new MultianewarrayInstruction(0xc5, -BytecodeUtils.unsign(dimensions) + 1, 0, indexInCP, dimensions);
   }
 
   public static Instruction ifnull(short branch) {

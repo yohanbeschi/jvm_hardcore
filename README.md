@@ -323,3 +323,12 @@ Objects
 The project can only be executed through unit tests. (See introduction)
 
 Blog post: [JVM Hardcore – Part 21 – Bytecode – Manipuler des Objets](http://blog.soat.fr/2014/04/22-jvm-hardcore-part-21-bytecode-manipuler-des-objets)
+
+## part22
+### Summary
+Arrays
+
+### Compile and execute
+The project can only be executed through unit tests. (See introduction)
+
+Blog post: [JVM Hardcore – Part 22 – Bytecode – Manipuler des tableaux](http://blog.soat.fr/2014/05/23-jvm-hardcore-part-22-bytecode-manipuler-des-tableaux)

@@ -324,6 +324,9 @@ public class PjbDumper implements Visitor {
       case IFS_CONSTANT:
         printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((byte) value), this.classFile);
         break;
+      case ARRAY_TYPE:
+        printableValue = StringValues.getArrayType(value);
+        break;
       default:
         throw new RuntimeException("Incorrect type: " + type + " for the value: " + value);
     }
@@ -431,6 +434,15 @@ public class PjbDumper implements Visitor {
     final String printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) indexInCP), this.classFile);
     
     this.currentInstruction.append(" ").append(printableValue).append("\n");
+    this.writeInstruction();
+    this.currentMethodLength += 4;
+  }
+
+  @Override
+  public void visitMultinewarrayInstruction(int indexInCP, int dimensions) {
+    final String printableValue = StringValues.getPrintableConstant(BytecodeUtils.unsign((short) indexInCP), this.classFile);
+
+    this.currentInstruction.append(" ").append(printableValue).append(" ").append(dimensions).append("\n");
     this.writeInstruction();
     this.currentMethodLength += 4;
   }

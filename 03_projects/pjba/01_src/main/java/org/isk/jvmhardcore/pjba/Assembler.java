@@ -300,6 +300,12 @@ public class Assembler implements Visitor {
     this.writeByte(zero);
   }
 
+  @Override
+  public void visitMultinewarrayInstruction(int indexInCP, int dimensions) {
+    this.writeShort(indexInCP);
+    this.writeByte(dimensions);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Write to the DataOutputStream
   // -------------------------------------------------------------------------------------------------------------------

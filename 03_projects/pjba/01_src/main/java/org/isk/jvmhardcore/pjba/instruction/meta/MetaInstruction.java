@@ -53,6 +53,8 @@ public abstract class MetaInstruction {
     LOOKUP_SWITCH,
     FIELD,
     METHOD,
-    CLASS;
+    CLASS,
+    ARRAY_TYPE,
+    ARRAY_MULTIDIM;
   }
 }

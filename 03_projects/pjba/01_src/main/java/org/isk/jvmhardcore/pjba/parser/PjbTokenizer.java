@@ -65,6 +65,10 @@ public class PjbTokenizer extends Tokenizer {
     return this.nameTokenizer.getMethodSignature();
   }
 
+  public byte getArrayType() {
+    return this.nameTokenizer.getArrayType();
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Get instructions with parameters
   // -------------------------------------------------------------------------------------------------------------------

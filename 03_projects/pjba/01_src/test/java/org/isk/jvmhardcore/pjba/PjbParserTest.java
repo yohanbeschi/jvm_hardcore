@@ -7,6 +7,7 @@ import java.util.List;
 import org.isk.jvmhardcore.pjba.parser.core.Tokenizer.ParserException;
 import org.isk.jvmhardcore.pjba.structure.ClassFile;
 import org.isk.pjb.APoint;
+import org.isk.pjb.Array;
 import org.isk.pjb.CPoint;
 import org.isk.pjb.CPoint3D;
 import org.isk.pjb.IMove;
@@ -183,7 +184,7 @@ public class PjbParserTest {
       this.test("parser/ko01.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko01.pjb\nLine 1, column 1 - Expected directive: '.class' Got: c", e.getMessage());
+      Assert.assertEquals("parser/ko01.pjb\nLine 1, column 1 - Expected directive: '.class' Got: <c>", e.getMessage());
     }
   }
 
@@ -193,7 +194,8 @@ public class PjbParserTest {
       this.test("parser/ko02.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko02.pjb\nLine 6, column 1 - Expected directive: '.classend' Got: c", e.getMessage());
+      Assert.assertEquals("parser/ko02.pjb\nLine 6, column 1 - Expected directive: '.classend' Got: <c>",
+          e.getMessage());
     }
   }
 
@@ -204,7 +206,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko03.pjb\nLine 2, column 3 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
+          "parser/ko03.pjb\nLine 2, column 3 - An identifier must start with an ASCII letter or '_' or '$'. Got: <.>",
           e.getMessage());
     }
   }
@@ -216,7 +218,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko04.pjb\nLine 5, column 3 - An identifier must start with an ASCII letter or '_' or '$'. Got: .",
+          "parser/ko04.pjb\nLine 5, column 3 - An identifier must start with an ASCII letter or '_' or '$'. Got: <.>",
           e.getMessage());
     }
   }
@@ -228,7 +230,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko05.pjb\nLine 4, column 11 - An identifier must start with an ASCII letter or '_' or '$'. Got: (",
+          "parser/ko05.pjb\nLine 4, column 11 - An identifier must start with an ASCII letter or '_' or '$'. Got: <(>",
           e.getMessage());
     }
   }
@@ -240,7 +242,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko06.pjb\nLine 5, column 3 - An identifier must start with a left parenthesis '('. Got: .",
+          "parser/ko06.pjb\nLine 5, column 3 - An identifier must start with a left parenthesis '('. Got: <.>",
           e.getMessage());
     }
   }
@@ -251,7 +253,7 @@ public class PjbParserTest {
       this.test("parser/ko07.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko07.pjb\nLine 5, column 0 - Missing return descriptor. Got: \n", e.getMessage());
+      Assert.assertEquals("parser/ko07.pjb\nLine 5, column 0 - Missing return descriptor. Got: <\n>", e.getMessage());
     }
   }
 
@@ -261,7 +263,8 @@ public class PjbParserTest {
       this.test("parser/ko08.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko08.pjb\nLine 4, column 3 - Expected directive: '.classend' Got: m", e.getMessage());
+      Assert.assertEquals("parser/ko08.pjb\nLine 4, column 3 - Expected directive: '.classend' Got: <m>",
+          e.getMessage());
     }
   }
 
@@ -271,7 +274,7 @@ public class PjbParserTest {
       this.test("parser/ko09.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko09.pjb\nLine 5, column 3 - Unknown instruction. Got: methodend", e.getMessage());
+      Assert.assertEquals("parser/ko09.pjb\nLine 5, column 3 - Unknown instruction. Got: <methodend>", e.getMessage());
     }
   }
 
@@ -281,7 +284,8 @@ public class PjbParserTest {
       this.test("parser/ko10.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko10.pjb\nLine 5, column 5 - Unknown instruction. Got: instruction", e.getMessage());
+      Assert.assertEquals("parser/ko10.pjb\nLine 5, column 5 - Unknown instruction. Got: <instruction>",
+          e.getMessage());
     }
   }
 
@@ -292,7 +296,7 @@ public class PjbParserTest {
       Assert.fail();
     } catch (ParserException e) {
       Assert.assertEquals(
-          "parser/ko11.pjb\nLine 6, column 17 - A label following an instruction should not end with a colon. Got: :",
+          "parser/ko11.pjb\nLine 6, column 17 - A label following an instruction should not end with a colon. Got: <:>",
           e.getMessage());
     }
   }
@@ -303,7 +307,7 @@ public class PjbParserTest {
       this.test("parser/ko12.pjb");
       Assert.fail();
     } catch (ParserException e) {
-      Assert.assertEquals("parser/ko12.pjb\nLine 9, column 5 - Unknown instruction. Got: label_1", e.getMessage());
+      Assert.assertEquals("parser/ko12.pjb\nLine 9, column 5 - Unknown instruction. Got: <label_1>", e.getMessage());
     }
   }
 
@@ -828,7 +832,7 @@ public class PjbParserTest {
   }
 
   @Test
-  public void resetFina2() {
+  public void resetFinal2() {
     try {
       TestStaticUpdater.resetFinal2(100);
       Assert.fail();
@@ -1010,5 +1014,123 @@ public class PjbParserTest {
     final int result = point1.compareTo(point2);
 
     Assert.assertEquals(1, result);
+  }
+
+  @Test
+  public void getNewarrayOfInts() {
+    final int[] i = Array.getNewarrayOfInts(10);
+    Assert.assertEquals(10, i.length);
+
+    i[9] = 3;
+    Assert.assertEquals(3, i[9]);
+  }
+
+  @Test
+  public void getNewarrayOfBooleans() {
+    final boolean[] b = Array.getNewarrayOfBooleans(10);
+    Assert.assertEquals(10, b.length);
+
+    b[9] = true;
+    Assert.assertTrue(b[9]);
+  }
+
+  @Test
+  public void getNewarrayOfStrings() {
+    final String[] s = Array.getNewarrayOfStrings(10);
+    Assert.assertEquals(10, s.length);
+
+    s[9] = "hello";
+    Assert.assertEquals("hello", s[9]);
+  }
+
+  @Test
+  public void daload() {
+    final double[] array = new double[] { 1.2, 2.3, 3.4, 4.5 };
+    final double d = Array.daload(array, 2);
+    Assert.assertEquals(3.4, d, 0.0001);
+  }
+
+  @Test
+  public void aastore() {
+    final String[] s = new String[10];
+    Array.aastore(s, 2, "hello");
+
+    Assert.assertEquals("hello", s[2]);
+  }
+
+  @Test
+  public void initArraySameValue() {
+    final int[] i = new int[5];
+    Array.initArraySameValue(i, 10);
+
+    Assert.assertEquals(10, i[0]);
+    Assert.assertEquals(10, i[1]);
+    Assert.assertEquals(10, i[2]);
+    Assert.assertEquals(10, i[3]);
+    Assert.assertEquals(10, i[4]);
+  }
+
+  @Test
+  public void initArrayDiffValue() {
+    final int[] i = Array.initArrayDiffValue();
+
+    Assert.assertEquals(1, i[0]);
+    Assert.assertEquals(2, i[1]);
+    Assert.assertEquals(3, i[2]);
+    Assert.assertEquals(4, i[3]);
+    Assert.assertEquals(5, i[4]);
+  }
+
+  @Test
+  public void multianewarray() {
+    final Object[][] o = Array.getMultianewarray(5, 10);
+
+    Assert.assertEquals(5, o.length);
+    Assert.assertEquals(10, o[0].length);
+
+    o[2][4] = "hello";
+
+    Assert.assertEquals("hello", o[2][4]);
+  }
+
+  @Test
+  public void getSubArray() {
+    final int[] subArray = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    final int[][] i = new int[5][10];
+    i[2] = subArray;
+
+    final int[] actuals = Array.getSubArray(i, 2);
+
+    Assert.assertArrayEquals(subArray, actuals);
+  }
+
+  @Test
+  public void setValueMultiArray() {
+    final int[][] i = new int[5][10];
+    Array.setValue(i, 2, 3, 1256);
+
+    Assert.assertEquals(1256, i[2][3]);
+  }
+
+  @Test
+  public void getValueMultiArray() {
+    final int[][] array = new int[5][10];
+    array[2][3] = 10;
+    final int i = Array.getValue(array, 2, 3);
+
+    Assert.assertEquals(10, i);
+  }
+
+  @Test
+  public void init2DArray() {
+    final int[][] i = new int[3][2];
+    Array.init2DArray(i, 10);
+
+    Assert.assertEquals(10, i[0][0]);
+    Assert.assertEquals(10, i[0][1]);
+    Assert.assertEquals(10, i[1][0]);
+    Assert.assertEquals(10, i[1][1]);
+    Assert.assertEquals(10, i[2][0]);
+    Assert.assertEquals(10, i[2][1]);
   }
 }

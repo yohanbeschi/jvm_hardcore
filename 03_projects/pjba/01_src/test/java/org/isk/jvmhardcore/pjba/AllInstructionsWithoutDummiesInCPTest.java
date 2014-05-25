@@ -303,6 +303,78 @@ public class AllInstructionsWithoutDummiesInCPTest {
   }
 
   @Test
+  public void iaload() {
+    final int[] array = new int[5];
+    array[3] = 25;
+
+    final int i = AllInstructionsWithoutDummiesInCP.iaload(array, 3);
+    Assert.assertEquals(25, i);
+  }
+
+  @Test
+  public void laload() {
+    final long[] array = new long[5];
+    array[3] = 25;
+
+    final long l = AllInstructionsWithoutDummiesInCP.laload(array, 3);
+    Assert.assertEquals(25l, l);
+  }
+
+  @Test
+  public void faload() {
+    final float[] array = new float[5];
+    array[3] = 25.98f;
+
+    final float f = AllInstructionsWithoutDummiesInCP.faload(array, 3);
+    Assert.assertEquals(25.98f, f, 0.0001);
+  }
+
+  @Test
+  public void daload() {
+    final double[] array = new double[5];
+    array[3] = 25.98d;
+
+    final double d = AllInstructionsWithoutDummiesInCP.daload(array, 3);
+    Assert.assertEquals(25.98d, d, 0.0001);
+  }
+
+  @Test
+  public void aaload() {
+    final String[] array = new String[5];
+    array[3] = "hello";
+
+    final String s = (String) AllInstructionsWithoutDummiesInCP.aaload(array, 3);
+    Assert.assertEquals("hello", s);
+  }
+
+  @Test
+  public void baload() {
+    final byte[] array = new byte[5];
+    array[3] = 25;
+
+    final byte b = AllInstructionsWithoutDummiesInCP.baload(array, 3);
+    Assert.assertEquals(25, b);
+  }
+
+  @Test
+  public void caload() {
+    final char[] array = new char[5];
+    array[3] = 25;
+
+    final char c = AllInstructionsWithoutDummiesInCP.caload(array, 3);
+    Assert.assertEquals(25, c);
+  }
+
+  @Test
+  public void saload() {
+    final short[] array = new short[5];
+    array[3] = 25;
+
+    final short s = AllInstructionsWithoutDummiesInCP.saload(array, 3);
+    Assert.assertEquals(25, s);
+  }
+
+  @Test
   public void istore() {
     final int i = AllInstructionsWithoutDummiesInCP.istore(2, true, true, true, true, true, true, true, true, true, 4);
     Assert.assertEquals(2, i);
@@ -453,6 +525,70 @@ public class AllInstructionsWithoutDummiesInCPTest {
   public void astore_3() {
     final int i = AllInstructionsWithoutDummiesInCP.astore_3(2, 5, 4, 7);
     Assert.assertEquals(2, i, 0.0001);
+  }
+
+  @Test
+  public void iastore() {
+    final int[] array = new int[5];
+    AllInstructionsWithoutDummiesInCP.iastore(array, 3, 5);
+
+    Assert.assertEquals(5, array[3]);
+  }
+
+  @Test
+  public void lastore() {
+    final long[] array = new long[5];
+    AllInstructionsWithoutDummiesInCP.lastore(array, 3, 5l);
+
+    Assert.assertEquals(5l, array[3]);
+  }
+
+  @Test
+  public void fastore() {
+    final float[] array = new float[5];
+    AllInstructionsWithoutDummiesInCP.fastore(array, 3, 5.43f);
+
+    Assert.assertEquals(5.43f, array[3], 0.0001);
+  }
+
+  @Test
+  public void dastore() {
+    final double[] array = new double[5];
+    AllInstructionsWithoutDummiesInCP.dastore(array, 3, 5.67);
+
+    Assert.assertEquals(5.67, array[3], 0.0001);
+  }
+
+  @Test
+  public void aastore() {
+    final String[] array = new String[5];
+    AllInstructionsWithoutDummiesInCP.aastore(array, 3, "hello");
+
+    Assert.assertEquals("hello", array[3]);
+  }
+
+  @Test
+  public void bastore() {
+    final byte[] array = new byte[5];
+    AllInstructionsWithoutDummiesInCP.bastore(array, 3, (byte) 5);
+
+    Assert.assertEquals(5, array[3]);
+  }
+
+  @Test
+  public void castore() {
+    final char[] array = new char[5];
+    AllInstructionsWithoutDummiesInCP.castore(array, 3, (char) 5);
+
+    Assert.assertEquals(5, array[3]);
+  }
+
+  @Test
+  public void sastore() {
+    final short[] array = new short[5];
+    AllInstructionsWithoutDummiesInCP.sastore(array, 3, (short) 5);
+
+    Assert.assertEquals(5, array[3]);
   }
 
   @Test
@@ -1171,6 +1307,93 @@ public class AllInstructionsWithoutDummiesInCPTest {
   }
 
   @Test
+  public void getNewarrayOfBooleans() {
+    final boolean[] b = AllInstructionsWithoutDummiesInCP.getNewarrayOfBooleans(10);
+    Assert.assertEquals(10, b.length);
+
+    b[9] = true;
+    Assert.assertTrue(b[9]);
+  }
+
+  @Test
+  public void getNewarrayOfChars() {
+    final char[] c = AllInstructionsWithoutDummiesInCP.getNewarrayOfChars(10);
+    Assert.assertEquals(10, c.length);
+
+    c[9] = 3;
+    Assert.assertEquals(3, c[9]);
+  }
+
+  @Test
+  public void getNewarrayOfFloats() {
+    final float[] f = AllInstructionsWithoutDummiesInCP.getNewarrayOfFloats(10);
+    Assert.assertEquals(10, f.length);
+
+    f[9] = 3.89f;
+    Assert.assertEquals(3.89f, f[9], 0.0001);
+  }
+
+  @Test
+  public void getNewarrayOfDoubles() {
+    final double[] d = AllInstructionsWithoutDummiesInCP.getNewarrayOfDoubles(10);
+    Assert.assertEquals(10, d.length);
+
+    d[9] = 3;
+    Assert.assertEquals(3, d[9], 0.0001);
+  }
+
+  @Test
+  public void getNewarrayOfBytes() {
+    final byte[] b = AllInstructionsWithoutDummiesInCP.getNewarrayOfBytes(10);
+    Assert.assertEquals(10, b.length);
+
+    b[9] = 3;
+    Assert.assertEquals(3, b[9]);
+  }
+
+  @Test
+  public void getNewarrayOfShorts() {
+    final short[] s = AllInstructionsWithoutDummiesInCP.getNewarrayOfShorts(10);
+    Assert.assertEquals(10, s.length);
+
+    s[9] = 3;
+    Assert.assertEquals(3, s[9]);
+  }
+
+  @Test
+  public void getNewarrayOfInts() {
+    final int[] i = AllInstructionsWithoutDummiesInCP.getNewarrayOfInts(10);
+    Assert.assertEquals(10, i.length);
+
+    i[9] = 3;
+    Assert.assertEquals(3, i[9]);
+  }
+
+  @Test
+  public void getNewarrayOfLongs() {
+    final long[] i = AllInstructionsWithoutDummiesInCP.getNewarrayOfLongs(10);
+    Assert.assertEquals(10, i.length);
+
+    i[9] = Long.MAX_VALUE;
+    Assert.assertEquals(Long.MAX_VALUE, i[9]);
+  }
+
+  @Test
+  public void getNewarrayOfStrings() {
+    final String[] s = AllInstructionsWithoutDummiesInCP.getNewarrayOfStrings(10);
+    Assert.assertEquals(10, s.length);
+
+    s[9] = "hello";
+    Assert.assertEquals("hello", s[9]);
+  }
+
+  @Test
+  public void arraylength() {
+    final int i = AllInstructionsWithoutDummiesInCP.arraylength(new int[10]);
+    Assert.assertEquals(10, i);
+  }
+
+  @Test
   public void wide_iinc() {
     final long l = AllInstructionsWithoutDummiesInCP.wide_iinc(10_000);
     Assert.assertEquals(((long) -20_000 << 32) | 6, l);
@@ -1204,6 +1427,14 @@ public class AllInstructionsWithoutDummiesInCPTest {
   public void wide_astore_aload() {
     final Object o = AllInstructionsWithoutDummiesInCP.wide_astore_aload();
     Assert.assertNull(o);
+  }
+
+  @Test
+  public void multianewarray() {
+    final Object[][] o = AllInstructionsWithoutDummiesInCP.multianewarray(5, 10);
+    o[2][4] = "hello";
+
+    Assert.assertEquals("hello", o[2][4]);
   }
 
   @Test

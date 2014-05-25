@@ -337,7 +337,21 @@ public class PjbParser extends Parser<List<ClassFile>, EventType, PjbTokenizer> 
           this.methodBuilder.checkcast(fullyQualifiedConcreteType);
         } else if ("instanceof".equals(metaInstruction.getMnemonic())) {
           this.methodBuilder.instanceof_(fullyQualifiedConcreteType);
+        } else if ("anewarray".equals(metaInstruction.getMnemonic())) {
+          this.methodBuilder.anewarray(fullyQualifiedConcreteType);
         }
+        break;
+      case ARRAY_TYPE:
+        this.tokenizer.consumeWhitespaces();
+        final byte arrayType = this.tokenizer.getArrayType();
+        this.methodBuilder.newarray(arrayType);
+        break;
+      case ARRAY_MULTIDIM:
+        this.tokenizer.consumeWhitespaces();
+        final String arrayMultiDimType = this.tokenizer.getFieldType();
+        this.tokenizer.consumeWhitespaces();
+        final byte dimensions = this.tokenizer.getByteValue();
+        this.methodBuilder.multianewarray(arrayMultiDimType, dimensions);
         break;
       case W_IFS_CONSTANT:
       default:

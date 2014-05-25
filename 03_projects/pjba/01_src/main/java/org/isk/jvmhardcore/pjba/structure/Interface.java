@@ -16,5 +16,4 @@ public class Interface implements Visitable {
   public void accept(Visitor visitor) {
     visitor.visitInterfaceConstantClassIndex(this.constantClassIndex);
   }
-
 }

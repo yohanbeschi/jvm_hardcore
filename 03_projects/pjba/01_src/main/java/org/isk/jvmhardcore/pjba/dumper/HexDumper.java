@@ -418,6 +418,14 @@ public class HexDumper implements Visitor {
     this.getHexAndAdd(4);
   }
 
+  @Override
+  public void visitMultinewarrayInstruction(int indexInCP, int dimensions) {
+    this.pjb.append(" #").append(BytecodeUtils.unsign((short) indexInCP)).append(" ").append(dimensions).append("\n");
+    
+    this.currentMethodLength += 3;
+    this.getHexAndAdd(3);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Utilities
   // -------------------------------------------------------------------------------------------------------------------
